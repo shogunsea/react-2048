@@ -1,28 +1,14 @@
 #box {
-  height: 50px;
-  width: 50px;
-  background-color: blue;
-  border: 2px solid red;
+  display: flex;
+  background-color: green;
+  width: 100%;
+  height: 400px;
+  align-items: center;
+  justify-content: center;
 }
 
-$blue: #3bbfce;
-$margin: 16px;
-
-.content-navigation {
-  border-color: $blue;
-  color: darken($blue, 9%);
+.board {
+  height: 40px;
+  width: 100px;
+  background-color: yellow
 }
-
-.border {
-  padding: $margin / 2; margin: $margin / 2; border-color: $blue;
-}
-
-
-@mixin border-radius($radius) {
-  -webkit-border-radius: $radius;
-     -moz-border-radius: $radius;
-      -ms-border-radius: $radius;
-          border-radius: $radius;
-}
-
-.box { @include border-radius(10px); }
