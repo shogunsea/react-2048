@@ -8,9 +8,11 @@ class TileView extends React.Component {
   }
 
   render() {
-    let title = 'Tile View';
+    // let title = 'Tile View';
     return <div className="tile">
-    {title}
+    <CellView />
+    <CellView />
+    <CellView />
     <CellView />
     </div>;
   }

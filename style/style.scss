@@ -1,33 +1,43 @@
 $board-color: #baa;
-$light-blue: #1b95e0;
+$light-blue: #E0F2FD;
 $tile-grey: #eee;
 $cell-brown: #dcb;
 
 #container {
   display: flex;
-  width: 100%;
   min-height: 400px;
   align-items: center;// vertical center
   justify-content: center; // horizontal center
   padding: 100px;
+  background-color: $light-blue;
 }
 
 .board {
-  border-radius: 10px;
-  min-height: 300px;
-  min-width: 300px;
+  padding: 7px;
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  min-height: 500px;
+  min-width: 500px;
   height: 40px;
   width: 100px;
-  background-color: $board-color
+  background-color: $board-color;
 }
 
 .tile {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
   min-height: 60px;
   min-width: 60px;
-  background-color: $tile-grey;
+  background-color: $board-color;
 }
 
 .cell {
+  margin: 5px;
+  display: flex;
+  flex: 1;
+  border-radius: 5px;
   min-height: 60px;
   min-width: 60px;
   background-color: $cell-brown;

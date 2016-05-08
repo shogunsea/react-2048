@@ -6,9 +6,8 @@ class CellView extends React.Component {
         this.displayName = '';
     }
     render() {
-        let title = 'Cell View'
+        // let title = 'Cell View'
         return <div className="cell">
-        {title}
         </div>;
     }
 }
