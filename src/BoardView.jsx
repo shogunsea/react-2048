@@ -1,22 +1,26 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import TileView from './tileView.jsx';
-import CellView from './cellView.jsx';
-import BoardModel from './board.js'
+import RowView from './RowView.jsx';
+import CellView from './CellView.jsx';
+import BoardModel from './Board.js'
 
 class BoardView extends React.Component {
   constructor(props) {
       super(props);
       this.displayName = '';
+      let showTwoIndex = 2;
+      let counter = 0;
+      const board = new BoardModel();
+      const rows = board.grid.map((row) =>{
+        counter++;
+        return <RowView id={row.id} key={row.id} showTwo={counter == showTwoIndex? true: false}/>
+      });
+      this.state = {rows: rows}
   }
 
   render() {
-    let board = new BoardModel();
-    let tiles = board.tiles.map((tile) =>{
-      return <TileView id={tile.id} key={tile.id}/>
-    });
     return <div className='board'>
-      {tiles}
+      {this.state.rows}
     </div>;
   }
 }

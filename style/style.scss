@@ -10,6 +10,7 @@ $cell-brown: #dcb;
   justify-content: center; // horizontal center
   padding: 100px;
   background-color: $light-blue;
+  flex-direction: row;
 }
 
 .board {
@@ -24,13 +25,12 @@ $cell-brown: #dcb;
   background-color: $board-color;
 }
 
-.tile {
+.row {
   display: flex;
   flex-direction: row;
   flex: 1;
   min-height: 60px;
   min-width: 60px;
-  background-color: $board-color;
 }
 
 .cell {

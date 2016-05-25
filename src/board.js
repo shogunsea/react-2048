@@ -1,16 +1,18 @@
-import Tile from './tile.js'
+import Row from './Row.js'
 
-class Board {
+const BOARD_SIZE = 4;
+
+export default class Board {
   constructor(){
-    this.tiles = [];
-    for(let i = 0; i < 4; i++) {
-      this.tiles.push(new Tile());
+    this.grid = [];
+    for(let i = 0; i < BOARD_SIZE; i++) {
+      this.grid.push(new Row());
     }
   }
 
-  getTiles(){
-    return this.tiles;
+  getGrid(){
+    return this.grid;
   }
 }
 
-export default Board;
+// export default Board;

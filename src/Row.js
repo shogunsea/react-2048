@@ -1,9 +1,9 @@
 let tileId = 0;
 
-class Tile {
+class Row {
   constructor () {
     this.id = tileId++;
   }
 }
 
-export default Tile;
+export default Row;

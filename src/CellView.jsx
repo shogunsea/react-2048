@@ -5,10 +5,13 @@ class CellView extends React.Component {
         super(props);
         this.displayName = '';
     }
+
     render() {
         // let title = 'Cell View'
-        return <div className="cell">
-        </div>;
+        if(this.props.showTwo)
+          return <div className="cell"></div>;
+        else
+          return <div className="cell two"></div>;
     }
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
-import CellView from './cellView.jsx';
+import CellView from './CellView.jsx';
 
-class TileView extends React.Component {
+class RowView extends React.Component {
   constructor(props) {
     super(props);
     this.displayName = '';
@@ -9,13 +9,13 @@ class TileView extends React.Component {
 
   render() {
     // let title = 'Tile View';
-    return <div className="tile">
+    return <div className="row">
     <CellView />
-    <CellView />
+    <CellView showTwo={this.props.showTwo? true: false}/>
     <CellView />
     <CellView />
     </div>;
   }
 }
 
-export default TileView;
+export default RowView;
