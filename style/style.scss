@@ -2,6 +2,7 @@ $board-color: #baa;
 $light-blue: #E0F2FD;
 $tile-grey: #eee;
 $cell-brown: #dcb;
+$text-brown: #766;
 
 #container {
   display: flex;
@@ -34,11 +35,74 @@ $cell-brown: #dcb;
 }
 
 .cell {
-  margin: 5px;
+  align-items: center;
+  background-color: $cell-brown;
+  border-radius: 5px;
+  color: $text-brown;
   display: flex;
   flex: 1;
-  border-radius: 5px;
+  font-family: "Clear Sans";
+  font-size: 50px;
+  justify-content: center;
+  margin: 5px;
   min-height: 60px;
   min-width: 60px;
-  background-color: $cell-brown;
+}
+
+.cell.value-2 {
+  background-color: #eee;
+}
+
+.cell.value-4 {
+  background-color: #eec;
+}
+
+.cell.value-8 {
+  color: #ffe;
+  background-color: #fb8;
+}
+
+.cell.value-16 {
+  color: #ffe;
+  background-color: #f96;
+}
+
+.cell.value-32 {
+  color: #ffe;
+  background-color: #f75;
+}
+
+.cell.value-64 {
+  color: #ffe;
+  background-color: #f53;
+}
+
+.cell.value-128 {
+  color: #ffe;
+  background-color: #ec7;
+  font-size: 45px;
+}
+
+.cell.value-256 {
+  color: #ffe;
+  background-color: #ec6;
+  font-size: 45px;
+}
+
+.cell.value-512 {
+  color: #ffe;
+  background-color: #ec5;
+  font-size: 45px;
+}
+
+.cell.value-1024 {
+  color: #fff;
+  background-color: #ec3;
+  font-size: 35px;
+}
+
+.cell.value-2048 {
+  color: #fff;
+  background-color: #ec2;
+  font-size: 35px;
 }
