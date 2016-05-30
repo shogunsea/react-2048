@@ -4,15 +4,22 @@ const BOARD_SIZE = 4;
 
 export default class Board {
   constructor(){
-    this.grid = [];
+    this.rows = [];
     for(let i = 0; i < BOARD_SIZE; i++) {
-      this.grid.push(new Row());
+      this.rows.push(new Row());
     }
   }
 
-  getGrid(){
-    return this.grid;
+  setCellToBoard(cell) {
+    const {row, col} = cell;
+    this.getRow(row).setCell(col, cell);
+  }
+
+  getRow(row) {
+    return this.rows[row];
+  }
+
+  getRows(){
+    return this.rows;
   }
 }
-
-// export default Board;

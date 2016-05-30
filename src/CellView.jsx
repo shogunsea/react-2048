@@ -1,18 +1,27 @@
 import React from 'react';
 
 class CellView extends React.Component {
-    constructor(props) {
-        super(props);
-        this.displayName = '';
-    }
+  constructor(props) {
+    super(props);
+    this.displayName = '';
+  }
 
-    render() {
-        // let title = 'Cell View'
-        if(this.props.showTwo)
-          return <div className="cell"></div>;
-        else
-          return <div className="cell two"></div>;
+  getValueClass(val) {
+    if (val == 0) {
+      return "";
+    } else {
+      return "value-" + val;
     }
+  }
+
+  render() {
+    const value = this.props.val;
+    if (value == 2) {
+      let b = 1;
+    }
+    const valClass = this.getValueClass(value);
+    return  <div className={"cell " + valClass}></div>;
+  }
 }
 
 export default CellView;

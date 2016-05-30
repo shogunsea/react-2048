@@ -8,12 +8,12 @@ class RowView extends React.Component {
   }
 
   render() {
-    // let title = 'Tile View';
+    const cells = this.props.cells;
+    const cellsView = cells.map((cell) => {
+      return <CellView val={cell.val} key={cell.id} />
+    })
     return <div className="row">
-    <CellView />
-    <CellView showTwo={this.props.showTwo? true: false}/>
-    <CellView />
-    <CellView />
+      {cellsView}
     </div>;
   }
 }
