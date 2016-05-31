@@ -10,7 +10,7 @@ class RowView extends React.Component {
   render() {
     const cells = this.props.cells;
     const cellsView = cells.map((cell) => {
-      return <CellView val={cell.val} key={cell.id} />
+      return <CellView val={cell.val} key={cell.id} isNew={cell.isNew()} />
     })
     return <div className="row">
       {cellsView}

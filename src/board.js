@@ -11,7 +11,7 @@ export default class Board {
   }
 
   setCellToBoard(cell) {
-    const {row, col} = cell;
+    const {curRow: row, curCol: col} = cell;
     this.getRow(row).setCell(col, cell);
   }
 

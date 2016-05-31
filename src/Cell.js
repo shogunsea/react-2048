@@ -6,9 +6,27 @@ let cellId = 0;
 class Cell {
   constructor (row = -1, col = -1, val = 0) {
     this.id = cellId++;
-    this.row = row;
-    this.col = col;
     this.val = val;
+    this.fromRow = -1;
+    this.fromCol = -1;
+    this.curRow = row;
+    this.curCol = col;
+  }
+
+  isNew() {
+    return (this.fromRow == -1 && this.fromCol == -1) && this.isVisible();
+  }
+
+  isVisible() {
+    return this.val != 0;
+  }
+
+  getValueClass(val) {
+    if (val == 0) {
+      return "";
+    } else {
+      return "value-" + val;
+    }
   }
 }
 

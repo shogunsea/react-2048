@@ -49,6 +49,24 @@ $text-brown: #766;
   min-width: 60px;
 }
 
+.cell.new {
+  animation-duration: 0.20s;
+  animation-name: newTile;
+  animation-fill-mode: forwards;
+  animation-delay: 0.15s;
+  transform: scale(0);
+}
+
+@keyframes newTile {
+  from {
+    transform: scale(0);
+  }
+
+  to {
+    transform: scale(1);
+  }
+}
+
 .cell.value-2 {
   background-color: #eee;
 }
