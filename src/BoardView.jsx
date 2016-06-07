@@ -13,7 +13,8 @@ class BoardView extends React.Component {
       super(); // need props or not?
       this.board = new BoardModel();
       const rowView = this.mapRowModelToView(this.board.rows);
-      this.state = {rows: rowView}
+      const gridView = this.mapRowModelToView(this.board.grid);
+      this.state = {rows: rowView, grid: gridView}
   }
 
   mapRowModelToView(rows) {
@@ -57,6 +58,7 @@ class BoardView extends React.Component {
 
   render() {
     return <div className='board'>
+      {this.state.grid}
       {this.state.rows}
     </div>;
   }

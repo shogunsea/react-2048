@@ -1,4 +1,5 @@
 import Row from './Row.js'
+import _ from 'lodash'
 
 const BOARD_SIZE = 4;
 
@@ -8,6 +9,7 @@ export default class Board {
     for(let i = 0; i < BOARD_SIZE; i++) {
       this.rows.push(new Row());
     }
+    this.grid = _.clone(this.rows);
   }
 
   setCellToBoard(cell) {

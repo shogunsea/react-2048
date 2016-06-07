@@ -4,7 +4,6 @@ import CellView from './CellView.jsx';
 class RowView extends React.Component {
   constructor(props) {
     super(props);
-    this.displayName = '';
   }
 
   render() {

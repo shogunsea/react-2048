@@ -38,7 +38,7 @@ $text-brown: #766;
   align-items: center;
   background-color: $cell-brown;
   border-radius: 5px;
-  color: $text-brown;
+  color: $text-brown; // color property is reserved for font-color
   display: flex;
   flex: 1;
   font-family: "Clear Sans";
