@@ -16,6 +16,10 @@ class Row {
   setCell(col, cell) {
     this.cells[col] = cell;
   }
+
+  addCell(cell) {
+    this.cells.push(cell);
+  }
 }
 
 export default Row;

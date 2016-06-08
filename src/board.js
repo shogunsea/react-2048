@@ -9,12 +9,12 @@ export default class Board {
     for(let i = 0; i < BOARD_SIZE; i++) {
       this.rows.push(new Row());
     }
-    this.grid = _.clone(this.rows);
   }
 
   setCellToBoard(cell) {
     const {curRow: row, curCol: col} = cell;
-    this.getRow(row).setCell(col, cell);
+    // this.getRow(row).setCell(col, cell);
+    this.getRow(row).addCell(cell);
   }
 
   getRow(row) {

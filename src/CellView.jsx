@@ -17,7 +17,8 @@ class CellView extends React.Component {
   render() {
     const value = this.props.val;
     const valClass = this.props.isNew? "new " + this.getValueClass(value) : this.getValueClass(value);
-    return  <div className={"cell " + valClass}>{this.props.val == 0? '' : this.props.val}</div>;
+    const position = " row_"+this.props.rowId+"_col_"+this.props.colId;
+    return  <div id={this.props.rowId} className={"cell " + valClass + position}>{this.props.val == 0? '' : this.props.val}</div>;
   }
 }
 
