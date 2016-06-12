@@ -13,6 +13,10 @@ class Cell {
     this.curCol = col;
   }
 
+  isGrid() {
+    return (this.fromRow == -1 && this.fromCol == -1) && !this.isVisible();
+  }
+
   isNew() {
     return (this.fromRow == -1 && this.fromCol == -1) && this.isVisible();
   }

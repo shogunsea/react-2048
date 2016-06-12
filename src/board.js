@@ -11,9 +11,8 @@ export default class Board {
     }
   }
 
-  setCellToBoard(cell) {
+  addCellToBoard(cell) {
     const {curRow: row, curCol: col} = cell;
-    // this.getRow(row).setCell(col, cell);
     this.getRow(row).addCell(cell);
   }
 

@@ -35,10 +35,9 @@ class BoardView extends React.Component {
 
   addRandomCell() {
     const newCell = this.getRandomCell();
-    this.board.setCellToBoard(newCell);
+    this.board.addCellToBoard(newCell);
     const rows = this.board.getRows();
     const rowView = this.mapRowModelToView(rows);
-    console.log(this.board);
     this.setState({rows: rowView});
   }
 
@@ -49,9 +48,7 @@ class BoardView extends React.Component {
   hanleKeyUp(e) {
     if (KeyCodes.indexOf(e.keyCode) != -1) {
       const direction = e.keyCode - 37;
-      // this.moveBoard(direction);
       this.addRandomCell();
-
     }
   }
 

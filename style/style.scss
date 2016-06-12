@@ -21,35 +21,31 @@ $text-brown: #766;
   border-radius: 20px;
   min-height: 500px;
   min-width: 500px;
-  height: 40px;
-  width: 100px;
   background-color: $board-color;
 }
 
 .row {
   display: flex;
-  flex-direction: row;
-  flex: 1;
-  min-height: 60px;
-  min-width: 60px;
+  position: relative;
 }
 
 .cell {
-  align-items: center;
   background-color: $cell-brown;
   border-radius: 5px;
   color: $text-brown; // color property is reserved for font-color
-  display: flex;
-  flex: 1;
   font-family: "Clear Sans";
   font-size: 50px;
-  justify-content: center;
   margin: 5px;
+  height: 115px;
+  width: 115px;
+  display: inline-block;
   min-height: 60px;
   min-width: 60px;
 }
 
 .cell.new {
+  position: absolute;
+  top: 0px;
   animation-duration: 0.20s;
   animation-name: newTile;
   animation-fill-mode: forwards;
@@ -123,4 +119,20 @@ $text-brown: #766;
   color: #fff;
   background-color: #ec2;
   font-size: 35px;
+}
+
+.col_0 {
+  left: 0px;
+}
+
+.col_1 {
+  left: 125px;
+}
+
+.col_2 {
+  left: 250px;
+}
+
+.col_3 {
+  left: 375px;
 }
