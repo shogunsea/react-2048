@@ -13,6 +13,10 @@ module.exports = {
         loader: "style!css"
       },
       {
+        test: /\.json$/,
+        loader: "json"
+      },
+      {
         test: /\.scss$/,
         loader: "style!css!sass"
       },

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import RowView from './RowView.jsx';
 import CellView from './CellView.jsx';
-import BoardModel from './Board.js';
+import Board from './Board.js';
 import Cell from './Cell.js';
 
 let AVAILABLE_INDEX = -1; // only four rounds during develpment
@@ -11,7 +11,7 @@ const KeyCodes = [37, 38, 39,40];
 class BoardView extends React.Component {
   constructor() {
       super(); // need props or not?
-      this.board = new BoardModel();
+      this.board = new Board();
       const rowView = this.mapRowModelToView(this.board.rows);
       this.state = {rows: rowView}
   }
@@ -46,10 +46,21 @@ class BoardView extends React.Component {
   }
 
   hanleKeyUp(e) {
-    if (KeyCodes.indexOf(e.keyCode) != -1) {
-      const direction = e.keyCode - 37;
+    const key = e.keyCode;
+    if (KeyCodes.indexOf(key) != -1) {
+      const direction = key - 37;
       this.addRandomCell();
+      this.board.moveBoard(direction);
     }
+    if (key == 13) {
+      this.createTestBoard();
+    }
+  }
+
+  createTestBoard() {
+    const testBoardRows = this.board.replaceWithTestBoard();
+    const testBoardRowView = this.mapRowModelToView(testBoardRows);
+    this.setState({rows: testBoardRowView});
   }
 
   render() {

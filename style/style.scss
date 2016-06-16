@@ -12,6 +12,10 @@ $text-brown: #766;
   padding: 100px;
   background-color: $light-blue;
   flex-direction: row;
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  cursor: default;
 }
 
 .board {
@@ -30,6 +34,9 @@ $text-brown: #766;
 }
 
 .cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: $cell-brown;
   border-radius: 5px;
   color: $text-brown; // color property is reserved for font-color
@@ -38,7 +45,6 @@ $text-brown: #766;
   margin: 5px;
   height: 115px;
   width: 115px;
-  display: inline-block;
   min-height: 60px;
   min-width: 60px;
 }
@@ -49,7 +55,7 @@ $text-brown: #766;
   animation-duration: 0.20s;
   animation-name: newTile;
   animation-fill-mode: forwards;
-  animation-delay: 0.15s;
+  animation-delay: 0.05s;
   transform: scale(0);
 }
 
@@ -57,7 +63,6 @@ $text-brown: #766;
   from {
     transform: scale(0);
   }
-
   to {
     transform: scale(1);
   }
@@ -121,18 +126,14 @@ $text-brown: #766;
   font-size: 35px;
 }
 
-.col_0 {
-  left: 0px;
+@for $col from 0 to 4 {
+  .col_#{$col} {
+    left: 125px * $col; // 115px: cell size, 5px*2 =10px margin
+  }
 }
 
-.col_1 {
-  left: 125px;
-}
 
-.col_2 {
-  left: 250px;
-}
 
-.col_3 {
-  left: 375px;
-}
+
+
+

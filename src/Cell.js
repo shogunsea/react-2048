@@ -11,6 +11,7 @@ class Cell {
     this.fromCol = -1;
     this.curRow = row;
     this.curCol = col;
+
   }
 
   isGrid() {
@@ -19,6 +20,10 @@ class Cell {
 
   isNew() {
     return (this.fromRow == -1 && this.fromCol == -1) && this.isVisible();
+  }
+
+  move(toRow, toCol) {
+
   }
 
   isVisible() {

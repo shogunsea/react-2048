@@ -4,13 +4,16 @@ let tileId = 0;
 const BOARD_COLUMNS = 4;
 
 class Row {
-  constructor () {
-    this.cells = []
-    this.id = tileId++;
-    for (let i = 0; i < BOARD_COLUMNS; i++) {
-      this.cells.push(new Cell());
+  constructor (cells) {
+    if (cells) {
+      this.cells = cells;
+    } else {
+      this.cells = []
+      this.id = tileId++;
+      for (let i = 0; i < BOARD_COLUMNS; i++) {
+        this.cells.push(new Cell());
+      }
     }
-
   }
 
   setCell(col, cell) {
