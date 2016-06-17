@@ -61,7 +61,7 @@ class BoardView extends React.Component {
     const key = e.keyCode;
     if (KeyCodes.indexOf(key) != -1) {
       const direction = key - 37;
-      this.addRandomCell();
+      // this.addRandomCell();
       this.board.moveBoard(direction);
       this.updateStateWithRows(this.board.rows);
     }

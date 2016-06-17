@@ -145,8 +145,8 @@ export default class Board {
     for(let i = 0; i < rows.length; i++) {
       const curRow = rows[i];
       // there will always be 4 empty grid in each row
-      for (let j = 4; j < curRow.length; j++) {
-        const curCell = curRow[j];
+      for (let j = 4; j < curRow.cells.length; j++) {
+        const curCell = curRow.cells[j];
         for (let k = j - 1; k > 3; k--) {
           const preCell = curRow[k];
           if (canMerge) {
