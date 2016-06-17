@@ -13,9 +13,9 @@ export default class Board {
     }
   }
 
-  replaceWithTestBoard() {
+  replaceWithTestBoard(boardName = 'board_A') {
     this.constructor();
-    const sampleBoard = SampleBoards['board_A'];
+    const sampleBoard = SampleBoards[boardName];
 
     for (let i = 0; i < BOARD_SIZE; i++) {
       const curRow = sampleBoard[i];
@@ -32,9 +32,45 @@ export default class Board {
   }
 
   addCellToBoard(cell) {
+    if (!cell) {
+      return;
+    }
+
     const {curRow: row, curCol: col} = cell;
     this.getRow(row).addCell(cell);
     // this.getRow(row).setCell(row, cell);
+  }
+
+  getAvailableSlots() {
+    const slots = [];
+    const rows = this.getRows();
+
+    for (let i = 0 ; i < BOARD_SIZE; i++) {
+      slots.push([0,0,0,0]);
+    }
+
+    for(let i = 0; i < rows.length; i++) {
+      const curRow = rows[i];
+      // there will always be 4 empty grid in each row
+      for (let j = 4; j < curRow.cells.length; j++) {
+        const curCell = curRow.cells[j];
+        if (curCell) {
+          slots[curCell.curRow][curCell.curCol] = 1;
+        }
+      }
+    }
+
+    const availableSlots = [];
+
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
+        if (slots[i][j] == 0) {
+          availableSlots.push({row: i, col: j})
+        }
+      }
+    }
+
+    return availableSlots;
   }
 
   moveBoard(direction) {
@@ -105,10 +141,9 @@ export default class Board {
     // move left: 4 2 0 0 ** 000042
     // move right: 0 0 4 2 ** 000042
 
-    const rows = this.rows;
+    const rows = this.getRows();
     for(let i = 0; i < rows.length; i++) {
       const curRow = rows[i];
-      console.log(curRow);
       // there will always be 4 empty grid in each row
       for (let j = 4; j < curRow.length; j++) {
         const curCell = curRow[j];

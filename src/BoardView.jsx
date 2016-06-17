@@ -9,11 +9,17 @@ let AVAILABLE_INDEX = -1; // only four rounds during develpment
 const KeyCodes = [37, 38, 39,40];
 
 class BoardView extends React.Component {
-  constructor() {
-      super(); // need props or not?
+  constructor(props) {
+      super(props); // need props or not?
       this.board = new Board();
-      const rowView = this.mapRowModelToView(this.board.rows);
+      this.addRandomCell();
+      const rowView = this.mapRowModelToView(this.board.getRows());
       this.state = {rows: rowView}
+  }
+
+  updateStateWithRows(rows) {
+    const rowView = this.mapRowModelToView(rows);
+    this.setState({rows: rowView});
   }
 
   mapRowModelToView(rows) {
@@ -25,9 +31,18 @@ class BoardView extends React.Component {
   }
 
   getRandomCell() {
-    const index = ~~(Math.random()* 16); // [0, 15]
-    const row = ~~(index / 4);
-    const col = index % 4;
+    const availableSlots = this.board.getAvailableSlots();
+    const availableLength = availableSlots.length;
+
+    if (availableLength == 0) {
+      console.log('niet, you\'re dead ');
+      return null;
+    }
+
+    const index = ~~(Math.random()* availableLength); // [0, availableLength - 1]
+    const slot = availableSlots[index];
+    const row = slot.row;
+    const col = slot.col;
     const val = 2;
     const newCell = new Cell(row, col, val);
     return newCell;
@@ -36,9 +51,6 @@ class BoardView extends React.Component {
   addRandomCell() {
     const newCell = this.getRandomCell();
     this.board.addCellToBoard(newCell);
-    const rows = this.board.getRows();
-    const rowView = this.mapRowModelToView(rows);
-    this.setState({rows: rowView});
   }
 
   componentDidMount() {
@@ -51,6 +63,7 @@ class BoardView extends React.Component {
       const direction = key - 37;
       this.addRandomCell();
       this.board.moveBoard(direction);
+      this.updateStateWithRows(this.board.rows);
     }
     if (key == 13) {
       this.createTestBoard();
@@ -58,9 +71,8 @@ class BoardView extends React.Component {
   }
 
   createTestBoard() {
-    const testBoardRows = this.board.replaceWithTestBoard();
-    const testBoardRowView = this.mapRowModelToView(testBoardRows);
-    this.setState({rows: testBoardRowView});
+    const testBoardRows = this.board.replaceWithTestBoard('board_A');
+    this.updateStateWithRows(testBoardRows);
   }
 
   render() {
