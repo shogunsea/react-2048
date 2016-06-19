@@ -47,16 +47,84 @@ $text-brown: #766;
   width: 115px;
   min-height: 60px;
   min-width: 60px;
-}
 
-.cell.new {
-  position: absolute;
-  top: 0px;
-  animation-duration: 0.20s;
-  animation-name: newTile;
-  animation-fill-mode: forwards;
-  animation-delay: 0.05s;
-  transform: scale(0);
+  &.new {
+    position: absolute;
+    animation-duration: 0.20s;
+    animation-name: newTile;
+    animation-fill-mode: forwards;
+    animation-delay: 0.05s;
+    transform: scale(0);
+  }
+
+  &.value-2 {
+    position: absolute;
+    background-color: #eee;
+  }
+
+  &.value-4 {
+    position: absolute;
+    background-color: #eec;
+  }
+
+  &.value-8 {
+    position: absolute;
+    color: #ffe;
+    background-color: #fb8;
+  }
+
+  &.value-16 {
+    position: absolute;
+    color: #ffe;
+    background-color: #f96;
+  }
+
+  &.value-32 {
+    position: absolute;
+    color: #ffe;
+    background-color: #f75;
+  }
+
+  &.value-64 {
+    position: absolute;
+    color: #ffe;
+    background-color: #f53;
+  }
+
+  &.value-128 {
+    position: absolute;
+    color: #ffe;
+    background-color: #ec7;
+    font-size: 45px;
+  }
+
+  &.value-256 {
+    position: absolute;
+    color: #ffe;
+    background-color: #ec6;
+    font-size: 45px;
+  }
+
+  &.value-512 {
+    position: absolute;
+    color: #ffe;
+    background-color: #ec5;
+    font-size: 45px;
+  }
+
+  &.value-1024 {
+    position: absolute;
+    color: #fff;
+    background-color: #ec3;
+    font-size: 35px;
+  }
+
+  &.value-2048 {
+    position: absolute;
+    color: #fff;
+    background-color: #ec2;
+    font-size: 35px;
+  }
 }
 
 @keyframes newTile {
@@ -68,72 +136,8 @@ $text-brown: #766;
   }
 }
 
-.cell.value-2 {
-  background-color: #eee;
-}
-
-.cell.value-4 {
-  background-color: #eec;
-}
-
-.cell.value-8 {
-  color: #ffe;
-  background-color: #fb8;
-}
-
-.cell.value-16 {
-  color: #ffe;
-  background-color: #f96;
-}
-
-.cell.value-32 {
-  color: #ffe;
-  background-color: #f75;
-}
-
-.cell.value-64 {
-  color: #ffe;
-  background-color: #f53;
-}
-
-.cell.value-128 {
-  color: #ffe;
-  background-color: #ec7;
-  font-size: 45px;
-}
-
-.cell.value-256 {
-  color: #ffe;
-  background-color: #ec6;
-  font-size: 45px;
-}
-
-.cell.value-512 {
-  color: #ffe;
-  background-color: #ec5;
-  font-size: 45px;
-}
-
-.cell.value-1024 {
-  color: #fff;
-  background-color: #ec3;
-  font-size: 35px;
-}
-
-.cell.value-2048 {
-  color: #fff;
-  background-color: #ec2;
-  font-size: 35px;
-}
-
 @for $col from 0 to 4 {
   .col_#{$col} {
     left: 125px * $col; // 115px: cell size, 5px*2 =10px margin
   }
 }
-
-
-
-
-
-

@@ -1,0 +1,19 @@
+@for $i from 0 to 4 {
+  @for $j from 0 to 4 {
+    @if $i != $j {
+        .col_from_#{$i}_to_#{$j} {
+          animation-name: col_#{$i}_#{$j};
+          animation-duration: 0.20s;
+        }
+
+        @keyframes col_#{$i}_#{$j} {
+          from {
+            left: 125px * $i;
+          }
+          to {
+            left: 125px * $j;
+          }
+        }
+    }
+  }
+}

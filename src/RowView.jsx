@@ -9,7 +9,7 @@ class RowView extends React.Component {
   render() {
     const cells = this.props.cells;
     const cellsView = cells.map((cell) => {
-      return <CellView rowId={cell.curRow} colId={cell.curCol} val={cell.val} key={cell.id} isNew={cell.isNew()} isGrid={cell.isGrid()} />
+      return <CellView rowId={cell.curRow} colId={cell.curCol} val={cell.val} key={cell.id} isNew={cell.isNew()} isGrid={cell.isGrid()} movement={cell.movement} />
     })
     return <div className="row">
       {cellsView}

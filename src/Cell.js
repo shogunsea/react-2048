@@ -11,6 +11,7 @@ class Cell {
     this.fromCol = -1;
     this.curRow = row;
     this.curCol = col;
+    this.movement = "";
   }
 
   isGrid() {

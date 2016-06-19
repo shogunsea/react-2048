@@ -35,10 +35,8 @@ export default class Board {
     if (!cell) {
       return;
     }
-
     const {curRow: row, curCol: col} = cell;
     this.getRow(row).addCell(cell);
-    // this.getRow(row).setCell(row, cell);
   }
 
   getAvailableSlots() {
@@ -76,103 +74,94 @@ export default class Board {
   moveBoard(direction) {
     switch(direction) {
       case 0:
-        this.moveLeft();
+        this.moveWithinRow('left');
+        // this.moveLeft();
         break;
       case 1:
-        this.moveUp();
+        this.moveAcrossRow('up');
+        // this.moveUp();
         break;
       case 2:
-        this.moveRight();
+        this.moveWithinRow('right');
+        // this.moveRight();
         break;
       case 3:
-        this.moveDown();
+        this.moveAcrossRow('down');
+        // this.moveDown();
         break;
     }
   }
-    // 0 0 0           0 0 0
-    // 0 0 0 --> left: 0 0 1
-    // 0 1 0           0 0 0
 
-    // 0
-    // 4
-    // 2
-    // 0
-    // move up:
-    // 4
-    // 2
-    // 0
-    // 0
-    // move down:
-    // 0
-    // 0
-    // 4
-    // 2
-
-
-    // 0
-    // 4
-    // 4
-    // 2
-    // move up:
-    // 8
-    // 2
-    // 0
-    // 0
-    // move down:
-    // 0
-    // 0
-    // 8
-    // 2
-
-  // rotateLeft() + moveLeft()/moveRight() == moveUp()/moveDown()
-  // rotateLeft() + rotateLeft()*3 = originalBoard
-
-    // 0 0 0                  0 0 0
-    // 1 0 0 --> rotate left: 0 0 2
-    // 0 2 0                  0 1 0
-  moveLeft(){
-    // 0 2  0  2 **  000022
-    // move left: 4 0 0 0 ** 00004
-    // move right 0 0 0 4 ** 00004
-    // 0 0 0 2
-    // move left:  2 0 0 0
-    // move right: 0 0 0 2
-    // 0 4 0 2  ** 000042
-    // move left: 4 2 0 0 ** 000042
-    // move right: 0 0 4 2 ** 000042
-
+  moveAcrossRow(direction) {
     const rows = this.getRows();
-    for(let i = 0; i < rows.length; i++) {
-      const curRow = rows[i];
-      // there will always be 4 empty grid in each row
-      for (let j = 4; j < curRow.cells.length; j++) {
-        const curCell = curRow.cells[j];
-        for (let k = j - 1; k > 3; k--) {
-          const preCell = curRow[k];
-          if (canMerge) {
-            // drop j, keep k
-            curCell.removed = true;
-            // double value of k
-            preCell.val *= 2;
-            //  0222 ** 0000222
-          }
+    for( let i = 4; i < 8; i++) {// 4 cells maximum
+      for (let j = 0; j < rows.length; j++) {
+        const curRow = rows[j].cells;
+        if (i >= curRow.length) {
+          continue;
         }
+        const curCell = curRow[i];
+        const preRow = curCell.curRow;
+        const preCol = curCell.curCol;
+        curCell.fromCol = preCol;
+        curCell.fromRow = preRow;
+        let movement = '';
+        if (direction == 'up') {
+          curCell.curRow = 0;
+          movement = "row_from_" + preRow + "_to_" + 0;
+          curCell.movement = movement;
+          const newRow = curRow.filter(function(cell) {
+            return cell.id != curCell.id;
+          })
+          rows[j].cells = newRow;
+          rows[0].cells.push(curCell);
+        } else {
+          curCell.curRow = 3;
+          movement = "row_from_" + preRow + "_to_" + 3;
+          curCell.movement = movement;
+          const newRow = curRow.filter(function(cell) {
+            return cell.id != curCell.id;
+          })
+          rows[j].cells = newRow;
+          rows[3].cells.push(curCell);
+        }
+
       }
     }
-
-    console.log('this is left')
   }
 
-  moveRight() {
-    console.log('this is right')
-  }
+  moveWithinRow(direction){
+    const rows = this.getRows();
+    for (let i = 0; i < rows.length; i++) {
+      const curRow = rows[i];
+      // simple case: single cell movement, no merge
+      for (let j = 4; j < curRow.cells.length; j++) {
+        const curCell = curRow.cells[j];
+        const preRow = curCell.curRow;
+        const preCol = curCell.curCol;
+        curCell.fromCol = preCol;
+        curCell.fromRow = preRow;
+        let movement = '';
+        if (direction == 'left') {
+          curCell.curCol = 0;
+          movement = "col_from_" + preCol + "_to_" + 0;
+        } else if(direction == 'right') {
+          curCell.curCol = 3;
+          movement = "col_from_" + preCol + "_to_" + 3;
+        } else if (direction == 'up') {
+          curCell.curRow = 0;
+          movement = "row_from_" + preRow + "_to_" + 0;
+        } else {
+          debugger
+          curCell.curRow = 3;
+          movement = "row_from_" + preRow + "_to_" + 3;
+        }
 
-  moveUp() {
-    console.log('this is up')
-  }
+        curCell.movement = movement;
+      }
 
-  moveDown() {
-    console.log('this is down')
+    }
+
   }
 
   swapTwoCells(cellA, cellB) {
