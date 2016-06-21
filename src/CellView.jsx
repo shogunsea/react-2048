@@ -8,18 +8,19 @@ class CellView extends React.Component {
 
   getValueClass(val) {
     if (val == 0) {
-      return "";
+      return " ";
     } else {
-      return "value-" + val;
+      return "value-" + val + " ";
     }
   }
 
   showCellInfoInDevMode() {
     const info = {
-      row: this.props.rowId,
-      col: this.props.colId,
+      row: this.props.row,
+      col: this.props.col,
       val: this.props.val,
-      isNew: this.props.isNew
+      isNew: this.props.isNew,
+      isGrid: this.props.isGrid
     };
     console.log(info);
   }
@@ -27,8 +28,9 @@ class CellView extends React.Component {
   render() {
     const value = this.props.val;
     const valClass = this.props.isNew? "new " + this.getValueClass(value) : this.getValueClass(value);
-    const position = this.props.isGrid? "" : " row_"+this.props.rowId+" col_"+this.props.colId;
-    return  <div id={this.props.rowId} className={"cell " + valClass + position + " " + this.props.movement} onClick={this.showCellInfoInDevMode.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
+    const gridClass = this.props.isGrid? "grid " : " ";
+    const position = "row_"+this.props.row+" col_"+this.props.col + " ";
+    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement} onClick={this.showCellInfoInDevMode.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
   }
 }
 

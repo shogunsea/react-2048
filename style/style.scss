@@ -1,3 +1,5 @@
+@import 'animation.scss';
+
 $board-color: #baa;
 $light-blue: #E0F2FD;
 $tile-grey: #eee;
@@ -20,12 +22,11 @@ $text-brown: #766;
 
 .board {
   padding: 7px;
-  display: flex;
-  flex-direction: column;
   border-radius: 20px;
   min-height: 500px;
   min-width: 500px;
   background-color: $board-color;
+  position: relative;
 }
 
 .row {
@@ -37,6 +38,7 @@ $text-brown: #766;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: absolute;
   background-color: $cell-brown;
   border-radius: 5px;
   color: $text-brown; // color property is reserved for font-color
@@ -138,6 +140,12 @@ $text-brown: #766;
 
 @for $col from 0 to 4 {
   .col_#{$col} {
-    left: 125px * $col; // 115px: cell size, 5px*2 =10px margin
+    left: 125px * $col + 8px; // 115px: cell size, 5px*2 =10px margin; 8px: padding caused by removal of row element.
+  }
+}
+
+@for $row from 0 to 4 {
+  .row_#{$row} {
+    top: 125px * $row + 8px;
   }
 }

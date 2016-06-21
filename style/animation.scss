@@ -8,10 +8,10 @@
 
         @keyframes col_#{$i}_#{$j} {
           from {
-            left: 125px * $i;
+            left: 125px * $i + 8px;
           }
           to {
-            left: 125px * $j;
+            left: 125px * $j + 8px;;
           }
         }
     }

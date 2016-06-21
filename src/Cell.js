@@ -1,5 +1,4 @@
 let cellId = 0;
-
 // Two types of cell:
 // background cell(fixed position)
 // movable cell(active; inactive)

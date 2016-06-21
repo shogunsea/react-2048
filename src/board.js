@@ -1,4 +1,3 @@
-import Row from './Row.js';
 import _ from 'lodash';
 import Cell from './Cell.js';
 import SampleBoards from '../test/stub/sample_boards.json';
@@ -7,9 +6,16 @@ const BOARD_SIZE = 4;
 
 export default class Board {
   constructor(){
-    this.rows = [];
+    this.grid = [[],[],[],[]];
+    this.board = [[],[],[],[]];
+    this.fillGridWithEmptyCell(this.grid);
+  }
+
+  fillGridWithEmptyCell(grid) {
     for(let i = 0; i < BOARD_SIZE; i++) {
-      this.rows.push(new Row());
+      for(let j = 0; j < BOARD_SIZE; j++) {
+        grid[i].push(new Cell(i, j, 0));
+      }
     }
   }
 
@@ -28,7 +34,30 @@ export default class Board {
       }
     }
 
-    return this.getRows();
+    return this.getBoard();
+  }
+
+  getRandomCell() {
+    const availableSlots = this.getAvailableSlots();
+    const availableLength = availableSlots.length;
+
+    if (availableLength == 0) {
+      console.log('niet, you\'re dead ');
+      return null;
+    }
+
+    const index = ~~(Math.random()* availableLength); // [0, availableLength - 1]
+    const slot = availableSlots[index];
+    const row = slot.row;
+    const col = slot.col;
+    const val = 2;
+    const newCell = new Cell(row, col, val);
+    return newCell;
+  }
+
+  addRandomCell() {
+    const newCell = this.getRandomCell();
+    this.addCellToBoard(newCell);
   }
 
   addCellToBoard(cell) {
@@ -36,22 +65,21 @@ export default class Board {
       return;
     }
     const {curRow: row, curCol: col} = cell;
-    this.getRow(row).addCell(cell);
+    this.getRow(row)[col] = cell;
   }
 
   getAvailableSlots() {
     const slots = [];
-    const rows = this.getRows();
+    const board = this.getBoard();
 
     for (let i = 0 ; i < BOARD_SIZE; i++) {
       slots.push([0,0,0,0]);
     }
 
-    for(let i = 0; i < rows.length; i++) {
-      const curRow = rows[i];
-      // there will always be 4 empty grid in each row
-      for (let j = 4; j < curRow.cells.length; j++) {
-        const curCell = curRow.cells[j];
+    for(let i = 0; i < board.length; i++) {
+      const curRow = board[i];
+      for (let j = 0; j < curRow.length; j++) {
+        const curCell = curRow[j];
         if (curCell) {
           slots[curCell.curRow][curCell.curCol] = 1;
         }
@@ -75,68 +103,97 @@ export default class Board {
     switch(direction) {
       case 0:
         this.moveWithinRow('left');
-        // this.moveLeft();
         break;
       case 1:
         this.moveAcrossRow('up');
-        // this.moveUp();
         break;
       case 2:
         this.moveWithinRow('right');
-        // this.moveRight();
         break;
       case 3:
         this.moveAcrossRow('down');
-        // this.moveDown();
         break;
     }
   }
 
   moveAcrossRow(direction) {
-    const rows = this.getRows();
-    for( let i = 4; i < 8; i++) {// 4 cells maximum
-      for (let j = 0; j < rows.length; j++) {
-        const curRow = rows[j].cells;
-        if (i >= curRow.length) {
-          continue;
-        }
-        const curCell = curRow[i];
-        const preRow = curCell.curRow;
-        const preCol = curCell.curCol;
-        curCell.fromCol = preCol;
-        curCell.fromRow = preRow;
-        let movement = '';
-        if (direction == 'up') {
+    console.log('direction: ' + direction);
+    const board = this.getBoard();
+    // col
+    for (let j = 0; j < 4; j++) {
+      // row
+      if (direction == 'up') {
+        // row starts from top
+        for (let i = 0; i < 4; i++) {
+          const curRow = board[i];
+          if (!curRow[j]) {
+            continue;
+          }
+          const curCell = curRow[j];
+          const preRow = curCell.curRow;
+          const preCol = curCell.curCol;
+          curCell.fromCol = preCol;
+          curCell.fromRow = preRow;
+          let movement = '';
           curCell.curRow = 0;
-          movement = "row_from_" + preRow + "_to_" + 0;
+          movement = "row_" + preRow + "_to_" + 0;
           curCell.movement = movement;
-          const newRow = curRow.filter(function(cell) {
-            return cell.id != curCell.id;
+          const newRow = curRow.map(function(cell) {
+            if (!cell) {
+              return;
+            }
+            if (cell.id != curCell.id) {
+              return cell;
+            }
           })
-          rows[j].cells = newRow;
-          rows[0].cells.push(curCell);
-        } else {
+          board[i] = newRow;
+          board[0][j] = curCell;
+        }
+      } else {
+        // rows starts from bottom
+        for (let i = 3; i >= 0; i--) {
+          const curRow = board[i];
+          if (!curRow[j]) {
+            continue;
+          }
+          const curCell = curRow[j];
+          const preRow = curCell.curRow;
+          const preCol = curCell.curCol;
+          curCell.fromCol = preCol;
+          curCell.fromRow = preRow;
+          let movement = '';
           curCell.curRow = 3;
           movement = "row_from_" + preRow + "_to_" + 3;
           curCell.movement = movement;
-          const newRow = curRow.filter(function(cell) {
-            return cell.id != curCell.id;
+          const newRow = curRow.map(function(cell) {
+            if (!cell) {
+              return;
+            }
+            if (cell.id != curCell.id) {
+              return cell;
+            }
           })
-          rows[j].cells = newRow;
-          rows[3].cells.push(curCell);
+          board[i] = newRow;
+          board[3][j] = curCell;
         }
-
       }
     }
   }
 
   moveWithinRow(direction){
-    const rows = this.getRows();
-    for (let i = 0; i < rows.length; i++) {
-      const curRow = rows[i];
+    console.log('direction: ' + direction);
+    const board = this.getBoard();
+    for (let i = 0; i < 4; i++) {
+      const curRow = board[i];
+      if (curRow.length == 0) {
+        continue;
+      }
       // simple case: single cell movement, no merge
-      for (let j = 4; j < curRow.cells.length; j++) {
-        const curCell = curRow.cells[j];
+      for (let j = 0; j < curRow.length; j++) {
+        const curCell = curRow[j];
+        if (!curCell) {
+          continue;
+        }
         const preRow = curCell.curRow;
         const preCol = curCell.curCol;
         curCell.fromCol = preCol;
@@ -152,22 +209,17 @@ export default class Board {
           curCell.curRow = 0;
           movement = "row_from_" + preRow + "_to_" + 0;
         } else {
-          debugger
           curCell.curRow = 3;
           movement = "row_from_" + preRow + "_to_" + 3;
         }
-
         curCell.movement = movement;
       }
-
     }
-
   }
 
   swapTwoCells(cellA, cellB) {
     const tempRow = cellA.curRow;
     const tempCol = cellA.curCol;
-
   }
 
   mergeTwoCells(cellA, cellB) {
@@ -175,10 +227,14 @@ export default class Board {
   }
 
   getRow(row) {
-    return this.rows[row];
+    return this.board[row];
   }
 
-  getRows(){
-    return this.rows;
+  getBoard(){
+    return this.board;
+  }
+
+  getGrid(){
+    return this.grid;
   }
 }

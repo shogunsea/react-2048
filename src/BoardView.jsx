@@ -1,9 +1,7 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import RowView from './RowView.jsx';
 import CellView from './CellView.jsx';
 import Board from './Board.js';
-import Cell from './Cell.js';
 
 let AVAILABLE_INDEX = -1; // only four rounds during develpment
 const KeyCodes = [37, 38, 39,40];
@@ -12,45 +10,27 @@ class BoardView extends React.Component {
   constructor(props) {
       super(props); // need props or not?
       this.board = new Board();
-      this.addRandomCell();
-      const rowView = this.mapRowModelToView(this.board.getRows());
-      this.state = {rows: rowView}
+      this.board.addRandomCell()
+      const gridView = this.mapCellsToView(this.board.getGrid());
+      const boardView = this.mapCellsToView(this.board.getBoard());
+      this.state = {board: boardView, grid: gridView}
   }
 
-  updateStateWithRows(rows) {
-    const rowView = this.mapRowModelToView(rows);
-    this.setState({rows: rowView});
+  updateStateWithCells(cells) {
+    const cellView = this.mapCellsToView(cells);
+    this.setState({board: cellView});
   }
 
-  mapRowModelToView(rows) {
-    let counter = 0;
-    const rowView = rows.map((row) =>{
-      return <RowView id={row.id} key={row.id} cells={row.cells}/>
+  mapCellsToView(cells) {
+    const cellView = cells.map((row) =>{
+      return row.map((cell) => {
+        if (!cell) {
+          return;
+        }
+        return <CellView row={cell.curRow} col={cell.curCol} val={cell.val} key={cell.id} id={cell.id} isNew={cell.isNew()} isGrid={cell.isGrid()} movement={cell.movement} />
+      })
     });
-    return rowView;
-  }
-
-  getRandomCell() {
-    const availableSlots = this.board.getAvailableSlots();
-    const availableLength = availableSlots.length;
-
-    if (availableLength == 0) {
-      console.log('niet, you\'re dead ');
-      return null;
-    }
-
-    const index = ~~(Math.random()* availableLength); // [0, availableLength - 1]
-    const slot = availableSlots[index];
-    const row = slot.row;
-    const col = slot.col;
-    const val = 2;
-    const newCell = new Cell(row, col, val);
-    return newCell;
-  }
-
-  addRandomCell() {
-    const newCell = this.getRandomCell();
-    this.board.addCellToBoard(newCell);
+    return cellView;
   }
 
   componentDidMount() {
@@ -61,9 +41,8 @@ class BoardView extends React.Component {
     const key = e.keyCode;
     if (KeyCodes.indexOf(key) != -1) {
       const direction = key - 37;
-      // this.addRandomCell();
       this.board.moveBoard(direction);
-      this.updateStateWithRows(this.board.rows);
+      this.updateStateWithCells(this.board.getBoard());
     }
     if (key == 13) {
       this.createTestBoard();
@@ -71,13 +50,14 @@ class BoardView extends React.Component {
   }
 
   createTestBoard() {
-    const testBoardRows = this.board.replaceWithTestBoard('board_A');
-    this.updateStateWithRows(testBoardRows);
+    const testBoard = this.board.replaceWithTestBoard('board_B');
+    this.updateStateWithCells(testBoard);
   }
 
   render() {
     return <div className='board'>
-      {this.state.rows}
+      {this.state.grid}
+      {this.state.board}
     </div>;
   }
 }
