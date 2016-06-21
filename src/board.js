@@ -6,15 +6,15 @@ const BOARD_SIZE = 4;
 
 export default class Board {
   constructor(){
-    this.grid = [[],[],[],[]];
-    this.board = [[],[],[],[]];
+    this.grid = [new Array(4), new Array(4), new Array(4), new Array(4)];
+    this.board = _.cloneDeep(this.grid);
     this.fillGridWithEmptyCell(this.grid);
   }
 
   fillGridWithEmptyCell(grid) {
     for(let i = 0; i < BOARD_SIZE; i++) {
       for(let j = 0; j < BOARD_SIZE; j++) {
-        grid[i].push(new Cell(i, j, 0));
+        grid[i][j] = new Cell(i, j, 0);
       }
     }
   }
@@ -22,7 +22,6 @@ export default class Board {
   replaceWithTestBoard(boardName = 'board_A') {
     this.constructor();
     const sampleBoard = SampleBoards[boardName];
-
     for (let i = 0; i < BOARD_SIZE; i++) {
       const curRow = sampleBoard[i];
       for (let j = 0; j < BOARD_SIZE; j++) {
@@ -102,41 +101,60 @@ export default class Board {
   moveBoard(direction) {
     switch(direction) {
       case 0:
-        this.moveWithinRow('left');
+        this.moveLeftOrRight('left');
         break;
       case 1:
-        this.moveAcrossRow('up');
+        this.moveUpOrDown('up');
         break;
       case 2:
-        this.moveWithinRow('right');
+        this.moveLeftOrRight('right');
         break;
       case 3:
-        this.moveAcrossRow('down');
+        this.moveUpOrDown('down');
         break;
     }
   }
 
-  moveAcrossRow(direction) {
+  getReachableRow(curCell) {
+    const {curRow: row, curCol: col} = curCell;
+    const board = this.getBoard();
+
+    for (let i = row - 1; i >= 0; i--) {
+      if (board[i][col]) {
+        return i + 1;
+      }
+    }
+    return 0;
+  }
+
+  getReachableCol() {
+
+  }
+
+  moveUpOrDown(direction) {
     console.log('direction: ' + direction);
     const board = this.getBoard();
     // col
-    for (let j = 0; j < 4; j++) {
+    for (let j = 0; j < BOARD_SIZE; j++) {
       // row
       if (direction == 'up') {
         // row starts from top
-        for (let i = 0; i < 4; i++) {
+        const targetRow = 0;
+        for (let i = 0; i < BOARD_SIZE; i++) {
           const curRow = board[i];
           if (!curRow[j]) {
             continue;
           }
+
           const curCell = curRow[j];
           const preRow = curCell.curRow;
           const preCol = curCell.curCol;
           curCell.fromCol = preCol;
           curCell.fromRow = preRow;
           let movement = '';
-          curCell.curRow = 0;
-          movement = "row_" + preRow + "_to_" + 0;
+          const toRow = this.getReachableRow(curCell);
+          curCell.curRow = toRow;
+          movement = "row_" + preRow + "_to_" + toRow;
           curCell.movement = movement;
           const newRow = curRow.map(function(cell) {
             if (!cell) {
@@ -147,11 +165,11 @@ export default class Board {
             }
           })
           board[i] = newRow;
-          board[0][j] = curCell;
+          board[toRow][j] = curCell;
         }
       } else {
         // rows starts from bottom
-        for (let i = 3; i >= 0; i--) {
+        for (let i = BOARD_SIZE - 1; i >= 0; i--) {
           const curRow = board[i];
           if (!curRow[j]) {
             continue;
@@ -180,10 +198,10 @@ export default class Board {
     }
   }
 
-  moveWithinRow(direction){
+  moveLeftOrRight(direction){
     console.log('direction: ' + direction);
     const board = this.getBoard();
-    for (let i = 0; i < 4; i++) {
+    for (let i = 0; i < BOARD_SIZE; i++) {
       const curRow = board[i];
       if (curRow.length == 0) {
         continue;
@@ -205,12 +223,6 @@ export default class Board {
         } else if(direction == 'right') {
           curCell.curCol = 3;
           movement = "col_from_" + preCol + "_to_" + 3;
-        } else if (direction == 'up') {
-          curCell.curRow = 0;
-          movement = "row_from_" + preRow + "_to_" + 0;
-        } else {
-          curCell.curRow = 3;
-          movement = "row_from_" + preRow + "_to_" + 3;
         }
         curCell.movement = movement;
       }
