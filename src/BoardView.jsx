@@ -22,15 +22,20 @@ class BoardView extends React.Component {
   }
 
   mapCellsToView(cells) {
-    const cellView = cells.map((row) =>{
+    const cellsViews = cells.map((row) =>{
       return row.map((cell) => {
         if (!cell) {
           return;
         }
-        return <CellView row={cell.curRow} col={cell.curCol} val={cell.val} key={cell.id} id={cell.id} isNew={cell.isNew()} isGrid={cell.isGrid()} movement={cell.movement} />
+
+        const cellView  = <CellView row={cell.curRow} col={cell.curCol} val={cell.val} key={cell.id} id={cell.id} isNew={cell.isNew()} isGrid={cell.isGrid()} movement={cell.movement} isMerged={cell.merged} isMergedInto={cell.mergedInto} />;
+
+        cell.mergedInto = false;
+
+        return cellView;
       })
     });
-    return cellView;
+    return cellsViews;
   }
 
   componentDidMount() {
@@ -41,8 +46,9 @@ class BoardView extends React.Component {
     const key = e.keyCode;
     if (KeyCodes.indexOf(key) != -1) {
       const direction = key - 37;
+      this.board.filterMergedCells();
       this.board.moveBoard(direction);
-      // this.board.addRandomCell();
+      this.board.addRandomCell();
       this.updateStateWithCells(this.board.getBoard());
     }
     if (key == 13) {
@@ -51,12 +57,13 @@ class BoardView extends React.Component {
   }
 
   createTestBoard() {
-    const testBoard = this.board.replaceWithTestBoard('board_D');
+    const testBoard = this.board.replaceWithTestBoard('board_E');
     this.updateStateWithCells(testBoard);
   }
 
   render() {
-    return <div className='board'>
+    const showOverlay = this.board.hasWon? 'show_overlay' : ' '
+    return <div className={'board ' + showOverlay}>
       {this.state.grid}
       {this.state.board}
     </div>;

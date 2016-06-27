@@ -11,6 +11,12 @@ class Cell {
     this.curRow = row;
     this.curCol = col;
     this.movement = "";
+    this.merged = false;
+    this.mergedInto = false;
+  }
+
+  isMerged() {
+    return this.merged;
   }
 
   isGrid() {

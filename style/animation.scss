@@ -11,7 +11,21 @@
             left: 125px * $i + 8px;
           }
           to {
-            left: 125px * $j + 8px;;
+            left: 125px * $j + 8px;
+          }
+        }
+
+        .row_from_#{$i}_to_#{$j} {
+          animation-name: row_#{$i}_#{$j};
+          animation-duration: 0.20s;
+        }
+
+        @keyframes row_#{$i}_#{$j} {
+          from {
+            top: 125px * $i + 8px;
+          }
+          to {
+            top: 125px * $j + 8px;
           }
         }
     }

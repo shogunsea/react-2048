@@ -12,7 +12,7 @@ $text-brown: #766;
   align-items: center;// vertical center
   justify-content: center; // horizontal center
   padding: 100px;
-  background-color: $light-blue;
+  // background-color: $light-blue;
   flex-direction: row;
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
@@ -27,6 +27,7 @@ $text-brown: #766;
   min-width: 500px;
   background-color: $board-color;
   position: relative;
+  z-index: 10;
 }
 
 .row {
@@ -49,6 +50,14 @@ $text-brown: #766;
   width: 115px;
   min-height: 60px;
   min-width: 60px;
+
+  &.merged {
+    z-index: 15;
+  }
+
+  &.mergedInto {
+    z-index: 20;
+  }
 
   &.new {
     position: absolute;
@@ -132,6 +141,15 @@ $text-brown: #766;
 @keyframes newTile {
   from {
     transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes mergedInto {
+  from {
+    transform: scale(1.05);
   }
   to {
     transform: scale(1);

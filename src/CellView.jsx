@@ -29,8 +29,10 @@ class CellView extends React.Component {
     const value = this.props.val;
     const valClass = this.props.isNew? "new " + this.getValueClass(value) : this.getValueClass(value);
     const gridClass = this.props.isGrid? "grid " : " ";
+    const merged = this.props.isMerged? " merged " : " ";
+    const mergedInto = this.props.isMergedInto? " mergedInto " : " ";
     const position = "row_"+this.props.row+" col_"+this.props.col + " ";
-    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement} onClick={this.showCellInfoInDevMode.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
+    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement + merged + mergedInto} onClick={this.showCellInfoInDevMode.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
   }
 }
 

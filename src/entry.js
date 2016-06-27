@@ -1,2 +1,2 @@
 require('../style/style.scss');
-require('./BoardView.jsx')
+require('./BoardView.jsx');
