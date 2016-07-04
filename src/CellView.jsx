@@ -3,7 +3,7 @@ import React from 'react';
 class CellView extends React.Component {
   constructor(props) {
     super(props);
-    this.displayName = '';
+    this.state = {cellProps: props};
   }
 
   getValueClass(val) {
@@ -20,7 +20,10 @@ class CellView extends React.Component {
       col: this.props.col,
       val: this.props.val,
       isNew: this.props.isNew,
-      isGrid: this.props.isGrid
+      isGrid: this.props.isGrid,
+      isMerged: this.props.isMerged,
+      isMergedInto: this.props.isMergedInto,
+      isMergedIntoToggle: this.props.isMergedIntoToggle
     };
     console.log(info);
   }
@@ -31,8 +34,9 @@ class CellView extends React.Component {
     const gridClass = this.props.isGrid? "grid " : " ";
     const merged = this.props.isMerged? " merged " : " ";
     const mergedInto = this.props.isMergedInto? " mergedInto " : " ";
+    const mergedIntoToggle = this.props.isMergedIntoToggle? " mergedIntoToggle " : " ";
     const position = "row_"+this.props.row+" col_"+this.props.col + " ";
-    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement + merged + mergedInto} onClick={this.showCellInfoInDevMode.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
+    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement + merged + mergedInto + mergedIntoToggle} onClick={this.showCellInfoInDevMode.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
   }
 }
 

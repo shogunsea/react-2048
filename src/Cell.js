@@ -13,6 +13,7 @@ class Cell {
     this.movement = "";
     this.merged = false;
     this.mergedInto = false;
+    this.mergedIntoToggle = false;
   }
 
   isMerged() {
@@ -20,11 +21,19 @@ class Cell {
   }
 
   isGrid() {
-    return (this.fromRow == -1 && this.fromCol == -1) && !this.isVisible();
+    return this.wasAt(-1, -1) && !this.isVisible();
+  }
+
+  isAt(row, col) {
+    return this.curRow == row && this.curCol == col;
+  }
+
+  wasAt(row, col) {
+    return this.fromRow == row && this.fromCol == col;
   }
 
   isNew() {
-    return (this.fromRow == -1 && this.fromCol == -1) && this.isVisible();
+    return this.wasAt(-1, -1) && this.isVisible();
   }
 
   move(toRow, toCol) {

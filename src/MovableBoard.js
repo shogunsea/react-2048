@@ -7,16 +7,25 @@ export default class MovableBoard {
   }
 
   mergeTwoCells(mergedIntoCell, mergedCell) {
-    // cellA.fromRow = -1;
-    // cellA.fromCol = -1;
     mergedIntoCell.val *= 2;
     if (mergedIntoCell.val == 2048) {
       this.hasWon = true;
     }
-    mergedIntoCell.mergedInto = true;
-    // cellA.isNew = true;
-    // cellB.val = 2;
+
+    mergedIntoCell.shouldNotMergeAgain = true;
+
+    if (mergedIntoCell.mergedInto) {
+      mergedIntoCell.mergedIntoToggle = true;
+      mergedIntoCell.mergedInto = false;
+    } else if (mergedIntoCell.mergedIntoToggle) {
+      mergedIntoCell.mergedInto = true;
+      mergedIntoCell.mergedIntoToggle = false;
+    } else {
+      mergedIntoCell.mergedInto = true;
+    }
+
     mergedCell.merged = true;
+    mergedCell.mergedInto = false;
   }
 
   moveUpOrDown(direction) {
@@ -36,8 +45,7 @@ export default class MovableBoard {
           const preRow = curCell.curRow;
           const preCol = curCell.curCol;
           let toRow = this.getReachableRow(curCell, direction);
-          // if mergable
-          if (toRow > 0 && board[toRow - 1][j] && board[toRow - 1][j].val == curCell.val) {
+          if (toRow > 0 && board[toRow - 1][j] && board[toRow - 1][j].val == curCell.val && !board[toRow - 1][j].shouldNotMergeAgain) {
             this.mergeTwoCells(board[toRow - 1][j], curCell);
             toRow -= 1;
           }
@@ -87,7 +95,7 @@ export default class MovableBoard {
           let toRow = this.getReachableRow(curCell, direction);
 
           // if mergable
-          if (toRow < 3 && board[toRow + 1][j] && board[toRow + 1][j].val == curCell.val) {
+          if (toRow < 3 && board[toRow + 1][j] && board[toRow + 1][j].val == curCell.val && !board[toRow + 1][j].shouldNotMergeAgain) {
             this.mergeTwoCells(board[toRow + 1][j], curCell);
             toRow += 1;
           }
@@ -123,24 +131,6 @@ export default class MovableBoard {
             board[toRow][j] = curCell;
           }
 
-
-
-          // curCell.fromCol = preCol;
-          // curCell.fromRow = preRow;
-          // curCell.curRow = toRow;
-          // movement = "row_from_" + preRow + "_to_" + toRow;
-          // curCell.movement = movement;
-
-          // const newRow = curRow.map(function(cell) {
-          //   if (!cell) {
-          //     return;
-          //   }
-          //   if (cell.id != curCell.id) {
-          //     return cell;
-          //   }
-          // })
-          // board[i] = newRow;
-          // board[toRow][j] = curCell;
         }
       }
     }

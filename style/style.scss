@@ -56,15 +56,27 @@ $text-brown: #766;
   }
 
   &.mergedInto {
-    z-index: 20;
+    animation-delay: 0.15s;
+    animation-duration: 0.35s;
+    animation-fill-mode: forwards;
+    animation-name: popup_as_merged;
+    transform: scale(0);
+  }
+
+  &.mergedIntoToggle {
+    animation-delay: 0.15s;
+    animation-duration: 0.35s;
+    animation-fill-mode: forwards;
+    animation-name: popup_as_merged_2;
+    transform: scale(0);
   }
 
   &.new {
-    position: absolute;
-    animation-duration: 0.20s;
-    animation-name: newTile;
-    animation-fill-mode: forwards;
     animation-delay: 0.05s;
+    animation-duration: 0.20s;
+    animation-fill-mode: forwards;
+    animation-name: newTile;
+    position: absolute;
     transform: scale(0);
   }
 
@@ -147,11 +159,22 @@ $text-brown: #766;
   }
 }
 
-@keyframes mergedInto {
+@keyframes popup_as_merged {
   from {
-    transform: scale(1.05);
+    transform: scale(0);
   }
   to {
+    z-index: 20;
+    transform: scale(1);
+  }
+}
+
+@keyframes popup_as_merged_2 {
+  from {
+    transform: scale(0);
+  }
+  to {
+    z-index: 20;
     transform: scale(1);
   }
 }
