@@ -4,6 +4,7 @@
         .col_from_#{$i}_to_#{$j} {
           animation-name: col_#{$i}_#{$j};
           animation-duration: 0.20s;
+          animation-timing-function: linear;
         }
 
         @keyframes col_#{$i}_#{$j} {

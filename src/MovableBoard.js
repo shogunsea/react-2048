@@ -43,7 +43,6 @@ export default class MovableBoard {
 
           const curCell = curRow[j];
           const preRow = curCell.curRow;
-          const preCol = curCell.curCol;
           let toRow = this.getReachableRow(curCell, direction);
           if (toRow > 0 && board[toRow - 1][j] && board[toRow - 1][j].val == curCell.val && !board[toRow - 1][j].shouldNotMergeAgain) {
             this.mergeTwoCells(board[toRow - 1][j], curCell);
@@ -52,7 +51,6 @@ export default class MovableBoard {
 
           let movement = '';
 
-          curCell.fromCol = preCol;
           curCell.fromRow = preRow;
           curCell.curRow = toRow;
           movement = "row_from_" + preRow + "_to_" + toRow;
@@ -138,49 +136,79 @@ export default class MovableBoard {
 
   moveLeftOrRight(direction){
     const board = this.getBoard();
+    // row
     for (let i = 0; i < board.length; i++) {
       const curRow = board[i];
       if (curRow.length == 0) {
         continue;
       }
-
+      // col
       if (direction == 'left') {
-        for (let j = 0; j < curRow.length; j++) {
+        // col starts from left
+        for (let j = 0; j < board.length; j++) {
           const curCell = curRow[j];
           if (!curCell) {
             continue;
           }
-          const preRow = curCell.curRow;
+
           const preCol = curCell.curCol;
-          curCell.fromCol = preCol;
-          curCell.fromRow = preRow;
+          let toCol = this.getReachableCol(curCell, direction);
           let movement = '';
-          const toCol = this.getReachableCol(curCell, direction);
+
+          if (toCol > 0 && curRow[toCol - 1] && curRow[toCol - 1].val == curCell.val && !curRow[toCol - 1].shouldNotMergeAgain) {
+            this.mergeTwoCells(curRow[toCol - 1], curCell);
+            toCol -= 1;
+          }
+
+          curCell.fromCol = preCol;
           curCell.curCol = toCol;
           movement = "col_from_" + preCol + "_to_" + toCol;
           curCell.movement = movement;
 
-          board[i][preCol] = null;
-          board[i][toCol] = curCell;
+          const cellHasMoved = curCell.fromCol != curCell.curCol;
+          if (cellHasMoved) {
+            if (curCell.merged) {
+              curRow.push(curCell);
+            } else {
+              curRow[curCell.curCol] = curCell;
+            }
+            curRow[j] = undefined;
+          }
         }
+
+        // console.log('processing for row ' + i + ' is done');
+        // console.log(board);
       } else if (direction == 'right') {
-        for (let j = curRow.length - 1; j >= 0; j--) {
+        // col starts from right
+        for (let j = board.length - 1; j >= 0; j--) {
           const curCell = curRow[j];
           if (!curCell) {
             continue;
           }
-          const preRow = curCell.curRow;
+
           const preCol = curCell.curCol;
-          curCell.fromCol = preCol;
-          curCell.fromRow = preRow;
+          let toCol = this.getReachableCol(curCell, direction);
           let movement = '';
-          const toCol = this.getReachableCol(curCell, direction);
+
+          if (toCol < board.length - 1 && curRow[toCol + 1] && curRow[toCol + 1].val == curCell.val && !curRow[toCol + 1].shouldNotMergeAgain) {
+            this.mergeTwoCells(curRow[toCol + 1], curCell);
+            toCol += 1;
+          }
+
+          curCell.fromCol = preCol;
           curCell.curCol = toCol;
           movement = "col_from_" + preCol + "_to_" + toCol;
           curCell.movement = movement;
 
-          board[i][preCol] = null;
-          board[i][toCol] = curCell;
+          const cellHasMoved = curCell.fromCol != curCell.curCol;
+          if (cellHasMoved) {
+            if (curCell.merged) {
+              curRow.push(curCell);
+            } else {
+              curRow[curCell.curCol] = curCell;
+            }
+            curRow[j] = undefined;
+          }
         }
       }
     }

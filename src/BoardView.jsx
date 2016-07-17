@@ -31,6 +31,7 @@ class BoardView extends React.Component {
         const cellView  = <CellView row={cell.curRow} col={cell.curCol} val={cell.val} key={cell.id} id={cell.id} isNew={cell.isNew()} isGrid={cell.isGrid()} movement={cell.movement} isMerged={cell.merged} isMergedInto={cell.mergedInto}  isMergedIntoToggle={cell.mergedIntoToggle} />;
 
         cell.shouldNotMergeAgain = false;
+        // cell.mergedInto = false;//????keep or remove????
 
         return cellView;
       })
@@ -57,7 +58,7 @@ class BoardView extends React.Component {
   }
 
   createTestBoard() {
-    const testBoard = this.board.replaceWithTestBoard('board_E');
+    const testBoard = this.board.replaceWithTestBoard('board_B');
     this.updateStateWithCells(testBoard);
   }
 
