@@ -5,6 +5,7 @@ $light-blue: #E0F2FD;
 $tile-grey: #eee;
 $cell-brown: #dcb;
 $text-brown: #766;
+$overlay-grey: #D3D3D3;
 
 #container {
   display: flex;
@@ -12,7 +13,6 @@ $text-brown: #766;
   align-items: center;// vertical center
   justify-content: center; // horizontal center
   padding: 100px;
-  // background-color: $light-blue;
   flex-direction: row;
   -webkit-user-select: none;  /* Chrome all / Safari all */
   -moz-user-select: none;     /* Firefox all */
@@ -28,6 +28,23 @@ $text-brown: #766;
   background-color: $board-color;
   position: relative;
   z-index: 10;
+}
+
+.overlay {
+  min-height: 500px;
+  min-width: 500px;
+  z-index: 30;
+  background-color: $overlay-grey;
+  position: absolute;
+  opacity: 0.4;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 23px;
+
+  &.hide {
+    display: none;
+  }
 }
 
 .row {
@@ -72,7 +89,7 @@ $text-brown: #766;
   }
 
   &.new {
-    animation-delay: 0.05s;
+    animation-delay: 0.15s;
     animation-duration: 0.20s;
     animation-fill-mode: forwards;
     animation-name: newTile;

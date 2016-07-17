@@ -3,12 +3,11 @@ import ReactDom from 'react-dom';
 import CellView from './CellView.jsx';
 import Board from './Board.js';
 
-let AVAILABLE_INDEX = -1; // only four rounds during develpment
 const KeyCodes = [37, 38, 39,40];
 
 class BoardView extends React.Component {
   constructor(props) {
-      super(props); // need props or not?
+      super(props); // need super with props if need to access attribute on 'this' inside constructor
       this.board = new Board();
       this.board.addRandomCell()
       const gridView = this.mapCellsToView(this.board.getGrid());
@@ -31,7 +30,6 @@ class BoardView extends React.Component {
         const cellView  = <CellView row={cell.curRow} col={cell.curCol} val={cell.val} key={cell.id} id={cell.id} isNew={cell.isNew()} isGrid={cell.isGrid()} movement={cell.movement} isMerged={cell.merged} isMergedInto={cell.mergedInto}  isMergedIntoToggle={cell.mergedIntoToggle} />;
 
         cell.shouldNotMergeAgain = false;
-        // cell.mergedInto = false;//????keep or remove????
 
         return cellView;
       })
@@ -45,28 +43,32 @@ class BoardView extends React.Component {
 
   hanleKeyUp(e) {
     const key = e.keyCode;
+    if (key == 13) {
+      this.createTestBoard();
+    }
+    if (this.board.hasWon) {
+      return;
+    }
     if (KeyCodes.indexOf(key) != -1) {
       const direction = key - 37;
       this.board.filterMergedCells();
-      this.board.moveBoard(direction);
-      this.board.addRandomCell();
+      this.board.moveBoard(direction, this.board.addRandomCell.bind(this.board));
       this.updateStateWithCells(this.board.getBoard());
-    }
-    if (key == 13) {
-      this.createTestBoard();
     }
   }
 
   createTestBoard() {
-    const testBoard = this.board.replaceWithTestBoard('board_B');
+    const testBoard = this.board.replaceWithTestBoard('board_F');
     this.updateStateWithCells(testBoard);
   }
 
   render() {
-    const showOverlay = this.board.hasWon? 'show_overlay' : ' '
-    return <div className={'board ' + showOverlay}>
+    const showOverlay = this.board.hasWon? 'show_overlay' : 'hide';
+    const overLay = <div className={'overlay ' + showOverlay}>You've won the game of 2048! Hit enter to restart</div>;
+    return <div className={'board '}>
       {this.state.grid}
       {this.state.board}
+      {overLay}
     </div>;
   }
 }

@@ -26,10 +26,12 @@ export default class MovableBoard {
 
     mergedCell.merged = true;
     mergedCell.mergedInto = false;
+    mergedCell.mergedIntoToggle = false;
   }
 
   moveUpOrDown(direction) {
     const board = this.getBoard();
+    let boardHasMoved = false;
     // col
     for (let j = 0; j < board.length; j++) {
       // row
@@ -43,10 +45,12 @@ export default class MovableBoard {
 
           const curCell = curRow[j];
           const preRow = curCell.curRow;
+          let merged = false;
           let toRow = this.getReachableRow(curCell, direction);
           if (toRow > 0 && board[toRow - 1][j] && board[toRow - 1][j].val == curCell.val && !board[toRow - 1][j].shouldNotMergeAgain) {
             this.mergeTwoCells(board[toRow - 1][j], curCell);
             toRow -= 1;
+            merged = true;
           }
 
           let movement = '';
@@ -56,7 +60,7 @@ export default class MovableBoard {
           movement = "row_from_" + preRow + "_to_" + toRow;
           curCell.movement = movement;
 
-          const hasMoved = curCell.fromRow != curCell.curRow;
+          const cellHasMoved = curCell.fromRow != curCell.curRow;
 
           const newRow = curRow.map(function(cell) {
             if (!cell) {
@@ -68,7 +72,7 @@ export default class MovableBoard {
           })
 
           // taking out the old cell
-          if (hasMoved) {
+          if (cellHasMoved) {
             board[i] = newRow;
           }
 
@@ -78,6 +82,13 @@ export default class MovableBoard {
           } else {
             board[toRow][j] = curCell;
           }
+
+          if (cellHasMoved && !merged) {
+            curCell.mergedInto = false;
+            curCell.mergedIntoToggle = false;
+          }
+
+          boardHasMoved |= cellHasMoved;
 
         }
       } else {
@@ -91,11 +102,13 @@ export default class MovableBoard {
           const preRow = curCell.curRow;
           const preCol = curCell.curCol;
           let toRow = this.getReachableRow(curCell, direction);
+          let merged = false;
 
           // if mergable
           if (toRow < 3 && board[toRow + 1][j] && board[toRow + 1][j].val == curCell.val && !board[toRow + 1][j].shouldNotMergeAgain) {
             this.mergeTwoCells(board[toRow + 1][j], curCell);
             toRow += 1;
+            merged = true;
           }
 
           let movement = '';
@@ -106,7 +119,7 @@ export default class MovableBoard {
           movement = "row_from_" + preRow + "_to_" + toRow;
           curCell.movement = movement;
 
-          const hasMoved = curCell.fromRow != curCell.curRow;
+          const cellHasMoved = curCell.fromRow != curCell.curRow;
 
           const newRow = curRow.map(function(cell) {
             if (!cell) {
@@ -118,7 +131,7 @@ export default class MovableBoard {
           })
 
           // taking out the old cell
-          if (hasMoved) {
+          if (cellHasMoved) {
             board[i] = newRow;
           }
 
@@ -129,13 +142,23 @@ export default class MovableBoard {
             board[toRow][j] = curCell;
           }
 
+          if (cellHasMoved && !merged) {
+            curCell.mergedInto = false;
+            curCell.mergedIntoToggle = false;
+          }
+
+          boardHasMoved |= cellHasMoved;
+
         }
       }
     }
+
+    return boardHasMoved;
   }
 
   moveLeftOrRight(direction){
     const board = this.getBoard();
+    let boardHasMoved = false;
     // row
     for (let i = 0; i < board.length; i++) {
       const curRow = board[i];
@@ -154,10 +177,12 @@ export default class MovableBoard {
           const preCol = curCell.curCol;
           let toCol = this.getReachableCol(curCell, direction);
           let movement = '';
+          let merged = false;
 
           if (toCol > 0 && curRow[toCol - 1] && curRow[toCol - 1].val == curCell.val && !curRow[toCol - 1].shouldNotMergeAgain) {
             this.mergeTwoCells(curRow[toCol - 1], curCell);
             toCol -= 1;
+            merged = true;
           }
 
           curCell.fromCol = preCol;
@@ -174,10 +199,15 @@ export default class MovableBoard {
             }
             curRow[j] = undefined;
           }
+
+          if (cellHasMoved && !merged) {
+            curCell.mergedInto = false;
+            curCell.mergedIntoToggle = false;
+          }
+
+          boardHasMoved |= cellHasMoved;
         }
 
-        // console.log('processing for row ' + i + ' is done');
-        // console.log(board);
       } else if (direction == 'right') {
         // col starts from right
         for (let j = board.length - 1; j >= 0; j--) {
@@ -189,10 +219,12 @@ export default class MovableBoard {
           const preCol = curCell.curCol;
           let toCol = this.getReachableCol(curCell, direction);
           let movement = '';
+          let merged = false;
 
           if (toCol < board.length - 1 && curRow[toCol + 1] && curRow[toCol + 1].val == curCell.val && !curRow[toCol + 1].shouldNotMergeAgain) {
             this.mergeTwoCells(curRow[toCol + 1], curCell);
             toCol += 1;
+            merged = true;
           }
 
           curCell.fromCol = preCol;
@@ -209,9 +241,18 @@ export default class MovableBoard {
             }
             curRow[j] = undefined;
           }
+
+          if (cellHasMoved && !merged) {
+            curCell.mergedInto = false;
+            curCell.mergedIntoToggle = false;
+          }
+
+          boardHasMoved |= cellHasMoved;
         }
       }
     }
+
+    return boardHasMoved;
   }
 
 

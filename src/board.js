@@ -11,20 +11,24 @@ export default class Board extends MovableBoard {
     this.fillGridWithEmptyCell(this.grid);
   }
 
-  moveBoard(direction) {
+  moveBoard(direction, addRandomCell) {
+    let hasMoved = false;
     switch(direction) {
       case 0:
-        this.moveLeftOrRight('left');
+        hasMoved = this.moveLeftOrRight('left');
         break;
       case 1:
-        this.moveUpOrDown('up');
+        hasMoved = this.moveUpOrDown('up');
         break;
       case 2:
-        this.moveLeftOrRight('right');
+        hasMoved = this.moveLeftOrRight('right');
         break;
       case 3:
-        this.moveUpOrDown('down');
+        hasMoved = this.moveUpOrDown('down');
         break;
+    }
+    if (hasMoved) {
+      addRandomCell();
     }
   }
 
