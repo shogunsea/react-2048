@@ -41,9 +41,31 @@ $overlay-grey: #D3D3D3;
   align-items: center;
   justify-content: center;
   font-size: 23px;
+  flex: 0 0 100%;
+  text-align: center;
+  flex-direction: column;
 
   &.hide {
     display: none;
+  }
+}
+
+.overlay_text {
+  flex: 0 0 100%;
+  color: #2d1212;
+  font-size: 27px;
+}
+
+.restart {
+  flex: 0 0 100%;
+  border: 2px solid #2d1212;
+  border-radius: 6px;
+  font-size: 36px;
+  padding: 11px;
+  box-shadow: 10px 10px 5px #888888;
+
+  &:hover {
+    background-color: #fff;
   }
 }
 

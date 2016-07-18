@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 import CellView from './CellView.jsx';
 import Board from './Board.js';
+import OverlayView from './Overlay.jsx'
 
 const KeyCodes = [37, 38, 39,40];
 
@@ -57,6 +58,11 @@ class BoardView extends React.Component {
     }
   }
 
+  clickHandler() {
+    const keyUpEvent = {keyCode: 13};
+    this.hanleKeyUp(keyUpEvent);
+  }
+
   createTestBoard() {
     const testBoard = this.board.replaceWithTestBoard('board_F');
     this.updateStateWithCells(testBoard);
@@ -64,11 +70,10 @@ class BoardView extends React.Component {
 
   render() {
     const showOverlay = this.board.hasWon? 'show_overlay' : 'hide';
-    const overLay = <div className={'overlay ' + showOverlay}>You've won the game of 2048! Hit enter to restart</div>;
     return <div className={'board '}>
       {this.state.grid}
       {this.state.board}
-      {overLay}
+      <OverlayView showOverlay={showOverlay} clickHandler={this.clickHandler.bind(this)}/>
     </div>;
   }
 }
