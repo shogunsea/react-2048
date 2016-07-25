@@ -13,7 +13,9 @@ class BoardView extends React.Component {
       this.board.addRandomCell()
       const gridView = this.mapCellsToView(this.board.getGrid());
       const boardView = this.mapCellsToView(this.board.getBoard());
-      this.state = {board: boardView, grid: gridView}
+      const touchStart = { x: null, y: null};
+      const touchEnd = {x: null, y: null};
+      this.state = {board: boardView, grid: gridView, touchStart, touchEnd};
   }
 
   updateStateWithCells(cells) {
@@ -40,6 +42,24 @@ class BoardView extends React.Component {
 
   componentDidMount() {
     window.addEventListener('keyup', this.hanleKeyUp.bind(this));
+  }
+
+  handleTouchStart(e) {
+    const touch = e.touches[0];
+    const x = touch.clientX;
+    const y = touch.clientY;
+    const touchStart = {x, y};
+    this.setState({touchStart: touchStart});
+  }
+
+  handleTouchEnd(e) {
+    const touch = e.changedTouches[0];
+    const x = touch.clientX;
+    const y = touch.clientY;
+    const prePos = this.state.touchStart;
+    const xd = x - prePos.x;
+    const yd = y - prePos.y;
+    // do something with diff data
   }
 
   hanleKeyUp(e) {
@@ -70,7 +90,7 @@ class BoardView extends React.Component {
 
   render() {
     const showOverlay = this.board.hasWon? 'show_overlay' : 'hide';
-    return <div className={'board '}>
+    return <div className={'board '} onTouchStart={this.handleTouchStart.bind(this)} onTouchEnd={this.handleTouchEnd.bind(this)}>
       {this.state.grid}
       {this.state.board}
       <OverlayView showOverlay={showOverlay} clickHandler={this.clickHandler.bind(this)}/>

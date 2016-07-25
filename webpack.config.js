@@ -1,13 +1,7 @@
-var path = require('path');
-var webpack = require('webpack');
-
-module.exports = {
-  entry: "./src/entry.js",
-  output: {
-      path: path.join(__dirname, "dist"),
-      filename: "bundle.js"
-  },
-  plugins: [
+const path = require('path');
+const webpack = require('webpack');
+const isProduction = process.env.NODE_ENV === 'production';
+const productionPlugins = [
     new webpack.optimize.UglifyJsPlugin({
       compressor: {
         warnings: false
@@ -18,7 +12,15 @@ module.exports = {
         'NODE_ENV': JSON.stringify('production')
       }
     })
-  ],
+  ];
+
+module.exports = {
+  entry: "./src/entry.js",
+  output: {
+      path: path.join(__dirname, "dist"),
+      filename: "bundle.js"
+  },
+  plugins: isProduction? productionPlugins : [],
   module: {
     loaders: [
       {
