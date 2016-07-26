@@ -59,7 +59,31 @@ class BoardView extends React.Component {
     const prePos = this.state.touchStart;
     const xd = x - prePos.x;
     const yd = y - prePos.y;
-    // do something with diff data
+    const xAbs = Math.abs(xd);
+    const yAbs = Math.abs(yd);
+    let keyCode = 0;
+
+    if (xAbs > yAbs) {
+      if (xd > 0) {
+        // direction = 'right';
+        keyCode = 39;
+      }else {
+        // direction = 'left';
+        keyCode = 37;
+      }
+    } else {
+      if (yd > 0) {
+        // direction = 'top';
+        keyCode = 40;
+
+      } else {
+        // direction = 'down';
+        keyCode = 38;
+      }
+    }
+
+    this.hanleKeyUp({keyCode});
+
   }
 
   hanleKeyUp(e) {
