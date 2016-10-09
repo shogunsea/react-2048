@@ -8,7 +8,8 @@ export default class MovableBoard {
 
   mergeTwoCells(mergedIntoCell, mergedCell) {
     mergedIntoCell.val *= 2;
-    if (mergedIntoCell.val == 2048) {
+    // never end please
+    if (mergedIntoCell.val == 20480000) {
       this.hasWon = true;
     }
 
