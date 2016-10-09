@@ -108,7 +108,7 @@ class BoardView extends React.Component {
   }
 
   createTestBoard() {
-    const testBoard = this.board.replaceWithTestBoard('board_F');
+    const testBoard = this.board.replaceWithTestBoard('board_G');
     this.updateStateWithCells(testBoard);
   }
 

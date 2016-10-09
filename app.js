@@ -1,13 +1,18 @@
 var express = require('express');
 var app = express();
 var path = require('path');
-var indexFile = path.join(__dirname, './index.html')
+var indexPage = path.join(__dirname, './index.html')
+var layout_example = path.join(__dirname, './layout_example.html')
 var publicPath = path.resolve(__dirname, 'dist');
 
 app.use(express.static(publicPath));
 
 app.get('/2048', function(req, res) {
-  res.sendFile(indexFile);
+  res.sendFile(indexPage);
+});
+
+app.get('/test', function(req, res) {
+  res.sendFile(layout_example);
 });
 
 app.get('*', function(req, res) {

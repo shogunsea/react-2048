@@ -187,6 +187,13 @@ $overlay-grey: #D3D3D3;
     background-color: #ec2;
     font-size: 35px;
   }
+
+  &.value-4096 {
+    position: absolute;
+    color: #gb(255, 245, 107);
+    background-color: #ec2;
+    font-size: 35px;
+  }
 }
 
 @keyframes newTile {

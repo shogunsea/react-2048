@@ -15,10 +15,13 @@ const productionPlugins = [
   ];
 
 module.exports = {
-  entry: "./src/entry.js",
+  entry: {
+    appBundle: "./src/entry.js",
+    layoutBundle: "./src/layout.js",
+  },
   output: {
       path: path.join(__dirname, "dist"),
-      filename: "bundle.js"
+      filename: "[name].js"
   },
   plugins: isProduction? productionPlugins : [],
   module: {

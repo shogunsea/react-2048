@@ -2,3 +2,4 @@ node_modules
 tmp
 *.txt
 bundle.js
+dist
