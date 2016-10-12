@@ -1,13 +1,66 @@
+const BOARD_SIZE = 4;
 
 export default class MovableBoard {
   constructor() {
-    this.grid = [new Array(4), new Array(4), new Array(4), new Array(4)];
+    this.grid = [new Array(BOARD_SIZE), new Array(BOARD_SIZE), new Array(BOARD_SIZE), new Array(BOARD_SIZE)];
     this.board = _.cloneDeep(this.grid);
     this.hasWon = false;
+    this.hasLost = false;
+    this.score = 0;
+  }
+
+  isMovable() {
+    const board = this.board;
+    let isMovable = false;
+    // check for empty slots
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
+        if (!board[i][j]) {
+          isMovable = true;
+          return isMovable;
+        }
+      }
+    }
+    // check if there're two ajacent cells have same value
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      for (let j = 0; j < BOARD_SIZE; j++) {
+        let curCell = board[i][j];
+        if (j !== BOARD_SIZE - 1) {
+          let rightCell = board[i][j + 1];
+          if (!!curCell && curCell.val === rightCell.val) {
+            isMovable = true;
+            return isMovable;
+          }
+        }
+        if (i !== BOARD_SIZE - 1) {
+          let bottomCell = board[i + 1][j];
+          if (!!curCell && curCell.val === bottomCell.val) {
+            isMovable = true;
+            return isMovable;
+          }
+        }
+      }
+    }
+
+    return isMovable;
+  }
+
+  recordMaxScore() {
+    const currentMaxScore = +window.sessionStorage.getItem('2048-max-score');
+    if (currentMaxScore <= this.score) {
+      window.sessionStorage.setItem('2048-max-score', this.score);
+    }
+  }
+
+  updateScore(score) {
+    this.score += score;
   }
 
   mergeTwoCells(mergedIntoCell, mergedCell) {
     mergedIntoCell.val *= 2;
+    this.updateScore(mergedIntoCell.val);
+    this.recordMaxScore();
+
     // never ends please
     if (mergedIntoCell.val == 2048000) {
       this.hasWon = true;

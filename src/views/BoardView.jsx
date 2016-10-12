@@ -1,8 +1,10 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
+import Board from '../Board.js';
 import CellView from './CellView.jsx';
-import Board from './Board.js';
-import OverlayView from './Overlay.jsx'
+import ScoreView from './ScoreView.jsx';
+import WinOverlayView from './WinOverlay.jsx';
+import FailOverlayView from './FailOverlay.jsx';
 
 const KeyCodes = [37, 38, 39,40];
 
@@ -86,8 +88,16 @@ class BoardView extends React.Component {
 
   }
 
-  hanleKeyUp(e) {
+  hanleKeyUp(e, newGame) {
+    if (newGame) {
+      this.board = new Board();
+      this.board.addRandomCell();
+      this.updateStateWithCells(this.board.getBoard());
+      return;
+    }
+
     const key = e.keyCode;
+
     if (key == 13) {
       this.createTestBoard();
     }
@@ -97,28 +107,46 @@ class BoardView extends React.Component {
     if (KeyCodes.indexOf(key) != -1) {
       const direction = key - 37;
       this.board.filterMergedCells();
-      this.board.moveBoard(direction, this.board.addRandomCell.bind(this.board));
+      let isInitiallyMovable = this.board.isMovable();
+
+      // move the board if movable
+      if (isInitiallyMovable) {
+        this.board.moveBoard(direction, this.board.addRandomCell.bind(this.board));
+      }
+      // after the movement the board may become unmovable
+      let postMovementMovable = this.board.isMovable();
+
+      if (!isInitiallyMovable || !postMovementMovable) {
+        this.board.hasLost = true;
+      }
+
       this.updateStateWithCells(this.board.getBoard());
     }
   }
 
   clickHandler() {
-    const keyUpEvent = {keyCode: 13};
-    this.hanleKeyUp(keyUpEvent);
+    this.hanleKeyUp(null, true);
   }
 
   createTestBoard() {
-    const testBoard = this.board.replaceWithTestBoard('board_G');
+    const testBoard = this.board.replaceWithTestBoard('one_step_to_2048');
     this.updateStateWithCells(testBoard);
   }
 
   render() {
-    const showOverlay = this.board.hasWon? 'show_overlay' : 'hide';
-    return <div className={'board '} onTouchStart={this.handleTouchStart.bind(this)} onTouchEnd={this.handleTouchEnd.bind(this)}>
-      {this.state.grid}
-      {this.state.board}
-      <OverlayView showOverlay={showOverlay} clickHandler={this.clickHandler.bind(this)}/>
-    </div>;
+    const showWinOverlay = this.board.hasWon? 'show_overlay' : 'hide';
+    const showFailOverlay = this.board.hasLost? 'show_overlay' : 'hide';
+    const currentScore = this.board.score;
+    const maxScore = +window.sessionStorage.getItem('2048-max-score') || 0;
+    return <div className="game-view">
+        <ScoreView currentScore={currentScore} maxScore={maxScore} />
+        <div className={'board '} onTouchStart={this.handleTouchStart.bind(this)} onTouchEnd={this.handleTouchEnd.bind(this)}>
+          {this.state.grid}
+          {this.state.board}
+          <WinOverlayView showOverlay={showWinOverlay} clickHandler={this.clickHandler.bind(this)}/>
+          <FailOverlayView showOverlay={showFailOverlay} clickHandler={this.clickHandler.bind(this)}/>
+        </div>
+      </div>
   }
 }
 

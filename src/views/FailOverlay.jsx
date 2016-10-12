@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
 
-class OverlayView extends React.Component {
+class FailOverlay extends React.Component {
   render() {
-    const wonText = 'You\'ve won the game of 2048! Hit enter or click button below to restart.';
+    const wonText = 'Whoops! That\'s it! One more round?';
     const showOverlay = this.props.showOverlay;
     const clickHandler = this.props.clickHandler;
     const restartButton = <div className='restart' onClick={clickHandler}>Play again</div>;
@@ -15,4 +15,4 @@ class OverlayView extends React.Component {
   }
 }
 
-export default OverlayView;
+export default FailOverlay;

@@ -6,6 +6,29 @@ $tile-grey: #eee;
 $cell-brown: #dcb;
 $text-brown: #766;
 $overlay-grey: #D3D3D3;
+$overlay-white: #ffffff;
+
+.score {
+  width: 100%;
+  padding-bottom: 30px;
+  font-family: Arial;
+
+  & .max-score {
+    display: inline-block;
+    float: left;
+  }
+
+  & .current-score {
+    display: inline-block;
+    float: right;
+  }
+}
+
+// .score::after {
+//   content: " ";
+//   clear: both;
+//   display: block;
+// }
 
 #container {
   display: flex;
@@ -34,9 +57,9 @@ $overlay-grey: #D3D3D3;
   min-height: 500px;
   min-width: 500px;
   z-index: 30;
-  background-color: $overlay-grey;
+  background-color: $overlay-white;
   position: absolute;
-  opacity: 0.4;
+  opacity: 0.6;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -51,6 +74,7 @@ $overlay-grey: #D3D3D3;
 }
 
 .overlay_text {
+  padding: 35px;
   flex: 0 0 100%;
   color: #2d1212;
   font-size: 27px;
@@ -190,8 +214,36 @@ $overlay-grey: #D3D3D3;
 
   &.value-4096 {
     position: absolute;
-    color: #gb(255, 245, 107);
-    background-color: #ec2;
+    color: #fff;
+    background-color: #f3dc3a;
+    font-size: 35px;
+  }
+
+  &.value-8192 {
+    position: absolute;
+    color: #fff;
+    background-color: #ece943;
+    font-size: 35px;
+  }
+
+  &.value-16384 {
+    position: absolute;
+    color: #fff;
+    background-color: #dae639;
+    font-size: 35px;
+  }
+
+  &.value-32768 {
+    position: absolute;
+    color: #fff;
+    background-color: #bae639;
+    font-size: 35px;
+  }
+
+  &.value-65536 {
+    position: absolute;
+    color: #fff;
+    background-color: #aae639;
     font-size: 35px;
   }
 }
