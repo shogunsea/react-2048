@@ -51,6 +51,10 @@ module.exports = {
       }
     ]
   },
-  watch: false
+  watch: false,
+  node: {
+    fs: "empty",
+    net: 'empty'
+  }
 }
 
