@@ -4,9 +4,10 @@
   "description": "react in 2048",
   "main": "index.js",
   "scripts": {
-    "start": "echo \"2048 is up\" ; nodemon -e js --watch . --watch dist app.js > /dev/null 2>&1 &",
+    "start": "echo \"2048 is up\" ; ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist app.js > /dev/null 2>&1 &",
     "build": "NODE_ENV=production webpack",
-    "hehe": "npm run build && npm start"
+    "hehe": "npm run build && npm start",
+    "deploy": "rsync -azP --exclude='.*' --exclude='node_modules' --exclude='*.text' ./ xxk@107.170.215.221:~/2048"
   },
   "repository": {
     "type": "git",
