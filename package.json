@@ -4,6 +4,8 @@
   "description": "react in 2048",
   "main": "index.js",
   "scripts": {
+    "dev": "node app.js",
+    "dev-debug": "node debug app.js",
     "start": "echo \"2048 is up\" ; ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist app.js > /dev/null 2>&1 &",
     "build": "NODE_ENV=production webpack",
     "hehe": "npm run build && npm start",
