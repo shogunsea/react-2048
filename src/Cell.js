@@ -36,10 +36,6 @@ class Cell {
     return this.wasAt(-1, -1) && this.isVisible();
   }
 
-  move(toRow, toCol) {
-
-  }
-
   isVisible() {
     return this.val != 0;
   }

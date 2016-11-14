@@ -1,3 +1,4 @@
+import _ from 'lodash';
 const BOARD_SIZE = 4;
 
 export default class MovableBoard {

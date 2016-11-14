@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import Cell from './Cell.js';
 import SampleBoards from '../test/stub/sample_boards.json';
 import MovableBoard from './MovableBoard.js';
