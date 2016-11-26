@@ -3,7 +3,12 @@ const BOARD_SIZE = 4;
 
 export default class MovableBoard {
   constructor() {
-    this.grid = [new Array(BOARD_SIZE), new Array(BOARD_SIZE), new Array(BOARD_SIZE), new Array(BOARD_SIZE)];
+    this.grid = [
+      new Array(BOARD_SIZE),
+      new Array(BOARD_SIZE),
+      new Array(BOARD_SIZE),
+      new Array(BOARD_SIZE),
+    ];
     this.board = _.cloneDeep(this.grid);
     this.hasWon = false;
     this.hasLost = false;
@@ -102,7 +107,10 @@ export default class MovableBoard {
           const preRow = curCell.curRow;
           let merged = false;
           let toRow = this.getReachableRow(curCell, direction);
-          if (toRow > 0 && board[toRow - 1][j] && board[toRow - 1][j].val == curCell.val && !board[toRow - 1][j].shouldNotMergeAgain) {
+          if (toRow > 0
+            && board[toRow - 1][j]
+            && board[toRow - 1][j].val == curCell.val
+            && !board[toRow - 1][j].shouldNotMergeAgain) {
             this.mergeTwoCells(board[toRow - 1][j], curCell);
             toRow -= 1;
             merged = true;
@@ -112,7 +120,7 @@ export default class MovableBoard {
 
           curCell.fromRow = preRow;
           curCell.curRow = toRow;
-          movement = "row_from_" + preRow + "_to_" + toRow;
+          movement = 'row_from_' + preRow + '_to_' + toRow;
           curCell.movement = movement;
 
           const cellHasMoved = curCell.fromRow != curCell.curRow;
@@ -124,7 +132,7 @@ export default class MovableBoard {
             if (cell.id != curCell.id) {
               return cell;
             }
-          })
+          });
 
           // taking out the old cell
           if (cellHasMoved) {
@@ -144,7 +152,6 @@ export default class MovableBoard {
           }
 
           boardHasMoved |= cellHasMoved;
-
         }
       } else {
         // rows starts from bottom
@@ -160,7 +167,10 @@ export default class MovableBoard {
           let merged = false;
 
           // if mergable
-          if (toRow < 3 && board[toRow + 1][j] && board[toRow + 1][j].val == curCell.val && !board[toRow + 1][j].shouldNotMergeAgain) {
+          if (toRow < 3
+            && board[toRow + 1][j]
+            && board[toRow + 1][j].val == curCell.val
+            && !board[toRow + 1][j].shouldNotMergeAgain) {
             this.mergeTwoCells(board[toRow + 1][j], curCell);
             toRow += 1;
             merged = true;
@@ -171,7 +181,7 @@ export default class MovableBoard {
           curCell.fromCol = preCol;
           curCell.fromRow = preRow;
           curCell.curRow = toRow;
-          movement = "row_from_" + preRow + "_to_" + toRow;
+          movement = 'row_from_' + preRow + '_to_' + toRow;
           curCell.movement = movement;
 
           const cellHasMoved = curCell.fromRow != curCell.curRow;
@@ -183,7 +193,7 @@ export default class MovableBoard {
             if (cell.id != curCell.id) {
               return cell;
             }
-          })
+          });
 
           // taking out the old cell
           if (cellHasMoved) {
@@ -203,7 +213,6 @@ export default class MovableBoard {
           }
 
           boardHasMoved |= cellHasMoved;
-
         }
       }
     }
@@ -211,7 +220,7 @@ export default class MovableBoard {
     return boardHasMoved;
   }
 
-  moveLeftOrRight(direction){
+  moveLeftOrRight(direction) {
     const board = this.getBoard();
     let boardHasMoved = false;
     // row
@@ -234,7 +243,10 @@ export default class MovableBoard {
           let movement = '';
           let merged = false;
 
-          if (toCol > 0 && curRow[toCol - 1] && curRow[toCol - 1].val == curCell.val && !curRow[toCol - 1].shouldNotMergeAgain) {
+          if (toCol > 0
+            && curRow[toCol - 1]
+            && curRow[toCol - 1].val == curCell.val
+            && !curRow[toCol - 1].shouldNotMergeAgain) {
             this.mergeTwoCells(curRow[toCol - 1], curCell);
             toCol -= 1;
             merged = true;
@@ -242,7 +254,7 @@ export default class MovableBoard {
 
           curCell.fromCol = preCol;
           curCell.curCol = toCol;
-          movement = "col_from_" + preCol + "_to_" + toCol;
+          movement = 'col_from_' + preCol + '_to_' + toCol;
           curCell.movement = movement;
 
           const cellHasMoved = curCell.fromCol != curCell.curCol;
@@ -262,7 +274,6 @@ export default class MovableBoard {
 
           boardHasMoved |= cellHasMoved;
         }
-
       } else if (direction == 'right') {
         // col starts from right
         for (let j = board.length - 1; j >= 0; j--) {
@@ -276,7 +287,10 @@ export default class MovableBoard {
           let movement = '';
           let merged = false;
 
-          if (toCol < board.length - 1 && curRow[toCol + 1] && curRow[toCol + 1].val == curCell.val && !curRow[toCol + 1].shouldNotMergeAgain) {
+          if (toCol < board.length - 1
+            && curRow[toCol + 1]
+            && curRow[toCol + 1].val == curCell.val
+            && !curRow[toCol + 1].shouldNotMergeAgain) {
             this.mergeTwoCells(curRow[toCol + 1], curCell);
             toCol += 1;
             merged = true;
@@ -284,7 +298,7 @@ export default class MovableBoard {
 
           curCell.fromCol = preCol;
           curCell.curCol = toCol;
-          movement = "col_from_" + preCol + "_to_" + toCol;
+          movement = 'col_from_' + preCol + '_to_' + toCol;
           curCell.movement = movement;
 
           const cellHasMoved = curCell.fromCol != curCell.curCol;
@@ -309,8 +323,6 @@ export default class MovableBoard {
 
     return boardHasMoved;
   }
-
-
 
   getReachableRow(curCell, direction) {
     const {curRow: row, curCol: col} = curCell;
@@ -354,7 +366,7 @@ export default class MovableBoard {
     }
   }
 
-  getBoard(){
+  getBoard() {
     return this.board;
   }
 }

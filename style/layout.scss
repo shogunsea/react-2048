@@ -18,8 +18,9 @@ body {
 
 #container {
   background-color: $board-color;
-  height: 400px;
-  width: 400px;
+  // height: 400px;
+  margin: 0 20px;
+  height: 100vh;
   // display: flex;
   // min-height: 400px;
   // align-items: center;// vertical center
@@ -35,8 +36,8 @@ body {
 .board {
   // padding: 7px;
   // border-radius: 20px;
-  // min-height: 500px;
-  // min-width: 500px;
+  min-height: 500px;
+  min-width: 500px;
   // background-color: $board-color;
   // position: relative;
   // z-index: 10;

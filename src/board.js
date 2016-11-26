@@ -5,8 +5,8 @@ import MovableBoard from './MovableBoard.js';
 const BOARD_SIZE = 4;
 
 export default class Board extends MovableBoard {
-  constructor(){
-    super()
+  constructor() {
+    super();
     this.fillGridWithEmptyCell(this.grid);
   }
 
@@ -65,7 +65,8 @@ export default class Board extends MovableBoard {
       return null;
     }
 
-    const index = ~~(Math.random()* availableLength); // [0, availableLength - 1]
+    // [0, availableLength - 1]
+    const index = ~~(Math.random() * availableLength);
     const slot = availableSlots[index];
     const row = slot.row;
     const col = slot.col;
@@ -91,8 +92,8 @@ export default class Board extends MovableBoard {
     const slots = [];
     const board = this.getBoard();
 
-    for (let i = 0 ; i < BOARD_SIZE; i++) {
-      slots.push([0,0,0,0]);
+    for (let i = 0; i < BOARD_SIZE; i++) {
+      slots.push([0, 0, 0, 0]);
     }
 
     for(let i = 0; i < BOARD_SIZE; i++) {
@@ -110,7 +111,7 @@ export default class Board extends MovableBoard {
     for (let i = 0; i < BOARD_SIZE; i++) {
       for (let j = 0; j < BOARD_SIZE; j++) {
         if (slots[i][j] == 0) {
-          availableSlots.push({row: i, col: j})
+          availableSlots.push({row: i, col: j});
         }
       }
     }
@@ -122,7 +123,7 @@ export default class Board extends MovableBoard {
     const board = this.getBoard();
 
     for (let i = 0; i < board.length; i++) {
-      board[i] = board[i].slice(0,4);
+      board[i] = board[i].slice(0, 4);
     }
   }
 
@@ -130,7 +131,7 @@ export default class Board extends MovableBoard {
     return this.board[row];
   }
 
-  getGrid(){
+  getGrid() {
     return this.grid;
   }
 }

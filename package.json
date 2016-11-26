@@ -4,12 +4,10 @@
   "description": "react in 2048",
   "main": "index.js",
   "scripts": {
-    "lint": "./node_modules/eslint/bin/eslint.js --color src; exit 0",
-    "dev": "node app.js",
-    "dev-debug": "node debug app.js",
+    "lint": "./node_modules/eslint/bin/eslint.js --color ./src/**; exit 0",
+    "dev": "./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist app.js",
+    "dev-debug": "./node_modules/nodemon/bin/nodemon.js debug -e js --watch . --watch dist app.js",
     "start": "echo \"2048 is up\" ; ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist app.js > /dev/null 2>&1 &",
-    "build": "NODE_ENV=production webpack",
-    "hehe": "npm run build && npm start",
     "deploy": "rsync -azP --exclude='.*' --exclude='node_modules' --exclude='*.text' ./ xxk@107.170.215.221:~/2048"
   },
   "repository": {
@@ -30,8 +28,11 @@
     "babel-preset-react": "^6.5.0",
     "css-loader": "^0.23.1",
     "eslint": "^3.10.0",
+    "eslint-config-google": "^0.7.0",
     "eslint-plugin-react": "^5.1.1",
     "extract-text-webpack-plugin": "^1.0.1",
+    "gulp": "^3.9.1",
+    "gulp-help": "^1.6.1",
     "jest-cli": "^13.0.0",
     "json-loader": "^0.5.4",
     "node-sass": "^3.4.2",
@@ -40,10 +41,11 @@
     "react-dom": "^15.0.2",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
-    "webpack": "^1.13.0"
+    "webpack": "^1.13.3"
   },
   "dependencies": {
     "express": "^4.14.0",
     "lodash": "^4.13.1"
-  }
+  },
+  "currentSHA": "ad9ea8b6c1cc5673f46b31d468d6293942f30692"
 }

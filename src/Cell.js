@@ -3,14 +3,14 @@ let cellId = 0;
 // background cell(fixed position)
 // movable cell(active; inactive)
 class Cell {
-  constructor (row = -1, col = -1, val = 0) {
+  constructor(row = -1, col = -1, val = 0) {
     this.id = cellId++;
     this.val = val;
     this.fromRow = -1;
     this.fromCol = -1;
     this.curRow = row;
     this.curCol = col;
-    this.movement = "";
+    this.movement = '';
     this.merged = false;
     this.mergedInto = false;
     this.mergedIntoToggle = false;
@@ -42,9 +42,9 @@ class Cell {
 
   getValueClass(val) {
     if (val == 0) {
-      return "";
+      return '';
     } else {
-      return "value-" + val;
+      return 'value-' + val;
     }
   }
 }

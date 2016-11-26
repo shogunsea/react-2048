@@ -7,8 +7,8 @@ class ScoreView extends React.Component {
 
   render() {
     return <div className="score">
-      <div className="max-score"> Max score: {this.props.maxScore}</div>
-      <div className="current-score"> Current score: {this.props.currentScore}</div>
+      <div className="max-score button"> Max score: {this.props.maxScore}</div>
+      <div className="current-score button"> Current score: {this.props.currentScore}</div>
     </div>
   }
 }

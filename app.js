@@ -23,5 +23,5 @@ var port = 3080;
 
 app.listen(port, function(){
   console.log('yoooo!');
-  console.log('2048 app running on ' + port);
+  console.log('2048 app running on http://localhost:' + port);
 });
