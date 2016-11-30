@@ -1,6 +1,20 @@
-@import 'animation.scss';
 @import 'colors.scss';
 @import 'cell.scss';
+@import 'board.scss';
+
+#container {
+  -webkit-user-select: none;  /* Chrome all / Safari all */
+  -moz-user-select: none;     /* Firefox all */
+  -ms-user-select: none;      /* IE 10+ */
+  cursor: default;
+}
+
+.game-view {
+  margin: 1vh 1vw;
+  width: 98vw;
+  height: 98vh;
+  background-color: $color-white;
+}
 
 .button {
   transition: box-shadow 0.2s ease;
@@ -33,32 +47,6 @@
     float: right;
   }
 }
-
-#container {
-  display: flex;
-  min-height: 400px;
-  align-items: center;// vertical center
-  justify-content: center; // horizontal center
-  padding: 100px;
-  flex-direction: row;
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
-  cursor: default;
-}
-
-.board {
-  clear: both;
-  padding: 7px;
-  border-radius: 20px;
-  min-height: 500px;
-  min-width: 500px;
-  // background-color: $board-color;
-  // background: $light-teal-blue-gradient;
-  position: relative;
-  z-index: 10;
-}
-
 .overlay {
   min-height: 500px;
   min-width: 500px;
@@ -102,47 +90,4 @@
 .row {
   display: flex;
   position: relative;
-}
-
-
-
-@keyframes newTile {
-  from {
-    transform: scale(0);
-  }
-  to {
-    transform: scale(1);
-  }
-}
-
-@keyframes popup_as_merged {
-  from {
-    transform: scale(0);
-  }
-  to {
-    z-index: 20;
-    transform: scale(1);
-  }
-}
-
-@keyframes popup_as_merged_2 {
-  from {
-    transform: scale(0);
-  }
-  to {
-    z-index: 20;
-    transform: scale(1);
-  }
-}
-
-@for $col from 0 to 4 {
-  .col_#{$col} {
-    left: 125px * $col + 8px; // 115px: cell size, 5px*2 =10px margin; 8px: padding caused by removal of row element.
-  }
-}
-
-@for $row from 0 to 4 {
-  .row_#{$row} {
-    top: 125px * $row + 8px;
-  }
 }

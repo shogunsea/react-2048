@@ -1,3 +1,33 @@
+
+@keyframes newTile {
+  from {
+    transform: scale(0);
+  }
+  to {
+    transform: scale(1);
+  }
+}
+
+@keyframes popup_as_merged {
+  from {
+    transform: scale(0);
+  }
+  to {
+    z-index: 20;
+    transform: scale(1);
+  }
+}
+
+@keyframes popup_as_merged_2 {
+  from {
+    transform: scale(0);
+  }
+  to {
+    z-index: 20;
+    transform: scale(1);
+  }
+}
+
 @for $i from 0 to 4 {
   @for $j from 0 to 4 {
     @if $i != $j {
@@ -8,10 +38,10 @@
 
         @keyframes col_#{$i}_#{$j} {
           from {
-            left: 125px * $i + 8px;
+            left: 24.5% * $i + 1%; // left margin offset
           }
           to {
-            left: 125px * $j + 8px;
+            left: 24.5% * $j + 1%; // left margin offset
           }
         }
 
@@ -22,10 +52,10 @@
 
         @keyframes row_#{$i}_#{$j} {
           from {
-            top: 125px * $i + 8px;
+            top: 24.5% * $i + 1%;
           }
           to {
-            top: 125px * $j + 8px;
+            top: 24.5% * $j + 1%;
           }
         }
     }
