@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var indexPage = path.join(__dirname, './index.html')
-var layout_example = path.join(__dirname, './layout_example.html')
+var layoutExample = path.join(__dirname, './layout_example.html')
 var publicPath = path.resolve(__dirname, 'dist');
 
 app.use(express.static(publicPath));
@@ -12,7 +12,7 @@ app.get('/2048', function(req, res) {
 });
 
 app.get('/test', function(req, res) {
-  res.sendFile(layout_example);
+  res.sendFile(layoutExample);
 });
 
 app.get('*', function(req, res) {

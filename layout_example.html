@@ -2,13 +2,46 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Document</title>
+  <title>Layout sample page</title>
 
 </head>
 <body>
-  <div id="container">
+  <!-- <div id="container">
     <div class="board"></div>
+  </div> -->
+  <div id="container">
+    <div data-reactroot="" class="game-view">
+      <div class="score"><div class="max-score button"><!-- react-text: 4 --> Max score: <!-- /react-text --><!-- react-text: 5 -->2048<!-- /react-text --></div><div class="current-score button"><!-- react-text: 7 --> Current score: <!-- /react-text --><!-- react-text: 8 -->0<!-- /react-text --></div></div>
+      <div class="board ">
+        <div id="0" class="cell  row_0 col_0"></div>
+        <div id="1" class="cell  row_0 col_1     "></div>
+        <div id="2" class="cell  row_0 col_2     "></div>
+        <div id="3" class="cell  row_0 col_3     "></div>
+        <div id="4" class="cell  row_1 col_0     "></div>
+        <div id="5" class="cell  row_1 col_1     "></div>
+        <div id="6" class="cell  row_1 col_2     "></div>
+        <div id="7" class="cell  row_1 col_3     "></div>
+        <div id="8" class="cell  row_2 col_0     "></div>
+        <div id="9" class="cell  row_2 col_1     "></div>
+        <div id="10" class="cell  row_2 col_2     "></div>
+        <div id="11" class="cell  row_2 col_3     "></div>
+        <div id="12" class="cell  row_3 col_0     "></div>
+        <div id="13" class="cell  row_3 col_1     "></div>
+        <div id="14" class="cell  row_3 col_2     "></div>
+        <div id="15" class="cell  row_3 col_3     "></div>
+        <div class="overlay hide">
+          <div class="overlay_text"></div>
+          <div class="restart"></div>
+        </div>
+        <div class="overlay hide">
+          <div class="overlay_text"></div>
+          <div class="restart"></div>
+        </div>
+      </div>
+    </div>
   </div>
-  <script src="./layoutBundle.js"></script>
+
+
+  <script src="./layoutExampleBundle.js"></script>
 </body>
 </html>

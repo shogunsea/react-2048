@@ -17,7 +17,7 @@ const productionPlugins = [
 module.exports = {
   entry: {
     appBundle: "./src/entry.js",
-    layoutBundle: "./src/layout.js",
+    layoutExampleBundle: "./src/layout_example.js",
   },
   output: {
       path: path.join(__dirname, "dist"),

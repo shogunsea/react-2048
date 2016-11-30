@@ -1,0 +1,63 @@
+// responsive layout AC:
+// 1. width and height of the board should be the same at all time. 1:1 ratio
+// 2. viewport width should be more prominant in terms of decideing the board style
+// 3. should have max width/height around 500px
+// 4. each cell still needs to be absolute positioned for animation purpose.
+
+@import 'colors.scss';
+// @import 'cell.scss';
+
+body {
+  margin: 0;
+}
+
+@for $col from 0 to 4 {
+  .col_#{$col} {
+    left: 24.5% * $col + 1%; // left margin offset
+  }
+}
+
+@for $row from 0 to 4 {
+  .row_#{$row} {
+    top: 24.5% * $row + 1%;
+  }
+}
+// How to make it pixel perfect:
+// 10 Margins(left end and right end doubles margin) + 4 Widths = 100
+// let width take 94% percent, 6 margin in total takes
+
+.cell {
+  margin: 1%;
+  position: absolute;
+  background-color: $light-blue;
+  width: 22.5%;
+  height: 22.5%;
+  font-family: "Clear Sans";
+}
+
+#container {
+
+}
+
+.game-view {
+  margin: 1vh 1vw;
+  width: 98vw;
+  height: 98vh;
+  background-color: $color-white;
+}
+
+.board {
+  position: relative;
+  min-width: 300px;
+  min-height: 300px;
+  max-width: 600px;
+  max-height: 600px;
+  margin: auto;
+  width: 82vw;
+  height: 82vw;
+  padding: 1vw;
+  background-color: $board-color;
+}
+
+
+
