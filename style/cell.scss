@@ -9,7 +9,7 @@
 
 @for $row from 0 to 4 {
   .row_#{$row} {
-    top: 24.5% * $row + 1%;
+    top: 24.5% * $row + 1%; // top margin offset
   }
 }
 

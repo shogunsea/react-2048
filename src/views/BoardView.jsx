@@ -12,7 +12,7 @@ class BoardView extends React.Component {
   constructor(props) {
       super(props); // need super with props if need to access attribute on 'this' inside constructor
       this.board = new Board();
-      this.board.addRandomCell()
+      this.board.addRandomCell();
       const gridView = this.mapCellsToView(this.board.getGrid());
       const boardView = this.mapCellsToView(this.board.getBoard());
       const touchStart = { x: null, y: null};
@@ -43,10 +43,13 @@ class BoardView extends React.Component {
   }
 
   componentDidMount() {
-    window.addEventListener('keyup', this.hanleKeyUp.bind(this));
+    document.addEventListener('keyup', this.hanleKeyUp.bind(this));
+    document.addEventListener('touchstart', this.handleTouchStart.bind(this));
+    document.addEventListener('touchend', this.handleTouchEnd.bind(this));
   }
 
   handleTouchStart(e) {
+    e.preventDefault();
     const touch = e.touches[0];
     const x = touch.clientX;
     const y = touch.clientY;
@@ -55,6 +58,7 @@ class BoardView extends React.Component {
   }
 
   handleTouchEnd(e) {
+    e.preventDefault();
     const touch = e.changedTouches[0];
     const x = touch.clientX;
     const y = touch.clientY;
@@ -140,7 +144,7 @@ class BoardView extends React.Component {
     const maxScore = +window.sessionStorage.getItem('2048-max-score') || 0;
     return <div className="game-view">
         <ScoreView currentScore={currentScore} maxScore={maxScore} />
-        <div className={'board '} onTouchStart={this.handleTouchStart.bind(this)} onTouchEnd={this.handleTouchEnd.bind(this)}>
+        <div className={'board '}>
           {this.state.grid}
           {this.state.board}
           <WinOverlayView showOverlay={showWinOverlay} clickHandler={this.clickHandler.bind(this)}/>

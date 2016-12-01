@@ -52,10 +52,10 @@
 
         @keyframes row_#{$i}_#{$j} {
           from {
-            top: 24.5% * $i + 1%;
+            top: 24.5% * $i + 1%; // top margin offset
           }
           to {
-            top: 24.5% * $j + 1%;
+            top: 24.5% * $j + 1%; // top margin offset
           }
         }
     }
