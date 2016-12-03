@@ -1,6 +1,8 @@
 @import 'colors.scss';
 @import 'cell.scss';
 @import 'board.scss';
+@import 'score.scss';
+
 
 #container {
   -webkit-user-select: none;  /* Chrome all / Safari all */
@@ -31,22 +33,7 @@
   }
 }
 
-.score {
-  width: 100%;
-  padding-bottom: 20px;
-  font-family: Arial;
 
-  & .max-score {
-    background-color: $light-teal;
-    display: inline-block;
-    float: left;
-  }
-
-  & .current-score {
-    display: inline-block;
-    float: right;
-  }
-}
 .overlay {
   min-height: 500px;
   min-width: 500px;

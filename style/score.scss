@@ -1,0 +1,21 @@
+.score {
+  width: 82vw;
+  max-width: 600px;
+  min-width: 300px;
+  margin: auto;
+  padding: 18px;
+  overflow: auto;
+  padding-bottom: 20px;
+  font-family: Arial;
+
+  & .max-score {
+    background-color: $light-teal;
+    display: inline-block;
+    float: left;
+  }
+
+  & .current-score {
+    display: inline-block;
+    float: right;
+  }
+}
