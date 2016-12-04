@@ -4,3 +4,4 @@ tmp
 bundle.js
 dist
 .deploykey.json
+npm-debug*

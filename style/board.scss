@@ -4,14 +4,9 @@
   clear: both;
   border-radius: 20px;
   position: relative;
-  min-width: 300px;
-  min-height: 300px;
-  max-width: 600px;
-  max-height: 600px;
   margin: auto;
-  width: 82vw;
-  height: 82vw;
-  padding: 1vw;
+  width: 82vmin;
+  height: 82vmin;
+  padding: 1vmin;
   z-index: 10;
-  background-color: $board-color;
 }
