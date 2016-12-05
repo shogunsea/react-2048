@@ -7,7 +7,7 @@ const exec = require('child_process').exec;
 let command = './node_modules/webpack/bin/webpack.js';
 
 if (argv.p) {
-  command += ' -p'; // production mode;
+  command = 'NODE_ENV=production ' + command; // production mode;
 }
 
 gulp.task('build', 'build and bundle assets by webpack', function() {
