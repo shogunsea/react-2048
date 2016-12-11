@@ -19,6 +19,7 @@
 }
 
 .button {
+  -webkit-transition: box-shadow 0.2s ease;
   transition: box-shadow 0.2s ease;
   color: $color-white;
   background-color: $light-blue;
@@ -28,11 +29,11 @@
   margin-bottom: 11px;
 
   &:hover {
+    -webkit-transition: box-shadow 0.2s ease;
     transition: box-shadow 0.2s ease;
     box-shadow: 3px 5px 20px 0px $button-box-shadow-color;
   }
 }
-
 
 .overlay {
   min-height: 500px;
