@@ -7,6 +7,10 @@ var publicPath = path.resolve(__dirname, 'dist');
 
 app.use(express.static(publicPath));
 
+app.get('/2048/_status', function(req, res) {
+  res.sendFile(indexPage);
+});
+
 app.get('/2048', function(req, res) {
   res.sendFile(indexPage);
 });

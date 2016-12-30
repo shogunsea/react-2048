@@ -14,10 +14,11 @@ const SHAFilePath = path.join(rootPath, './SHA.txt');
 const readPreviousSavedSHA = function() {
   return new Promise(function(resolve, reject) {
     fs.readFile(SHAFilePath, 'utf8', function(err, previousSHA) {
-      if (err)
+      if (err) {
         reject(err);
-      else
+      } else {
         resolve(previousSHA.trim());
+      }
     });
   });
 };
@@ -26,21 +27,39 @@ const fetchCurrentSHA = (previousSHA) => {
   return new Promise((resolve, reject) => {
     const fetchCommand = 'git rev-parse HEAD';
     exec(fetchCommand, {encoding: 'utf8'}, (err, currentSHA) => {
-      if (err)
+      if (err) {
         reject(err);
-      else
+      } else {
         resolve({currentSHA: currentSHA.trim(), previousSHA});
+      }
     });
   });
 };
 
-const updateSavedSHA = ({currentSHA, previousSHA}) => {
+const updateSavedSHA = ({currentSHA, previousSHA, deployCommand}) => {
   return new Promise((resolve, reject) => {
     fs.writeFile(SHAFilePath, currentSHA, 'utf8', function(err) {
-      if (err)
+      if (err) {
+        console.log(chalk.red('Updating SHA failed.'));
         reject(err);
-      else
+      } else {
+        console.log(chalk.green('SHA updated successfully.'));
+        resolve({currentSHA, previousSHA, deployCommand});
+      }
+    });
+  });
+};
+
+const revertUpdatedSHA = ({currentSHA, previousSHA}) => {
+  return new Promise((resolve, reject) => {
+    fs.writeFile(SHAFilePath, previousSHA, 'utf8', function(err) {
+      if (err) {
+        console.log(chalk.red('Reverting SHA failed.'));
+        reject(err);
+      } else {
+        console.log(chalk.green('SHA reverted successfully.'));
         resolve({currentSHA, previousSHA});
+      }
     });
   });
 };
@@ -48,10 +67,11 @@ const updateSavedSHA = ({currentSHA, previousSHA}) => {
 const deployToProduction = ({currentSHA, previousSHA, deployCommand}) => {
   return new Promise((resolve, reject) => {
     exec(deployCommand, function(err, stdout, stderr) {
-      if (err)
+      if (err) {
         reject(err);
-      else
+      } else {
         resolve({currentSHA, previousSHA});
+      }
     });
   });
 };
@@ -84,7 +104,8 @@ gulp.task('deploy', 'Deploy to production host', () => {
       chalk.blue(' to production host...')
     );
     return {currentSHA, previousSHA, deployCommand};
-  }).then(deployToProduction)
+  }).then(updateSavedSHA)
+  .then(deployToProduction)
   .then(({previousSHA, currentSHA}) => {
     if (previousSHA === currentSHA) {
       console.log(
@@ -95,11 +116,14 @@ gulp.task('deploy', 'Deploy to production host', () => {
       console.log(chalk.underline(diffUrl));
     }
     return {previousSHA, currentSHA};
-  }).then(updateSavedSHA)
-  .catch((err) => {
+  }).catch((err) => {
     console.log(
-      chalk.red('Deployment failed, local SHA file didnt get updated. Error: ')
+      chalk.red('Deployment failed with error: ')
     );
     console.log(err);
+    console.log(
+      chalk.green('Reverting saved SHA...')
+    );
+    return revertUpdatedSHA();
   });
 });
