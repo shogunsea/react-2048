@@ -4,39 +4,56 @@ const gulp = require('gulp');
 const fs = require('fs');
 const path = require('path');
 const chalk = require('chalk');
+const {assignIn} = require('lodash');
 const exec = require('child_process').exec;
+// Replace this constant for different app.
+const APP_NAME = 'react-2048';
 
-const rootPath = path.resolve('.');
-const exists = fs.existsSync;
+const readPreviousSavedSHA = ({config, logging}) => {
+  const {SHAFilePath} = config;
 
-const SHAFilePath = path.join(rootPath, './SHA.txt');
-
-const readPreviousSavedSHA = function() {
-  return new Promise(function(resolve, reject) {
-    fs.readFile(SHAFilePath, 'utf8', function(err, previousSHA) {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(previousSHA.trim());
-      }
-    });
-  });
-};
-
-const fetchCurrentSHA = (previousSHA) => {
   return new Promise((resolve, reject) => {
-    const fetchCommand = 'git rev-parse HEAD';
-    exec(fetchCommand, {encoding: 'utf8'}, (err, currentSHA) => {
+    fs.readFile(SHAFilePath, 'utf8', (err, data) => {
       if (err) {
+        console.log(
+          chalk.red(`Failed to read previously saved SHA,
+            make sure SHA.txt exists.`)
+          );
+        console.log(chalk.red(JSON.stringify(err)));
         reject(err);
       } else {
-        resolve({currentSHA: currentSHA.trim(), previousSHA});
+        const previousSHA = data.trim();
+        assignIn(logging, {previousSHA});
+        resolve({config, logging});
       }
     });
   });
 };
 
-const updateSavedSHA = ({currentSHA, previousSHA, deployCommand}) => {
+const fetchCurrentSHA = ({config, logging}) => {
+  const {gitSHAFetchCommand} = config;
+
+  return new Promise((resolve, reject) => {
+    exec(gitSHAFetchCommand, {encoding: 'utf8'}, (err, data) => {
+      if (err) {
+        console.log(
+          chalk.red(`Failed to fetch current SHA,
+            make sure current directory has git history.`)
+          );
+        reject(err);
+      } else {
+        const currentSHA = data.trim();
+        assignIn(logging, {currentSHA});
+        resolve({config, logging});
+      }
+    });
+  });
+};
+
+const updateSavedSHA = ({config, logging}) => {
+  const {SHAFilePath} = config;
+  let {currentSHA} = logging;
+
   return new Promise((resolve, reject) => {
     fs.writeFile(SHAFilePath, currentSHA, 'utf8', function(err) {
       if (err) {
@@ -44,13 +61,16 @@ const updateSavedSHA = ({currentSHA, previousSHA, deployCommand}) => {
         reject(err);
       } else {
         console.log(chalk.green('SHA updated successfully.'));
-        resolve({currentSHA, previousSHA, deployCommand});
+        resolve({config, logging});
       }
     });
   });
 };
 
-const revertUpdatedSHA = ({currentSHA, previousSHA}) => {
+const revertUpdatedSHA = ({config, logging}) => {
+  const {SHAFilePath} = config;
+  const {previousSHA} = logging;
+
   return new Promise((resolve, reject) => {
     fs.writeFile(SHAFilePath, previousSHA, 'utf8', function(err) {
       if (err) {
@@ -58,25 +78,35 @@ const revertUpdatedSHA = ({currentSHA, previousSHA}) => {
         reject(err);
       } else {
         console.log(chalk.green('SHA reverted successfully.'));
-        resolve({currentSHA, previousSHA});
+        resolve({config, logging});
       }
     });
   });
 };
 
-const deployToProduction = ({currentSHA, previousSHA, deployCommand}) => {
+const deployToProduction = ({config, logging}) => {
+  const {deployCommand} = config;
+
   return new Promise((resolve, reject) => {
     exec(deployCommand, function(err, stdout, stderr) {
       if (err) {
+        console.log(
+          chalk.red('Deployment failed.')
+          );
         reject(err);
       } else {
-        resolve({currentSHA, previousSHA});
+        console.log(chalk.green('Deployment succedded.'));
+        resolve({config, logging});
       }
     });
   });
 };
 
 gulp.task('deploy', 'Deploy to production host', () => {
+  const rootPath = path.resolve('.');
+  const exists = fs.existsSync;
+  const SHAFilePath = path.join(rootPath, './SHA.txt');
+  const gitSHAFetchCommand = 'git rev-parse HEAD';
   const deployKeyPath = path.join(rootPath, './.deploykey.json');
 
   if (!exists(deployKeyPath)) {
@@ -86,14 +116,23 @@ gulp.task('deploy', 'Deploy to production host', () => {
   const deployKey = require('../.deploykey.json');
   const deployCommand = `rsync -avzP --exclude='.*' \
   --exclude='node_modules' --exclude='*.txt' \
-  --exclude='tmp' . ${deployKey.path}:~/2048`;
+  --exclude='tmp' . ${deployKey.path}:~/${APP_NAME}`;
+  let diffUrl = `https://github.com/shogunsea/${APP_NAME}/compare/`;
 
-  let diffUrl = 'https://github.com/shogunsea/react-2048/compare/';
+  const config = {deployKey, deployCommand, SHAFilePath, gitSHAFetchCommand};
+  const logging = {diffUrl};
 
-  readPreviousSavedSHA()
+  readPreviousSavedSHA({config, logging})
   .then(fetchCurrentSHA)
-  .then(({previousSHA, currentSHA}) => {
+  // this method can be moved into standalone method..?
+  // except one reference to a global variable.
+  // how make it pure..?: wrap the global variable as input parameter
+  // Log previous and current sha and build diff URL
+  .then(({config, logging}) => {
+    let {previousSHA, currentSHA, diffUrl} = logging;
     diffUrl += previousSHA + '...' + currentSHA;
+    assignIn(logging, {diffUrl});
+
     console.log(
       chalk.blue('Previous SHA: ') +
       chalk.yellow(previousSHA)
@@ -103,10 +142,12 @@ gulp.task('deploy', 'Deploy to production host', () => {
       chalk.yellow(currentSHA) +
       chalk.blue(' to production host...')
     );
-    return {currentSHA, previousSHA, deployCommand};
+
+    return {config, logging};
   }).then(updateSavedSHA)
   .then(deployToProduction)
-  .then(({previousSHA, currentSHA}) => {
+  .then(({config, logging}) => {
+    const {previousSHA, currentSHA, diffUrl} = logging;
     if (previousSHA === currentSHA) {
       console.log(
         chalk.yellow('Deployment completed successfully, no chnages observed.')
@@ -115,15 +156,16 @@ gulp.task('deploy', 'Deploy to production host', () => {
       console.log(chalk.green('Deployment completed successfully, changes: '));
       console.log(chalk.underline(diffUrl));
     }
-    return {previousSHA, currentSHA};
+    return {config, logging};
   }).catch((err) => {
     console.log(
       chalk.red('Deployment failed with error: ')
     );
-    console.log(err);
+    console.log(chalk.red(err));
     console.log(
       chalk.green('Reverting saved SHA...')
     );
-    return revertUpdatedSHA();
+    // dependency of outter global data
+    return revertUpdatedSHA({config, logging});
   });
 });

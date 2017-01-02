@@ -8,6 +8,7 @@ var publicPath = path.resolve(__dirname, 'dist');
 app.use(express.static(publicPath));
 
 app.get('/2048/_status', function(req, res) {
+  // fetch current app sha
   res.sendFile(indexPage);
 });
 
