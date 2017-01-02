@@ -115,7 +115,7 @@ gulp.task('deploy', 'Deploy to production host', () => {
 
   const deployKey = require('../.deploykey.json');
   const deployCommand = `rsync -avzP --exclude='.*' \
-  --exclude='node_modules' --exclude='*.txt' \
+  --exclude='node_modules' \
   --exclude='tmp' . ${deployKey.path}:~/${APP_NAME}`;
   let diffUrl = `https://github.com/shogunsea/${APP_NAME}/compare/`;
 
