@@ -1,15 +1,26 @@
-var express = require('express');
-var app = express();
-var path = require('path');
-var indexPage = path.join(__dirname, './index.html')
-var layoutExample = path.join(__dirname, './layout_example.html')
-var publicPath = path.resolve(__dirname, 'dist');
+const express = require('express');
+const path = require('path');
+const chalk = require('chalk');
+const fs = require('fs');
+
+const app = express();
+const indexPage = path.join(__dirname, './index.html')
+const layoutExample = path.join(__dirname, './layout_example.html')
+const publicPath = path.resolve(__dirname, 'dist');
 
 app.use(express.static(publicPath));
 
 app.get('/2048/_status', function(req, res) {
-  // fetch current app sha
-  res.sendFile(indexPage);
+  // return current sha
+  let SHAFilePath = path.join(path.resolve('.'), './SHA.txt');
+  fs.readFile(SHAFilePath, 'utf8', (err, data) => {
+    if (err) {
+      console.log(chalk.red(err));
+      return res.json({err: 'failed to retrive current SHA.'})
+    }
+    let currentSHA = data.trim();
+    res.json({currentSHA});
+  });
 });
 
 app.get('/2048', function(req, res) {
@@ -24,7 +35,7 @@ app.get('*', function(req, res) {
   res.redirect('/2048');
 });
 
-var port = 3080;
+const port = 3080;
 
 app.listen(port, function(){
   console.log('yoooo!');
