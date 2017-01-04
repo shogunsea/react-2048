@@ -4,9 +4,7 @@
 @import 'score.scss';
 
 #container {
-  -webkit-user-select: none;  /* Chrome all / Safari all */
-  -moz-user-select: none;     /* Firefox all */
-  -ms-user-select: none;      /* IE 10+ */
+  user-select: none;
   cursor: default;
 }
 
@@ -18,7 +16,6 @@
 }
 
 .button {
-  -webkit-transition: box-shadow 0.2s ease;
   transition: box-shadow 0.2s ease;
   color: $color-white;
   background-color: $light-blue;
@@ -28,7 +25,6 @@
   margin-bottom: 11px;
 
   &:hover {
-    -webkit-transition: box-shadow 0.2s ease;
     transition: box-shadow 0.2s ease;
     box-shadow: 3px 5px 20px 0px $button-box-shadow-color;
   }

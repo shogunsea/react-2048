@@ -2,35 +2,29 @@
 @keyframes newTile {
   from {
     transform: scale(0);
-    -webkit-transform: scale(0);
   }
   to {
     transform: scale(1);
-    -webkit-transform: scale(1);
   }
 }
 
 @keyframes popup_as_merged {
   from {
     transform: scale(0);
-    -webkit-transform: scale(0);
   }
   to {
     z-index: 20;
     transform: scale(1);
-    -webkit-transform: scale(1);
   }
 }
 
 @keyframes popup_as_merged_2 {
   from {
     transform: scale(0);
-    -webkit-transform: scale(0);
   }
   to {
     z-index: 20;
     transform: scale(1);
-    -webkit-transform: scale(1);
   }
 }
 
