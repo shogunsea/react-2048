@@ -5,7 +5,6 @@ import CellView from './CellView.jsx';
 import ScoreView from './ScoreView.jsx';
 import WinOverlayView from './WinOverlay.jsx';
 import FailOverlayView from './FailOverlay.jsx';
-
 const KeyCodes = [37, 38, 39,40];
 
 class BoardView extends React.Component {
@@ -112,7 +111,6 @@ class BoardView extends React.Component {
       const direction = key - 37;
       this.board.filterMergedCells();
       let isInitiallyMovable = this.board.isMovable();
-
       // move the board if movable
       if (isInitiallyMovable) {
         this.board.moveBoard(direction, this.board.addRandomCell.bind(this.board));
@@ -133,7 +131,7 @@ class BoardView extends React.Component {
   }
 
   createTestBoard() {
-    const testBoard = this.board.replaceWithTestBoard('one_step_to_2048');
+    const testBoard = this.board.replaceWithTestBoard('one_step_to_win');
     this.updateStateWithCells(testBoard);
   }
 

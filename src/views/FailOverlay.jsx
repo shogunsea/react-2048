@@ -6,7 +6,7 @@ class FailOverlay extends React.Component {
     const wonText = 'Whoops! That\'s it! One more round?';
     const showOverlay = this.props.showOverlay;
     const clickHandler = this.props.clickHandler;
-    const restartButton = <div className='restart' onClick={clickHandler}>Play again</div>;
+    const restartButton = <div className='restart button' onClick={clickHandler}>Play again</div>;
     const overLay = <div className='overlay_text'>{wonText}</div>;
     return <div className={'overlay ' + showOverlay}>
       {overLay}

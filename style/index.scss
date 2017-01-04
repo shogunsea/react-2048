@@ -31,19 +31,15 @@
 }
 
 .overlay {
-  min-height: 500px;
-  min-width: 500px;
+  width: 82vmin;
+  height: 82vmin;
   z-index: 30;
   background-color: $overlay-white;
   position: absolute;
   opacity: 0.6;
-  display: flex;
   align-items: center;
-  justify-content: center;
   font-size: 23px;
-  flex: 0 0 100%;
   text-align: center;
-  flex-direction: column;
 
   &.hide {
     display: none;
@@ -51,23 +47,21 @@
 }
 
 .overlay_text {
+  position: relative;
+  top: 33%;
   padding: 35px;
-  flex: 0 0 100%;
   color: #2d1212;
   font-size: 27px;
 }
 
 .restart {
-  flex: 0 0 100%;
-  border: 2px solid #2d1212;
-  border-radius: 6px;
+  position: relative;
+  top: 35%;
+  background-color: #19c164;
   font-size: 36px;
   padding: 11px;
-  box-shadow: 10px 10px 5px #888888;
-
-  &:hover {
-    background-color: #fff;
-  }
+  width: 50%;
+  margin: auto;
 }
 
 .row {

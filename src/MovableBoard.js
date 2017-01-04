@@ -68,7 +68,7 @@ export default class MovableBoard {
     this.recordMaxScore();
 
     // never ends please
-    if (mergedIntoCell.val == 2048000) {
+    if (mergedIntoCell.val == 2048) {
       this.hasWon = true;
     }
 
