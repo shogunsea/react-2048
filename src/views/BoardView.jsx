@@ -139,7 +139,10 @@ class BoardView extends React.Component {
     const showWinOverlay = this.board.hasWon? 'show_overlay' : 'hide';
     const showFailOverlay = this.board.hasLost? 'show_overlay' : 'hide';
     const currentScore = this.board.score;
-    const maxScore = +window.sessionStorage.getItem('2048-max-score') || 0;
+    let maxScore = 0;
+    if (document.cookie.indexOf('2048-max-score') !== -1) {
+      maxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
+    }
     return <div className="game-view">
         <ScoreView currentScore={currentScore} maxScore={maxScore} />
         <div className={'board '}>

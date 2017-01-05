@@ -52,9 +52,14 @@ export default class MovableBoard {
   }
 
   recordMaxScore() {
-    const currentMaxScore = +window.sessionStorage.getItem('2048-max-score');
-    if (currentMaxScore <= this.score) {
-      window.sessionStorage.setItem('2048-max-score', this.score);
+    const cookie = document.cookie;
+    if (cookie.indexOf('2048-max-score') === -1) {
+      document.cookie = '2048-max-score=' + this.score;
+    } else {
+      const currentMaxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
+      if (currentMaxScore <= this.score) {
+        document.cookie = '2048-max-score=' + this.score;
+      }
     }
   }
 
