@@ -16,12 +16,12 @@ const productionPlugins = [
 
 module.exports = {
   entry: {
-    appBundle: "./src/entry.js",
-    layoutExampleBundle: "./src/layout_example.js",
+    '2048': "./src/entry.js",
+    example: "./src/layout_example.js",
   },
   output: {
       path: path.join(__dirname, "dist"),
-      filename: "[name].js"
+      filename: "[name]/[name].js"
   },
   plugins: isProduction? productionPlugins : [],
   module: {

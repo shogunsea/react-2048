@@ -27,7 +27,7 @@ app.get('/2048', function(req, res) {
   res.sendFile(indexPage);
 });
 
-app.get('/test', function(req, res) {
+app.get('/example', function(req, res) {
   res.sendFile(layoutExample);
 });
 

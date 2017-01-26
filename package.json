@@ -7,7 +7,7 @@
     "lint": "./node_modules/eslint/bin/eslint.js --color ./src/** ./tasks/**; exit 0",
     "dev": "./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist app.js",
     "dev-debug": "./node_modules/nodemon/bin/nodemon.js debug -e js --watch . --watch dist app.js",
-    "start": "echo \"2048 is up\" ; ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist app.js > /dev/null 2>&1 &",
+    "start": "echo \"2048 is up\" ; ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist app.js > /dev/null 2>&1 &"
   },
   "repository": {
     "type": "git",
