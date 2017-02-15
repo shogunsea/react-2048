@@ -3,6 +3,7 @@ import ReactDom from 'react-dom';
 import Board from '../Board.js';
 import CellView from './CellView.jsx';
 import ScoreView from './ScoreView.jsx';
+import SourceView from './SourceView.jsx';
 import WinOverlayView from './WinOverlay.jsx';
 import FailOverlayView from './FailOverlay.jsx';
 const KeyCodes = [37, 38, 39,40];
@@ -166,6 +167,7 @@ class BoardView extends React.Component {
           <WinOverlayView showOverlay={showWinOverlay} clickHandler={this.clickHandler.bind(this)}/>
           <FailOverlayView showOverlay={showFailOverlay} clickHandler={this.clickHandler.bind(this)}/>
         </div>
+        <SourceView />
       </div>
   }
 }

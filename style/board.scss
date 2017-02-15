@@ -5,8 +5,15 @@
   border-radius: 20px;
   position: relative;
   margin: auto;
-  width: 82vmin;
-  height: 82vmin;
+  width: 72vmin;
+  height: 72vmin;
   padding: 1vmin;
   z-index: 10;
+}
+
+@media (min-width: 1100px) {
+  .board {
+    width: 82vmin;
+    height: 82vmin;
+  }
 }
