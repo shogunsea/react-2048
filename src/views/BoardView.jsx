@@ -48,20 +48,21 @@ class BoardView extends React.Component {
     document.addEventListener('touchend', this.handleTouchEnd.bind(this));
   }
 
-  isRestartButton(eventTarget) {
-    const listOfMatchedElements = [...document.querySelectorAll('.restart.button')];
+  shouldBeClickable(eventTarget) {
+    const listOfMatchedElements = [...document.querySelectorAll('.restart.button, .github_link, .github_project')];
 
     return listOfMatchedElements.indexOf(eventTarget) !== -1;
   }
 
   handleTouchStart(e) {
-    if (this.isRestartButton(e.target)) {
+    e.preventDefault();
+
+    if (this.shouldBeClickable(e.target)) {
       // if clicking on the restart button, then do not
       // handle it as touch event
       return e.target.click();
     }
 
-    e.preventDefault();
     const touch = e.touches[0];
     const x = touch.clientX;
     const y = touch.clientY;
@@ -70,7 +71,7 @@ class BoardView extends React.Component {
   }
 
   handleTouchEnd(e) {
-    if (this.isRestartButton(e.target)) {
+    if (this.shouldBeClickable(e.target)) {
       return;
     }
 
