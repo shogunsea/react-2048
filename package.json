@@ -46,6 +46,7 @@
     "webpack": "^2.2.1"
   },
   "dependencies": {
+    "compression": "^1.6.2",
     "express": "^4.14.0",
     "lodash": "^4.13.1"
   },

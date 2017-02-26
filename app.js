@@ -2,12 +2,14 @@ const express = require('express');
 const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs');
+const compression = require('compression');
 
 const app = express();
 const indexPage = path.join(__dirname, './index.html')
 const layoutExample = path.join(__dirname, './layout_example.html')
 const publicPath = path.resolve(__dirname, 'dist');
 
+app.use(compression());
 app.use(express.static(publicPath));
 
 app.get('/2048/_status', function(req, res) {
