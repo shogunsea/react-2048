@@ -1,54 +1,54 @@
 const path = require('path');
 const webpack = require('webpack');
+const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const isProduction = process.env.NODE_ENV === 'production';
-const productionPlugins = [
-    new webpack.optimize.UglifyJsPlugin({
-      compressor: {
-        warnings: false
-      }
-    }),
-    new webpack.DefinePlugin({
-      'process.env': {
-        'NODE_ENV': JSON.stringify('production')
-      }
-    })
-  ];
+const plugins = [
+  new webpack.optimize.UglifyJsPlugin({
+    compressor: {
+      warnings: false
+    }
+  }),
+  new webpack.DefinePlugin({
+    'process.env': {
+      'NODE_ENV': JSON.stringify('production')
+    }
+  }),
+  new ExtractTextPlugin('2048/style.css')
+];
 
 module.exports = {
   entry: {
     '2048': "./src/entry.js",
-    example: "./src/layout_example.js",
   },
   output: {
       path: path.join(__dirname, "dist"),
       filename: "[name]/[name].js"
   },
-  plugins: isProduction? productionPlugins : [],
+  plugins: plugins,
   module: {
     rules: [
-      {
-        test: /\.css$/,
-        use: [
-          "style-loader",
-          "css-loader"
-        ]
-      },
+      // It seems like this repo doesn't have any native css files at the moment. This can be commented out.
+      // {
+      //   test: /\.css$/,
+      //   use: [
+      //     "style-loader",
+      //     "css-loader"
+      //   ]
+      // },
       {
         test: /\.scss$/,
-        use: [
-          "style-loader",
-          "css-loader",
-          "postcss-loader",
-          "sass-loader"
-        ]
+        use: ExtractTextPlugin.extract({
+          fallback: 'style-loader',
+          //resolve-url-loader may be chained before sass-loader if necessary
+          use: ['css-loader', "postcss-loader", 'sass-loader']
+        })
       },
       {
         test: /\.jsx?$/,
         use: [
           {
             loader: 'babel-loader',
-            options: { // will this ever work ?
+            options: {
               presets: ['es2015', 'react']
             }
           }
@@ -56,7 +56,6 @@ module.exports = {
         include: [
           path.resolve(__dirname, "src")
         ],
-        exclude: /node_modules/,
       }
     ]
   },
@@ -66,4 +65,3 @@ module.exports = {
     net: 'empty'
   }
 }
-
