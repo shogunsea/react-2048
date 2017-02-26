@@ -1,6 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+
 
 const plugins = [
   new webpack.optimize.UglifyJsPlugin({
@@ -13,7 +15,8 @@ const plugins = [
       'NODE_ENV': JSON.stringify('production')
     }
   }),
-  new ExtractTextPlugin('2048/style.css')
+  new ExtractTextPlugin('2048/style.css'),
+  new OptimizeCssAssetsPlugin()
 ];
 
 module.exports = {
