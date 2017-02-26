@@ -1,5 +1,6 @@
 const path = require('path');
 const webpack = require('webpack');
+
 const isProduction = process.env.NODE_ENV === 'production';
 const productionPlugins = [
     new webpack.optimize.UglifyJsPlugin({
@@ -25,29 +26,37 @@ module.exports = {
   },
   plugins: isProduction? productionPlugins : [],
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.css$/,
-        loader: "style!css"
-      },
-      {
-        test: /\.json$/,
-        loader: "json"
+        use: [
+          "style-loader",
+          "css-loader"
+        ]
       },
       {
         test: /\.scss$/,
-        loader: "style!css!postcss-loader!sass"
+        use: [
+          "style-loader",
+          "css-loader",
+          "postcss-loader",
+          "sass-loader"
+        ]
       },
       {
         test: /\.jsx?$/,
+        use: [
+          {
+            loader: 'babel-loader',
+            options: { // will this ever work ?
+              presets: ['es2015', 'react']
+            }
+          }
+        ],
         include: [
           path.resolve(__dirname, "src")
         ],
         exclude: /node_modules/,
-        loader: 'babel-loader',
-        query: {
-          presets: ['es2015', 'react']
-        }
       }
     ]
   },
