@@ -1,5 +1,6 @@
 # react-2048
 Classic 2048 built from scratch using React.
+Live [here](http://shogunsea.com/2048/)
 
 ## Prerequisites
 Make sure you have `yarn` and `gulp` installed globally.
