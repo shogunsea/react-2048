@@ -161,7 +161,7 @@ class BoardView extends React.Component {
       maxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
     }
     return <div className="game-view">
-        <ScoreView currentScore={currentScore} maxScore={maxScore} />
+        <ScoreView currentScore={currentScore} maxScore={maxScore} clickHandler={this.clickHandler.bind(this)} />
         <div className={'board '}>
           {this.state.grid}
           {this.state.board}
