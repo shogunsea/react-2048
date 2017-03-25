@@ -50,21 +50,6 @@
   background-color: $color-white;
 }
 
-.button {
-  transition: box-shadow 0.2s ease;
-  color: $color-white;
-  background-color: $light-blue;
-  box-shadow: 5px 10px 15px 1px $button-box-shadow-color;
-  border-radius: 5px;
-  padding: 8px;
-  margin-bottom: 11px;
-
-  &:hover {
-    transition: box-shadow 0.2s ease;
-    box-shadow: 3px 5px 20px 0px $button-box-shadow-color;
-  }
-}
-
 .overlay {
   width: 82vmin;
   height: 82vmin;

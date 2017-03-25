@@ -1,22 +1,60 @@
 
 .score {
-  width: 82vw;
-  max-width: 600px;
-  min-width: 300px;
+  font-size: 0.7em;
   margin: auto;
+  width: 72vmin;
   padding: 18px;
   overflow: auto;
-  padding-bottom: 20px;
+  padding-bottom: 0.8em;
   font-family: Arial;
 
   & .max-score {
     background-color: $light-teal;
     display: inline-block;
-    float: left;
+    float: right;
   }
 
   & .current-score {
     display: inline-block;
     float: right;
+  }
+}
+
+.button {
+  transition: box-shadow 0.2s ease;
+  color: $color-white;
+  background-color: $light-blue;
+  box-shadow: 4px 2px 11px 1px $button-box-shadow-color;
+  border-radius: 5px;
+  padding: 4px;
+  margin-bottom: 0em;
+  margin-left: 0.5em;
+
+  &:hover {
+    transition: box-shadow 0.2s ease;
+    box-shadow: 5px 1px 14px 0px $button-box-shadow-color;
+  }
+}
+
+@media (min-width: 600px) {
+  .score {
+    font-size: 1em;
+  }
+
+  .button {
+    padding: 8px;
+    margin-bottom: 1em;
+    margin-left: 1em;
+    box-shadow: 5px 10px 15px 1px $button-box-shadow-color;
+
+    &:hover {
+      box-shadow: 3px 5px 20px 0px $button-box-shadow-color;
+    }
+  }
+}
+
+@media (min-width: 1100px) {
+  .score {
+    width: 82vmin;
   }
 }

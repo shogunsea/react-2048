@@ -15,7 +15,7 @@ const plugins = [
       'NODE_ENV': JSON.stringify('production')
     }
   }),
-  new ExtractTextPlugin('2048/style.css'),
+  new ExtractTextPlugin('2048/style.css'), // how to namespace to a different dist path?
   new OptimizeCssAssetsPlugin()
 ];
 
