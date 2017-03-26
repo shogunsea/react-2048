@@ -5,8 +5,8 @@ import MovableBoard from './MovableBoard.js';
 const BOARD_SIZE = 4;
 
 export default class Board extends MovableBoard {
-  constructor() {
-    super();
+  constructor(args) {
+    super(args);
     this.fillGridWithEmptyCell(this.grid);
   }
 
@@ -28,7 +28,23 @@ export default class Board extends MovableBoard {
     }
     if (hasMoved) {
       addRandomCell();
+      this.recordCurrentBoard();
     }
+  }
+
+  recordCurrentBoard() {
+    const currentBoard = this.getBoard();
+    let scoreString = '';
+
+    for (let row = 0; row < currentBoard.length; row++) {
+      for (let col = 0; col < currentBoard.length; col++) {
+        const val = currentBoard[row][col]? currentBoard[row][col].val : 0;
+        scoreString += val + ',';
+      }
+      scoreString += '!';
+    }
+
+    document.cookie = '2048-stored-board=' + scoreString;
   }
 
   fillGridWithEmptyCell(grid) {

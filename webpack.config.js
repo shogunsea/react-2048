@@ -2,14 +2,9 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-
+const isProduction = process.env.NODE_ENV === 'production';
 
 const plugins = [
-  new webpack.optimize.UglifyJsPlugin({
-    compressor: {
-      warnings: false
-    }
-  }),
   new webpack.DefinePlugin({
     'process.env': {
       'NODE_ENV': JSON.stringify('production')
@@ -18,6 +13,16 @@ const plugins = [
   new ExtractTextPlugin('2048/style.css'), // how to namespace to a different dist path?
   new OptimizeCssAssetsPlugin()
 ];
+
+if (isProduction) {
+  const uglifyJS = new webpack.optimize.UglifyJsPlugin({
+    compressor: {
+      warnings: false
+    }
+  });
+  plugins.push(uglifyJS);
+}
+
 
 module.exports = {
   entry: {

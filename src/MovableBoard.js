@@ -1,15 +1,31 @@
 import _ from 'lodash';
+import Cell from './Cell.js';
+
 const BOARD_SIZE = 4;
 
 export default class MovableBoard {
-  constructor() {
+  constructor(boardData) {
     this.grid = [
       new Array(BOARD_SIZE),
       new Array(BOARD_SIZE),
       new Array(BOARD_SIZE),
       new Array(BOARD_SIZE),
     ];
+
     this.board = _.cloneDeep(this.grid);
+
+    if (boardData) {
+      for (let row = 0; row < BOARD_SIZE; row++) {
+        for (let col = 0; col < BOARD_SIZE; col++) {
+          const val = boardData[row][col];
+          if (val !== '0') {
+            const newCell = new Cell(row, col, val);
+            this.board[row][col] = newCell;
+          }
+        }
+      }
+    }
+
     this.hasWon = false;
     this.hasLost = false;
     this.score = 0;
@@ -350,7 +366,7 @@ export default class MovableBoard {
     }
   }
 
- getReachableCol(curCell, direction) {
+  getReachableCol(curCell, direction) {
     const {curRow: row, curCol: col} = curCell;
     const board = this.getBoard();
 

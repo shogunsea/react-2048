@@ -11,13 +11,41 @@ const KeyCodes = [37, 38, 39,40];
 class BoardView extends React.Component {
   constructor(props) {
       super(props); // need super with props if need to access attribute on 'this' inside constructor
-      this.board = new Board();
-      this.board.addRandomCell();
+      const previousBoard = this.getStoredBoard();
+
+      // if previosu board exists, then re-contrcut the board form it
+      // else: create a new board and initialize with a random cell
+
+      if (previousBoard) {
+        this.board = previousBoard;
+      } else {
+        this.board = new Board();
+        this.board.addRandomCell();
+      }
+
       const gridView = this.mapCellsToView(this.board.getGrid());
       const boardView = this.mapCellsToView(this.board.getBoard());
       const touchStart = { x: null, y: null};
       const touchEnd = {x: null, y: null};
       this.state = {board: boardView, grid: gridView, touchStart, touchEnd};
+  }
+
+  getStoredBoard() {
+   // read from cookie
+    if (document.cookie.indexOf('2048-stored-board') === -1) {
+      return;
+    }
+
+    const scoresString = document.cookie.match(/2048-stored-board=((\d+,\d+,\d+,\d+,!)+)/)[1];
+    const rows = scoresString.split('!').filter((elem) => { return elem });
+    const boardData = [];
+
+    for (let i = 0; i < rows.length; i++) {
+      const scoresInRow = rows[i].split(',').filter((elem) => { return elem });
+      boardData[i] = scoresInRow;
+    }
+
+    return new Board(boardData)
   }
 
   updateStateWithCells(cells) {
