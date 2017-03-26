@@ -28,8 +28,18 @@ export default class Board extends MovableBoard {
     }
     if (hasMoved) {
       addRandomCell();
-      this.recordCurrentBoard();
+      this.recordCurrentState();
     }
+  }
+
+  recordCurrentState() {
+    this.recordCurrentBoard();
+    this.recordCurrentScore();
+  }
+
+  recordCurrentScore() {
+    const currentScore = this.getScore();
+    document.cookie = '2048-stored-score=' + currentScore;
   }
 
   recordCurrentBoard() {

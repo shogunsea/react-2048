@@ -12,12 +12,14 @@ class BoardView extends React.Component {
   constructor(props) {
       super(props); // need super with props if need to access attribute on 'this' inside constructor
       const previousBoard = this.getStoredBoard();
+      const previousScore = this.getStoredScore();
 
       // if previosu board exists, then re-contrcut the board form it
       // else: create a new board and initialize with a random cell
 
       if (previousBoard) {
         this.board = previousBoard;
+        this.board.score = previousScore;
       } else {
         this.board = new Board();
         this.board.addRandomCell();
@@ -30,14 +32,24 @@ class BoardView extends React.Component {
       this.state = {board: boardView, grid: gridView, touchStart, touchEnd};
   }
 
+  getStoredScore() {
+    if (document.cookie.indexOf('2048-stored-score') === -1) {
+      return;
+    }
+
+    const storedScore = +document.cookie.match(/2048-stored-score=(\d+)/)[1];
+
+    return  storedScore;
+  }
+
   getStoredBoard() {
    // read from cookie
     if (document.cookie.indexOf('2048-stored-board') === -1) {
       return;
     }
 
-    const scoresString = document.cookie.match(/2048-stored-board=((\d+,\d+,\d+,\d+,!)+)/)[1];
-    const rows = scoresString.split('!').filter((elem) => { return elem });
+    const boardString = document.cookie.match(/2048-stored-board=((\d+,\d+,\d+,\d+,!)+)/)[1];
+    const rows = boardString.split('!').filter((elem) => { return elem });
     const boardData = [];
 
     for (let i = 0; i < rows.length; i++) {
@@ -45,7 +57,7 @@ class BoardView extends React.Component {
       boardData[i] = scoresInRow;
     }
 
-    return new Board(boardData)
+    return new Board(boardData);
   }
 
   updateStateWithCells(cells) {

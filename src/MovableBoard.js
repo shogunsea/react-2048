@@ -390,4 +390,8 @@ export default class MovableBoard {
   getBoard() {
     return this.board;
   }
+
+  getScore() {
+    return this.score;
+  }
 }
