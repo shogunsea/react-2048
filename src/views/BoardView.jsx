@@ -84,8 +84,11 @@ class BoardView extends React.Component {
 
   componentDidMount() {
     document.addEventListener('keyup', this.hanleKeyUp.bind(this));
-    document.addEventListener('touchstart', this.handleTouchStart.bind(this));
-    document.addEventListener('touchend', this.handleTouchEnd.bind(this));
+
+    const touchPanel = document.querySelectorAll('.touch-panel')[0];
+
+    touchPanel.addEventListener('touchstart', this.handleTouchStart.bind(this));
+    touchPanel.addEventListener('touchend', this.handleTouchEnd.bind(this));
   }
 
   shouldBeClickable(eventTarget) {
@@ -202,11 +205,13 @@ class BoardView extends React.Component {
     }
     return <div className="game-view">
         <ScoreView currentScore={currentScore} maxScore={maxScore} clickHandler={this.clickHandler.bind(this)} />
-        <div className={'board '}>
-          {this.state.grid}
-          {this.state.board}
-          <WinOverlayView showOverlay={showWinOverlay} clickHandler={this.clickHandler.bind(this)}/>
-          <FailOverlayView showOverlay={showFailOverlay} clickHandler={this.clickHandler.bind(this)}/>
+        <div className={'touch-panel'}>
+          <div className={'board '}>
+            {this.state.grid}
+            {this.state.board}
+            <WinOverlayView showOverlay={showWinOverlay} clickHandler={this.clickHandler.bind(this)}/>
+            <FailOverlayView showOverlay={showFailOverlay} clickHandler={this.clickHandler.bind(this)}/>
+          </div>
         </div>
         <SourceView />
       </div>
