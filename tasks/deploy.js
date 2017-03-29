@@ -102,6 +102,51 @@ const deployToProduction = ({config, logging}) => {
   });
 };
 
+// Log previous and current sha and build diff URL
+const preDeploymentLogging = ({config, logging}) => {
+  let {previousSHA, currentSHA, diffUrl} = logging;
+  diffUrl += previousSHA + '...' + currentSHA;
+  assignIn(logging, {diffUrl});
+
+  console.log(
+    chalk.blue('Previous SHA: ') +
+    chalk.yellow(previousSHA)
+  );
+  console.log(
+    chalk.blue('Deploying current SHA: ') +
+    chalk.yellow(currentSHA) +
+    chalk.blue(' to production host...')
+  );
+
+  return {config, logging};
+};
+
+const postDeploymentlogging = ({config, logging}) => {
+  const {previousSHA, currentSHA, diffUrl} = logging;
+  if (previousSHA === currentSHA) {
+    console.log(
+      chalk.yellow('Deployment completed successfully, no chnages observed.')
+    );
+  } else {
+    console.log(chalk.green('Deployment completed successfully, changes: '));
+    console.log(chalk.underline(diffUrl));
+  }
+  return {config, logging};
+};
+
+const errorHandler = (err) => {
+  console.log(
+    chalk.red('Deployment failed with error: ')
+  );
+  console.log(chalk.red(err));
+  console.log(
+    chalk.green('Reverting saved SHA...')
+  );
+  // dependency of outter global data
+  // eslint-disable-next-line
+  return revertUpdatedSHA({config, logging});
+};
+
 gulp.task('deploy', 'Deploy to production host', () => {
   const rootPath = path.resolve('.');
   const exists = fs.existsSync;
@@ -124,48 +169,9 @@ gulp.task('deploy', 'Deploy to production host', () => {
 
   readPreviousSavedSHA({config, logging})
   .then(fetchCurrentSHA)
-  // this method can be moved into standalone method..?
-  // except one reference to a global variable.
-  // how make it pure..?: wrap the global variable as input parameter
-  // Log previous and current sha and build diff URL
-  .then(({config, logging}) => {
-    let {previousSHA, currentSHA, diffUrl} = logging;
-    diffUrl += previousSHA + '...' + currentSHA;
-    assignIn(logging, {diffUrl});
-
-    console.log(
-      chalk.blue('Previous SHA: ') +
-      chalk.yellow(previousSHA)
-    );
-    console.log(
-      chalk.blue('Deploying current SHA: ') +
-      chalk.yellow(currentSHA) +
-      chalk.blue(' to production host...')
-    );
-
-    return {config, logging};
-  }).then(updateSavedSHA)
+  .then(preDeploymentLogging)
+  .then(updateSavedSHA)
   .then(deployToProduction)
-  .then(({config, logging}) => {
-    const {previousSHA, currentSHA, diffUrl} = logging;
-    if (previousSHA === currentSHA) {
-      console.log(
-        chalk.yellow('Deployment completed successfully, no chnages observed.')
-      );
-    } else {
-      console.log(chalk.green('Deployment completed successfully, changes: '));
-      console.log(chalk.underline(diffUrl));
-    }
-    return {config, logging};
-  }).catch((err) => {
-    console.log(
-      chalk.red('Deployment failed with error: ')
-    );
-    console.log(chalk.red(err));
-    console.log(
-      chalk.green('Reverting saved SHA...')
-    );
-    // dependency of outter global data
-    return revertUpdatedSHA({config, logging});
-  });
+  .then(postDeploymentlogging)
+  .catch(errorHandler);
 });
