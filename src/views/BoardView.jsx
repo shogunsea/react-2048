@@ -14,13 +14,19 @@ class BoardView extends React.Component {
       const previousBoard = this.getStoredBoard();
       const previousScore = this.getStoredScore();
 
-      // if previosu board exists, then re-contrcut the board form it
-      // else: create a new board and initialize with a random cell
+      const querySpecifiedBoard = document.querySelectorAll('#board_data').length === 1;
 
-      if (previousBoard) {
+      // if specified in querystring which board to load
+      if (querySpecifiedBoard) {
+        const boardData = window.__specifiedBoardData__;
+        this.board = new Board(boardData);
+        this.board.score = 0;
+      } else if (previousBoard) {
+        // if previosu board exists, then re-contrcut the board form it
         this.board = previousBoard;
         this.board.score = previousScore;
       } else {
+        // else: create a new board and initialize with a random cell
         this.board = new Board();
         this.board.addRandomCell();
       }

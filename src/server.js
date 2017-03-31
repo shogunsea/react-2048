@@ -3,11 +3,14 @@ const path = require('path');
 const chalk = require('chalk');
 const fs = require('fs');
 const compression = require('compression');
+const Handlebars = require('handlebars');
 
 const app = express();
-const indexPage = path.join(__dirname, './index.html')
-const layoutExample = path.join(__dirname, './layout_example.html')
-const publicPath = path.resolve(__dirname, 'dist');
+const indexPage = path.join(__dirname, './index.html.hbs');
+const layoutExample = path.join(__dirname, '../layout_example.html');
+const publicPath = path.resolve(__dirname, '../dist');
+
+const {boardDataFetcher} = require('./helper');
 
 app.use(compression());
 app.use(express.static(publicPath));
@@ -18,7 +21,7 @@ app.get('/2048/_status', function(req, res) {
   fs.readFile(SHAFilePath, 'utf8', (err, data) => {
     if (err) {
       console.log(chalk.red(err));
-      return res.json({err: 'failed to retrive current SHA.'})
+      return res.json({err: 'failed to retrive current SHA.'});
     }
     let currentSHA = data.trim();
     res.json({currentSHA});
@@ -26,7 +29,21 @@ app.get('/2048/_status', function(req, res) {
 });
 
 app.get('/2048', function(req, res) {
-  res.sendFile(indexPage);
+  const {board} = req.query;
+
+  fs.readFile(indexPage, 'utf8', (err, rawTemplate) => {
+    if (err) {
+      console.log(chalk.red(err));
+      return res.json({err: 'failed to fetch template.'});
+    }
+
+    const template = Handlebars.compile(rawTemplate);
+    const loadBoardViaQuery = boardDataFetcher(board);
+    const pageData = {loadBoardViaQuery};
+    const html = template(pageData);
+
+    return res.end(html);
+  });
 });
 
 app.get('/example', function(req, res) {
@@ -39,7 +56,7 @@ app.get('*', function(req, res) {
 
 const port = 3080;
 
-app.listen(port, function(){
+app.listen(port, function() {
   console.log('yoooo!');
   console.log('2048 app running on http://localhost:' + port);
 });
