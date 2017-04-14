@@ -12,8 +12,13 @@ const publicPath = path.resolve(__dirname, '../dist');
 
 const {boardDataFetcher} = require('./helper');
 
+const oneWeekInMsFormat = '7d';
+const httpCachingOptions = {
+  maxAge: oneWeekInMsFormat,
+};
+
 app.use(compression());
-app.use(express.static(publicPath));
+app.use(express.static(publicPath, httpCachingOptions));
 
 app.get('/2048/_status', function(req, res) {
   // return current sha
