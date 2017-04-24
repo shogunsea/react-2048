@@ -3,6 +3,7 @@ import SampleBoards from '../test/stub/sample_boards.json';
 import MovableBoard from './MovableBoard.js';
 
 const BOARD_SIZE = 4;
+const VALUE_4_PROBABILITY = 8;
 
 export default class Board extends MovableBoard {
   constructor(args) {
@@ -82,6 +83,13 @@ export default class Board extends MovableBoard {
     return this.getBoard();
   }
 
+
+  getRandomIntInclusive(min, max) {
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+
   getRandomCell() {
     const availableSlots = this.getAvailableSlots();
     const availableLength = availableSlots.length;
@@ -96,7 +104,8 @@ export default class Board extends MovableBoard {
     const slot = availableSlots[index];
     const row = slot.row;
     const col = slot.col;
-    const val = 2;
+    const valueFourRand = this.getRandomIntInclusive(0, 10);
+    const val = valueFourRand > VALUE_4_PROBABILITY? 4 : 2;
     const newCell = new Cell(row, col, val);
     return newCell;
   }
