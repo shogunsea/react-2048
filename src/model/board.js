@@ -1,11 +1,11 @@
 import Cell from './Cell.js';
-import SampleBoards from '../test/stub/sample_boards.json';
-import MovableBoard from './MovableBoard.js';
+import SampleBoards from '../../test/stub/sample_boards.json';
+import AbstractBoard from './abstractBoard.js';
 
 const BOARD_SIZE = 4;
 const VALUE_4_PROBABILITY = 8;
 
-export default class Board extends MovableBoard {
+export default class Board extends AbstractBoard {
   constructor(args) {
     super(args);
     this.fillGridWithEmptyCell(this.grid);

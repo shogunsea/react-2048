@@ -3,7 +3,7 @@ import Cell from './Cell.js';
 
 const BOARD_SIZE = 4;
 
-export default class MovableBoard {
+export default class AbstractBoard {
   constructor(boardData) {
     this.grid = [
       new Array(BOARD_SIZE),

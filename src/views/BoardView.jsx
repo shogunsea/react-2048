@@ -1,11 +1,12 @@
 import React, {Component} from 'react';
 import ReactDom from 'react-dom';
-import Board from '../Board.js';
-import CellView from './CellView.jsx';
-import ScoreView from './ScoreView.jsx';
-import SourceView from './SourceView.jsx';
-import WinOverlayView from './WinOverlay.jsx';
-import FailOverlayView from './FailOverlay.jsx';
+import Board from '../model/board.js';
+import CellView from './cellView.jsx';
+import ScoreView from './scoreView.jsx';
+import SourceView from './sourceView.jsx';
+import WinOverlayView from './winOverlay.jsx';
+import FailOverlayView from './failOverlay.jsx';
+
 const KeyCodes = [37, 38, 39,40];
 
 class BoardView extends React.Component {
