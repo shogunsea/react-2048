@@ -3,6 +3,14 @@
 @import 'board.scss';
 @import 'score.scss';
 
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
 .touch-panel {
   height: 78vh;
 }

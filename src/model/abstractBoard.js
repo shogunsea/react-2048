@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import Cell from './Cell.js';
+import Cell from './cell.js';
 
 const BOARD_SIZE = 4;
 
@@ -31,52 +31,53 @@ export default class AbstractBoard {
     this.score = 0;
   }
 
-  isMovable() {
+  hasEmptySlots() {
     const board = this.board;
-    let isMovable = false;
-    // check for empty slots
+    let hasSlots = false;
+
     for (let i = 0; i < BOARD_SIZE; i++) {
       for (let j = 0; j < BOARD_SIZE; j++) {
         if (!board[i][j]) {
-          isMovable = true;
-          return isMovable;
+          hasSlots = true;
+          return hasSlots;
         }
       }
     }
-    // check if there're two ajacent cells have same value
+
+    return hasSlots;
+  }
+
+  // check if there're two ajacent cells have same value
+  // for each slot only checking right and down direction is enough
+  hasMergeableSlots() {
+    const board = this.board;
+    let isMergeable = false;
+
     for (let i = 0; i < BOARD_SIZE; i++) {
       for (let j = 0; j < BOARD_SIZE; j++) {
         let curCell = board[i][j];
         if (j !== BOARD_SIZE - 1) {
           let rightCell = board[i][j + 1];
           if (!!curCell && curCell.val === rightCell.val) {
-            isMovable = true;
-            return isMovable;
+            isMergeable = true;
+            return isMergeable;
           }
         }
         if (i !== BOARD_SIZE - 1) {
           let bottomCell = board[i + 1][j];
           if (!!curCell && curCell.val === bottomCell.val) {
-            isMovable = true;
-            return isMovable;
+            isMergeable = true;
+            return isMergeable;
           }
         }
       }
     }
 
-    return isMovable;
+    return isMergeable;
   }
 
-  recordMaxScore() {
-    const cookie = document.cookie;
-    if (cookie.indexOf('2048-max-score') === -1) {
-      document.cookie = '2048-max-score=' + this.score;
-    } else {
-      const currentMaxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
-      if (currentMaxScore <= this.score) {
-        document.cookie = '2048-max-score=' + this.score;
-      }
-    }
+  isMovable() {
+    return this.hasEmptySlots() || this.hasMergeableSlots();
   }
 
   updateScore(score) {
@@ -110,21 +111,57 @@ export default class AbstractBoard {
     mergedCell.mergedIntoToggle = false;
   }
 
+  // copy over the logic to move cells up here.
+  moveCellsUp() {
+
+  }
+
+  rotateClockwise(times) {
+    return this.board;
+  }
+
+  moveBoard(direction) {
+    switch (direction) {
+      case 'up':
+        this.moveCellsUp();
+        break;
+      case 'down':
+        this.rotateClockwise(2);
+        this.moveCellsUp();
+        this.rotateClockwise(2);
+        break;
+      case 'left':
+        this.rotateClockwise(1);
+        this.moveCellsUp();
+        this.rotateClockwise(3);
+        break;
+      case 'right':
+        this.rotateClockwise(3);
+        this.moveCellsUp();
+        this.rotateClockwise(1);
+        break;
+      default:
+        break;
+    }
+  }
+
   moveUpOrDown(direction) {
     const board = this.getBoard();
     let boardHasMoved = false;
-    // col
+    // iterate through each column, move cells that will
+    // hit the bound visually earlies first, i.e. start
+    // from the top
     for (let j = 0; j < board.length; j++) {
       // row
       if (direction == 'up') {
         // row starts from top
         for (let i = 0; i < board.length; i++) {
-          const curRow = board[i];
-          if (!curRow[j]) {
+          const currentRow = board[i];
+          if (!currentRow[j]) {
             continue;
           }
 
-          const curCell = curRow[j];
+          const curCell = currentRow[j];
           const preRow = curCell.curRow;
           let merged = false;
           let toRow = this.getReachableRow(curCell, direction);
@@ -146,7 +183,7 @@ export default class AbstractBoard {
 
           const cellHasMoved = curCell.fromRow != curCell.curRow;
 
-          const newRow = curRow.map(function(cell) {
+          const newRow = currentRow.map(function(cell) {
             if (!cell) {
               return;
             }
@@ -177,13 +214,13 @@ export default class AbstractBoard {
       } else {
         // rows starts from bottom
         for (let i = board.length - 1; i >= 0; i--) {
-          const curRow = board[i];
-          if (!curRow[j]) {
+          const currentRow = board[i];
+          if (!currentRow[j]) {
             continue;
           }
-          const curCell = curRow[j];
+          const curCell = currentRow[j];
           const preRow = curCell.curRow;
-          const preCol = curCell.curCol;
+          // const preCol = curCell.curCol;
           let toRow = this.getReachableRow(curCell, direction);
           let merged = false;
 
@@ -199,7 +236,7 @@ export default class AbstractBoard {
 
           let movement = '';
 
-          curCell.fromCol = preCol;
+          // curCell.fromCol = preCol;
           curCell.fromRow = preRow;
           curCell.curRow = toRow;
           movement = 'row_from_' + preRow + '_to_' + toRow;
@@ -207,7 +244,7 @@ export default class AbstractBoard {
 
           const cellHasMoved = curCell.fromRow != curCell.curRow;
 
-          const newRow = curRow.map(function(cell) {
+          const newRow = currentRow.map(function(cell) {
             if (!cell) {
               return;
             }

@@ -1,4 +1,4 @@
-import Cell from './Cell.js';
+import Cell from './cell.js';
 import SampleBoards from '../../test/stub/sample_boards.json';
 import AbstractBoard from './abstractBoard.js';
 
@@ -30,6 +30,18 @@ export default class Board extends AbstractBoard {
     if (hasMoved) {
       addRandomCell();
       this.recordCurrentState();
+    }
+  }
+
+  recordMaxScore() {
+    const cookie = document.cookie;
+    if (cookie.indexOf('2048-max-score') === -1) {
+      document.cookie = '2048-max-score=' + this.score;
+    } else {
+      const currentMaxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
+      if (currentMaxScore <= this.score) {
+        document.cookie = '2048-max-score=' + this.score;
+      }
     }
   }
 
