@@ -15,16 +15,16 @@ export default class Board extends AbstractBoard {
     let hasMoved = false;
     switch(direction) {
       case 0:
-        hasMoved = this.moveLeftOrRight('left');
+        hasMoved = this.moveBoardTowards('left');
         break;
       case 1:
-        hasMoved = this.moveUpOrDown('up');
+        hasMoved = this.moveBoardTowards('up');
         break;
       case 2:
-        hasMoved = this.moveLeftOrRight('right');
+        hasMoved = this.moveBoardTowards('right');
         break;
       case 3:
-        hasMoved = this.moveUpOrDown('down');
+        hasMoved = this.moveBoardTowards('down');
         break;
     }
     if (hasMoved) {

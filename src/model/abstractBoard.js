@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import Cell from './cell.js';
+import {rotateMatrixClockwise} from '../helper/index.js';
 
 const BOARD_SIZE = 4;
 
@@ -113,36 +114,100 @@ export default class AbstractBoard {
 
   // copy over the logic to move cells up here.
   moveCellsUp() {
+    const direction = 'up';
+    const board = this.getBoard();
+    let boardHasMoved = false;
+    // iterate through each column, move cells that will
+    // hit the bound visually earlies first, i.e. start
+    // from the top
+    for (let j = 0; j < board.length; j++) {
+      for (let i = 0; i < board.length; i++) {
+        const currentRow = board[i];
+        if (!currentRow[j]) {
+          continue;
+        }
 
+        const curCell = currentRow[j];
+        const preRow = curCell.curRow;
+        let merged = false;
+        let toRow = this.getReachableRow(curCell, direction);
+        if (toRow > 0
+          && board[toRow - 1][j]
+          && board[toRow - 1][j].val == curCell.val
+          && !board[toRow - 1][j].shouldNotMergeAgain) {
+          this.mergeTwoCells(board[toRow - 1][j], curCell);
+          toRow -= 1;
+          merged = true;
+        }
+
+        let movement = '';
+
+        curCell.fromRow = preRow;
+        curCell.curRow = toRow;
+        movement = 'row_from_' + preRow + '_to_' + toRow;
+        curCell.movement = movement;
+
+        const cellHasMoved = curCell.fromRow != curCell.curRow;
+
+        const newRow = currentRow.map(function(cell) {
+          if (!cell) {
+            return;
+          }
+          if (cell.id != curCell.id) {
+            return cell;
+          }
+        });
+
+        // taking out the old cell
+        if (cellHasMoved) {
+          board[i] = newRow;
+        }
+
+        // setting new cell?
+        if (curCell.merged) {
+          board[toRow].push(curCell);
+        } else {
+          board[toRow][j] = curCell;
+        }
+
+        if (cellHasMoved && !merged) {
+          curCell.mergedInto = false;
+          curCell.mergedIntoToggle = false;
+        }
+
+        boardHasMoved |= cellHasMoved;
+      }
+    }
+
+    return boardHasMoved;
   }
 
-  rotateClockwise(times) {
-    return this.board;
-  }
-
-  moveBoard(direction) {
+  moveBoardTowards(direction) {
+    let hasMoved = false;
     switch (direction) {
       case 'up':
-        this.moveCellsUp();
+        hasMoved = this.moveCellsUp();
         break;
       case 'down':
-        this.rotateClockwise(2);
-        this.moveCellsUp();
-        this.rotateClockwise(2);
+        rotateMatrixClockwise(this.board, 2);
+        hasMoved = this.moveCellsUp();
+        rotateMatrixClockwise(this.board, 2);
         break;
       case 'left':
-        this.rotateClockwise(1);
-        this.moveCellsUp();
-        this.rotateClockwise(3);
+        rotateMatrixClockwise(this.board, 1);
+        hasMoved = this.moveCellsUp();
+        rotateMatrixClockwise(this.board, 3);
         break;
       case 'right':
-        this.rotateClockwise(3);
-        this.moveCellsUp();
-        this.rotateClockwise(1);
+        rotateMatrixClockwise(this.board, 3);
+        hasMoved = this.moveCellsUp();
+        rotateMatrixClockwise(this.board, 1);
         break;
       default:
         break;
     }
+
+    return hasMoved;
   }
 
   moveUpOrDown(direction) {
