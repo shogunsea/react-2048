@@ -1,4 +1,10 @@
 {
+  "new": [
+          [null,null,2,null],
+          [null,null,null,null],
+          [null,null,2,null],
+          [null,null,null,null]
+            ],
   "board_a": [
               [0,0,2,0],
               [0,0,0,0],
