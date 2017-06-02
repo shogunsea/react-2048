@@ -1,6 +1,10 @@
 import Cell from './cell.js';
 import SampleBoards from '../../test/stub/sample_boards.json';
 import AbstractBoard from './abstractBoard.js';
+// extend board functionalities by decorating board instance
+// with methods from these two class.
+import BoardAction from '../helper/boardAction.js';
+import BoardState from '../helper/boardState.js';
 
 const BOARD_SIZE = 4;
 const VALUE_4_PROBABILITY = 8;
@@ -8,9 +12,27 @@ const VALUE_4_PROBABILITY = 8;
 export default class Board extends AbstractBoard {
   constructor(args) {
     super(args);
+
+    // Inject actions and states handlers
+    const handlers = this.getHandlers();
+    this.decorateWith(handlers);
+
     this.fillGridWithEmptyCell(this.grid);
   }
 
+  getHandlers() {
+    const actionHandler = new BoardAction();
+    const stateHandler = new BoardState();
+    return [actionHandler, stateHandler];
+  }
+
+  decorateWith(handlers) {
+    for (let handler of handlers) {
+      handler.inject(this);
+    }
+  }
+
+  // Action
   moveBoard(direction, addRandomCell) {
     let hasMoved = false;
     switch(direction) {
@@ -33,6 +55,7 @@ export default class Board extends AbstractBoard {
     }
   }
 
+  // Action
   recordMaxScore() {
     const cookie = document.cookie;
     if (cookie.indexOf('2048-max-score') === -1) {
@@ -45,16 +68,19 @@ export default class Board extends AbstractBoard {
     }
   }
 
+  // Action
   recordCurrentState() {
     this.recordCurrentBoard();
     this.recordCurrentScore();
   }
 
+  // Action
   recordCurrentScore() {
     const currentScore = this.getScore();
     document.cookie = '2048-stored-score=' + currentScore;
   }
 
+  // Action
   recordCurrentBoard() {
     const currentBoard = this.getBoard();
     let scoreString = '';
@@ -70,6 +96,7 @@ export default class Board extends AbstractBoard {
     document.cookie = '2048-stored-board=' + scoreString;
   }
 
+  // // Action
   fillGridWithEmptyCell(grid) {
     for(let i = 0; i < BOARD_SIZE; i++) {
       for(let j = 0; j < BOARD_SIZE; j++) {
@@ -78,6 +105,7 @@ export default class Board extends AbstractBoard {
     }
   }
 
+  // Action
   replaceWithTestBoard(boardName = 'board_A') {
     this.constructor();
     const sampleBoard = SampleBoards[boardName];
@@ -85,7 +113,7 @@ export default class Board extends AbstractBoard {
       const curRow = sampleBoard[i];
       for (let j = 0; j < BOARD_SIZE; j++) {
         const val = curRow[j];
-        if (val != 0) {
+        if (val) {
           const cell = new Cell(i, j, val);
           this.setCellToBoard(cell);
         }
@@ -95,7 +123,7 @@ export default class Board extends AbstractBoard {
     return this.getBoard();
   }
 
-
+  // ? helper
   getRandomIntInclusive(min, max) {
     min = Math.ceil(min);
     max = Math.floor(max);
