@@ -1,5 +1,41 @@
 /*eslint-disable */
 
+import {rotateMatrixClockwise} from '../helper/index.js';
+
+// Action
+const moveBoardTowards = function(direction) {
+  debugger
+  let hasMoved = false;
+  switch (direction) {
+    case 'up':
+      hasMoved = this.moveCellsUp();
+      break;
+    case 'down':
+      this.print('Before rotating twice:');
+      this.board = rotateMatrixClockwise(this.board, 2);
+      this.print('After rotating twice:');
+      this.print('Before current board moving up:');
+      hasMoved = this.moveCellsUp();
+      this.print('After current board moving up:');
+      this.board = rotateMatrixClockwise(this.board, 2);
+      break;
+    case 'left':
+      this.board = rotateMatrixClockwise(this.board, 1);
+      hasMoved = this.moveCellsUp();
+      this.board = rotateMatrixClockwise(this.board, 3);
+      break;
+    case 'right':
+      this.board = rotateMatrixClockwise(this.board, 3);
+      hasMoved = this.moveCellsUp();
+      this.board = rotateMatrixClockwise(this.board, 1);
+      break;
+    default:
+      break;
+  }
+
+  return hasMoved;
+}
+
 export default class BoardAction {
   constructor() {
 
@@ -23,7 +59,7 @@ export default class BoardAction {
       }
     };
 
-    return [getAction, print];
+    return [getAction, print, moveBoardTowards];
   }
 
   decorate(boardInstance) {

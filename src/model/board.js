@@ -10,8 +10,32 @@ const BOARD_SIZE = 4;
 const VALUE_4_PROBABILITY = 8;
 
 export default class Board extends AbstractBoard {
-  constructor(args) {
-    super(args);
+   /**
+    * @param  {Array} boardData - optional array to initialize the board
+    * @param  {number} boardSize - optional integer to configure the board
+    */
+  constructor(boardData = null, boardSize = 4) {
+    super(boardSize);
+
+    // size of boardData takes precedence
+    if (boardData) {
+      const rowLen = boardData.length;
+      for (let row = 0; row < rowLen; row++) {
+        const currentRow = boardData[row];
+        const colLen = currentRow.length;
+        for (let col = 0; col < colLen; col++) {
+          const val = boardData[row][col];
+          if (val) {
+            const newCell = new Cell(row, col, val);
+            this.board[row][col] = newCell;
+          }
+        }
+      }
+    }
+
+    this.hasWon = false;
+    this.hasLost = false;
+    this.score = 0;
 
     // Inject actions and states handlers
     const handlers = this.getHandlers();
@@ -28,8 +52,13 @@ export default class Board extends AbstractBoard {
 
   decorateWith(handlers) {
     for (let handler of handlers) {
-      handler.inject(this);
+      handler.decorate(this);
     }
+  }
+
+  // State/Board
+  isMovable() {
+    return this.hasEmptySlots() || this.hasMergeableSlots();
   }
 
   // Action
@@ -208,5 +237,18 @@ export default class Board extends AbstractBoard {
 
   getGrid() {
     return this.grid;
+  }
+
+  /**
+   * Score related method
+   */
+
+  getScore() {
+    return this.score;
+  }
+
+  // Action
+  updateScore(score) {
+    this.score += score;
   }
 }
