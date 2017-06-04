@@ -1,6 +1,16 @@
 const chalk = require('chalk');
-
 const sampleBoards = require('../../test/stub/sample_boards.json');
+
+/**
+ * @param  {number} min - Lower inclusive bound
+ * @param  {number} max - Upper inclusive bound
+ * @return {number} Random integer value in [min, max]
+ */
+const getRandomIntInclusive = function(min, max) {
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+};
 
 const boardDataFetcher = function(board) {
   let boardName = '';
@@ -36,4 +46,8 @@ const rotateMatrixClockwise = function(matrix, times) {
   return tempBoard;
 };
 
-module.exports = {boardDataFetcher, rotateMatrixClockwise};
+module.exports = {
+  boardDataFetcher,
+  rotateMatrixClockwise,
+  getRandomIntInclusive,
+};

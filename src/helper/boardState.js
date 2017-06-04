@@ -1,6 +1,9 @@
 
-const getState = function() {
-  console.log('This is getState method.');
+/**
+ * @return {Boolean} If current board has empty slots or has mergeable slots.
+ */
+const isMovable = function() {
+  return this.hasEmptySlots() || this.hasMergeableSlots();
 };
 
 // State/Board
@@ -83,7 +86,6 @@ const hasMergeableSlots = function() {
   return isMergeable;
 };
 
-
 export default class BoardState {
   constructor() {
 
@@ -91,10 +93,10 @@ export default class BoardState {
 
   getMethods() {
     const methods = [
-      getState,
       getReachableCol,
       getReachableRow,
       hasMergeableSlots,
+      isMovable,
     ];
 
     return methods;

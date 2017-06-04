@@ -1,12 +1,11 @@
-import Cell from './cell.js';
-import SampleBoards from '../../test/stub/sample_boards.json';
 import AbstractBoard from './abstractBoard.js';
-// extend board functionalities by decorating board instance
-// with methods from these two class.
+import Cell from './cell.js';
 import BoardAction from '../helper/boardAction.js';
 import BoardState from '../helper/boardState.js';
+import SampleBoards from '../../test/stub/sample_boards.json';
+import {getRandomIntInclusive} from '../helper/utils.js';
 
-const BOARD_SIZE = 4;
+// 8/10 --> 80%
 const VALUE_4_PROBABILITY = 8;
 
 export default class Board extends AbstractBoard {
@@ -37,50 +36,21 @@ export default class Board extends AbstractBoard {
     this.hasLost = false;
     this.score = 0;
 
-    // Inject actions and states handlers
-    const handlers = this.getHandlers();
-    this.decorateWith(handlers);
+    const decorators = this.getDecorators();
+    this.decorateWith(decorators);
 
     this.fillGridWithEmptyCell(this.grid);
   }
 
-  getHandlers() {
+  getDecorators() {
     const actionHandler = new BoardAction();
     const stateHandler = new BoardState();
     return [actionHandler, stateHandler];
   }
 
-  decorateWith(handlers) {
-    for (let handler of handlers) {
-      handler.decorate(this);
-    }
-  }
-
-  // State/Board
-  isMovable() {
-    return this.hasEmptySlots() || this.hasMergeableSlots();
-  }
-
-  // Action
-  moveBoard(direction, addRandomCell) {
-    let hasMoved = false;
-    switch(direction) {
-      case 0:
-        hasMoved = this.moveBoardTowards('left');
-        break;
-      case 1:
-        hasMoved = this.moveBoardTowards('up');
-        break;
-      case 2:
-        hasMoved = this.moveBoardTowards('right');
-        break;
-      case 3:
-        hasMoved = this.moveBoardTowards('down');
-        break;
-    }
-    if (hasMoved) {
-      addRandomCell();
-      this.recordCurrentState();
+  decorateWith(decorators) {
+    for (let decorator of decorators) {
+      decorator.decorate(this);
     }
   }
 
@@ -125,22 +95,43 @@ export default class Board extends AbstractBoard {
     document.cookie = '2048-stored-board=' + scoreString;
   }
 
-  // // Action
+  /**
+   * Initialize the grid by filling it with empty cells,
+   *   visually 'grid' is the one being rendered as the board
+   *   'board' is the data model that holds the cells.
+   * @param  {Array} grid - Grid array of the board
+   */
   fillGridWithEmptyCell(grid) {
-    for(let i = 0; i < BOARD_SIZE; i++) {
-      for(let j = 0; j < BOARD_SIZE; j++) {
+    const rowLen = grid.length;
+    for(let i = 0; i < rowLen; i++) {
+      const colLen = grid[i].length;
+      for(let j = 0; j < colLen; j++) {
         grid[i][j] = new Cell(i, j, 0);
       }
     }
   }
 
-  // Action
+  /**
+   * @param  {string} boardName - optional board name to fetch
+   *   from sample boards
+   * @return {array} updated board array.
+   */
   replaceWithTestBoard(boardName = 'board_A') {
     this.constructor();
     const sampleBoard = SampleBoards[boardName];
-    for (let i = 0; i < BOARD_SIZE; i++) {
+
+    if (!sampleBoard) {
+      console.ward(boardName + ' not found.');
+      return;
+    }
+
+    const rowLen = sampleBoard.length;
+
+    for (let i = 0; i < rowLen; i++) {
       const curRow = sampleBoard[i];
-      for (let j = 0; j < BOARD_SIZE; j++) {
+      const colLen = curRow.length;
+
+      for (let j = 0; j < colLen; j++) {
         const val = curRow[j];
         if (val) {
           const cell = new Cell(i, j, val);
@@ -150,13 +141,6 @@ export default class Board extends AbstractBoard {
     }
 
     return this.getBoard();
-  }
-
-  // ? helper
-  getRandomIntInclusive(min, max) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    return Math.floor(Math.random() * (max - min + 1)) + min;
   }
 
   getRandomCell() {
@@ -173,7 +157,7 @@ export default class Board extends AbstractBoard {
     const slot = availableSlots[index];
     const row = slot.row;
     const col = slot.col;
-    const valueFourRand = this.getRandomIntInclusive(0, 10);
+    const valueFourRand = getRandomIntInclusive(0, 10);
     const val = valueFourRand > VALUE_4_PROBABILITY? 4 : 2;
     const newCell = new Cell(row, col, val);
     return newCell;
@@ -192,17 +176,27 @@ export default class Board extends AbstractBoard {
     this.getRow(row)[col] = cell;
   }
 
+
+  // TODO: refactor this method: why does it need to check if cell is merged
+  // or not just for filtering?
+  /**
+   * @return {array} A list of objects that represent the position
+   * of available slots.
+   */
   getAvailableSlots() {
     const slots = [];
     const board = this.getBoard();
+    const rowLen = board.length;
 
-    for (let i = 0; i < BOARD_SIZE; i++) {
+    // ? OGKW: Only God knows Why ¯\_(ツ)_/¯
+    for (let i = 0; i < rowLen; i++) {
       slots.push([0, 0, 0, 0]);
     }
 
-    for(let i = 0; i < BOARD_SIZE; i++) {
+    for(let i = 0; i < rowLen; i++) {
       const curRow = board[i];
-      for (let j = 0; j < curRow.length; j++) {
+      const colLen = curRow.length;
+      for (let j = 0; j < colLen; j++) {
         const curCell = curRow[j];
         if (curCell && !curCell.merged) {
           slots[curCell.curRow][curCell.curCol] = 1;
@@ -212,8 +206,9 @@ export default class Board extends AbstractBoard {
 
     const availableSlots = [];
 
-    for (let i = 0; i < BOARD_SIZE; i++) {
-      for (let j = 0; j < BOARD_SIZE; j++) {
+    for (let i = 0; i < rowLen; i++) {
+      const colLen = board[i].length;
+      for (let j = 0; j < colLen; j++) {
         if (slots[i][j] == 0) {
           availableSlots.push({row: i, col: j});
         }

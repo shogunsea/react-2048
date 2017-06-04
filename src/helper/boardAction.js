@@ -1,12 +1,35 @@
 /*eslint-disable */
 
-import {rotateMatrixClockwise} from '../helper/index.js';
+import {rotateMatrixClockwise} from '../helper/utils.js';
 
-const getAction = function() {
-  console.log('This is getAction method.');
-};
+const moveBoard = function(direction, addRandomCell) {
+  let hasMoved = false;
+  switch(direction) {
+    case 0:
+      hasMoved = this.moveBoardTowards('left');
+      break;
+    case 1:
+      hasMoved = this.moveBoardTowards('up');
+      break;
+    case 2:
+      hasMoved = this.moveBoardTowards('right');
+      break;
+    case 3:
+      hasMoved = this.moveBoardTowards('down');
+      break;
+  }
 
-// Action
+  if (hasMoved) {
+    addRandomCell();
+    this.recordCurrentState();
+  }
+}
+
+/**
+ * Receive direction, based on the direction temporarily rotate the board,
+ *   move the cells up and restore the board.
+ * @param  {string} direction - current direction board is moving towards
+ */
 const moveBoardTowards = function(direction) {
   let hasMoved = false;
   switch (direction) {
@@ -39,8 +62,9 @@ const moveBoardTowards = function(direction) {
   return hasMoved;
 };
 
-// Action
-// copy over the logic to move cells up here.
+/**
+ * move the cells upwards, merge if necessary
+ */
 const moveCellsUp = function() {
   const direction = 'up';
   const board = this.getBoard();
@@ -110,6 +134,11 @@ const moveCellsUp = function() {
   return boardHasMoved;
 }
 
+/**
+ * @param  {Object} mergedIntoCell - the cell that absorb another cell and stays on
+ *   the board??
+ * @param  {Object} mergedCell - the cell that has been merged with another cell
+ */
 const mergeTwoCells = function(mergedIntoCell, mergedCell) {
   mergedIntoCell.val *= 2;
   this.updateScore(mergedIntoCell.val);
@@ -144,11 +173,11 @@ export default class BoardAction {
   getMethods() {
 
     const methods = [
-      getAction,
       print,
       moveBoardTowards,
       mergeTwoCells,
-      moveCellsUp
+      moveCellsUp,
+      moveBoard,
     ];
 
     return methods;

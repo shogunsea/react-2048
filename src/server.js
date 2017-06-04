@@ -10,7 +10,7 @@ const indexPage = path.join(__dirname, './index.html.hbs');
 const layoutExample = path.join(__dirname, '../layout_example.html');
 const publicPath = path.resolve(__dirname, '../dist');
 
-const {boardDataFetcher} = require('./helper');
+const {boardDataFetcher} = require('./helper/utils.js');
 
 const oneWeekInMsFormat = '7d';
 const httpCachingOptions = {
