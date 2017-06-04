@@ -27,7 +27,7 @@ export default class Board extends AbstractBoard {
           const val = boardData[row][col];
           if (val) {
             const newCell = new Cell(row, col, val);
-            this.board[row][col] = newCell;
+            this.getBoard()[row][col] = newCell;
           }
         }
       }
@@ -232,7 +232,7 @@ export default class Board extends AbstractBoard {
   }
 
   getRow(row) {
-    return this.board[row];
+    return this.getBoard()[row];
   }
 
   getGrid() {
@@ -243,11 +243,16 @@ export default class Board extends AbstractBoard {
    * Score related method
    */
 
+  /**
+   * @return {number} Current score.
+   */
   getScore() {
     return this.score;
   }
 
-  // Action
+  /**
+   * @param  {number} score - new score
+   */
   updateScore(score) {
     this.score += score;
   }

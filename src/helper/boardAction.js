@@ -2,9 +2,12 @@
 
 import {rotateMatrixClockwise} from '../helper/index.js';
 
+const getAction = function() {
+  console.log('This is getAction method.');
+};
+
 // Action
 const moveBoardTowards = function(direction) {
-  debugger
   let hasMoved = false;
   switch (direction) {
     case 'up':
@@ -34,32 +37,121 @@ const moveBoardTowards = function(direction) {
   }
 
   return hasMoved;
+};
+
+// Action
+// copy over the logic to move cells up here.
+const moveCellsUp = function() {
+  const direction = 'up';
+  const board = this.getBoard();
+  let boardHasMoved = false;
+  // iterate through each column, move cells that will
+  // hit the bound visually earlies first, i.e. start
+  // from the top
+  for (let j = 0; j < board.length; j++) {
+    for (let i = 0; i < board.length; i++) {
+      const currentRow = board[i];
+      if (!currentRow[j]) {
+        continue;
+      }
+
+      const curCell = currentRow[j];
+      const preRow = curCell.curRow;
+      let merged = false;
+      let toRow = this.getReachableRow(curCell, direction);
+      if (toRow > 0
+        && board[toRow - 1][j]
+        && board[toRow - 1][j].val == curCell.val
+        && !board[toRow - 1][j].shouldNotMergeAgain) {
+        this.mergeTwoCells(board[toRow - 1][j], curCell);
+        toRow -= 1;
+        merged = true;
+      }
+
+      let movement = '';
+
+      curCell.fromRow = preRow;
+      curCell.curRow = toRow;
+      movement = 'row_from_' + preRow + '_to_' + toRow;
+      curCell.movement = movement;
+
+      const cellHasMoved = curCell.fromRow != curCell.curRow;
+
+      const newRow = currentRow.map(function(cell) {
+        if (!cell) {
+          return;
+        }
+        if (cell.id != curCell.id) {
+          return cell;
+        }
+      });
+
+      // taking out the old cell
+      if (cellHasMoved) {
+        board[i] = newRow;
+      }
+
+      // setting new cell?
+      if (curCell.merged) {
+        board[toRow].push(curCell);
+      } else {
+        board[toRow][j] = curCell;
+      }
+
+      if (cellHasMoved && !merged) {
+        curCell.mergedInto = false;
+        curCell.mergedIntoToggle = false;
+      }
+
+      boardHasMoved |= cellHasMoved;
+    }
+  }
+
+  return boardHasMoved;
+}
+
+const mergeTwoCells = function(mergedIntoCell, mergedCell) {
+  mergedIntoCell.val *= 2;
+  this.updateScore(mergedIntoCell.val);
+  this.recordMaxScore();
+
+  // never ends please
+  if (mergedIntoCell.val == 2048) {
+    this.hasWon = true;
+  }
+
+  mergedIntoCell.shouldNotMergeAgain = true;
+
+  if (mergedIntoCell.mergedInto) {
+    mergedIntoCell.mergedIntoToggle = true;
+    mergedIntoCell.mergedInto = false;
+  } else if (mergedIntoCell.mergedIntoToggle) {
+    mergedIntoCell.mergedInto = true;
+    mergedIntoCell.mergedIntoToggle = false;
+  } else {
+    mergedIntoCell.mergedInto = true;
+  }
+
+  mergedCell.merged = true;
+  mergedCell.mergedInto = false;
+  mergedCell.mergedIntoToggle = false;
 }
 
 export default class BoardAction {
   constructor() {
-
   }
 
   getMethods() {
-    const getAction = function() {
-      console.log('This is getAction method.');
-    };
 
-    const print = function(message = '', padding = 2) {
-      const row = this.board.length;
-      console.log(message);
+    const methods = [
+      getAction,
+      print,
+      moveBoardTowards,
+      mergeTwoCells,
+      moveCellsUp
+    ];
 
-      for (let i = 0; i < row; i++) {
-        console.log(this.board[i]);
-      }
-
-      for (let j = 0; j < padding; j++) {
-        console.log();
-      }
-    };
-
-    return [getAction, print, moveBoardTowards];
+    return methods;
   }
 
   decorate(boardInstance) {
