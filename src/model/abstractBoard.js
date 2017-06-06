@@ -67,6 +67,14 @@ export default class AbstractBoard {
 
   /**
    * getter
+   * @return {Array} The grid data array.
+   */
+  getGrid() {
+    return this.grid;
+  }
+
+  /**
+   * getter
    * @return {Array} The board data array.
    */
   getBoard() {

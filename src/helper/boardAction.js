@@ -2,6 +2,39 @@
 
 import {rotateMatrixClockwise} from '../helper/utils.js';
 
+/**
+ * Generate a new Cell that been assigned value from
+ *   available row and cols.
+ * Set the new cell to the board.
+ */
+const addRandomCell = function() {
+  const newCell = this.getRandomCell();
+  this.setCellToBoard(newCell);
+};
+
+/**
+ * @param {object} cell - The cell to be added on to the board
+ *   according to the row&col value from cell properties.
+ */
+const setCellToBoard = function(cell) {
+  if (!cell) {
+    return;
+  }
+  const {curRow: row, curCol: col} = cell;
+  this.getBoard()[row][col] = cell;
+};
+
+
+/**
+ * TODO: number to string: doulbe switch condition
+ *   really necessary?
+ * TODO: Passing function as callback can reduce
+ *   dependency? Consider to use more of such pattern?
+ * TODO: is this method right place to trigger recordCurrentState?
+ * @param  {number} direction - number that represents the direction
+ * @param  {function} addRandomCell - the function that needs to be
+ *   triggered to add a random number
+ */
 const moveBoard = function(direction, addRandomCell) {
   let hasMoved = false;
   switch(direction) {
@@ -178,6 +211,8 @@ export default class BoardAction {
       mergeTwoCells,
       moveCellsUp,
       moveBoard,
+      addRandomCell,
+      setCellToBoard,
     ];
 
     return methods;

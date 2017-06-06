@@ -5,9 +5,6 @@ import BoardState from '../helper/boardState.js';
 import SampleBoards from '../../test/stub/sample_boards.json';
 import {getRandomIntInclusive} from '../helper/utils.js';
 
-// 8/10 --> 80%
-const VALUE_4_PROBABILITY = 8;
-
 export default class Board extends AbstractBoard {
    /**
     * @param  {Array} boardData - optional array to initialize the board
@@ -16,36 +13,50 @@ export default class Board extends AbstractBoard {
   constructor(boardData = null, boardSize = 4) {
     super(boardSize);
 
-    // size of boardData takes precedence
-    if (boardData) {
-      const rowLen = boardData.length;
-      for (let row = 0; row < rowLen; row++) {
-        const currentRow = boardData[row];
-        const colLen = currentRow.length;
-        for (let col = 0; col < colLen; col++) {
-          const val = boardData[row][col];
-          if (val) {
-            const newCell = new Cell(row, col, val);
-            this.getBoard()[row][col] = newCell;
-          }
-        }
-      }
-    }
-
+    const decorators = this.getDecorators();
     this.hasWon = false;
     this.hasLost = false;
     this.score = 0;
+    this.VALUE_4_PROBABILITY = 8; // 8/10 --> 80%
 
-    const decorators = this.getDecorators();
+    this.initWithBoardData(boardData);
+    this.initGrid();
     this.decorateWith(decorators);
-
-    this.fillGridWithEmptyCell(this.grid);
   }
 
+/**
+ * @param  {Array} boardData - optional array to initialize the board
+ */
+  initWithBoardData(boardData) {
+    if (!boardData) {
+      return;
+    }
+    // size of boardData takes precedence
+    const rowLen = boardData.length;
+    for (let row = 0; row < rowLen; row++) {
+      const currentRow = boardData[row];
+      const colLen = currentRow.length;
+      for (let col = 0; col < colLen; col++) {
+        const val = boardData[row][col];
+        if (val) {
+          const newCell = new Cell(row, col, val);
+          this.setCellToBoard(newCell);
+        }
+      }
+    }
+  }
+
+  initGrid() {
+    this.fillGridWithEmptyCell();
+  }
+
+  /**
+   * @return {array} a list of all decorators.
+   */
   getDecorators() {
-    const actionHandler = new BoardAction();
-    const stateHandler = new BoardState();
-    return [actionHandler, stateHandler];
+    const actionDecorator = new BoardAction();
+    const stateDecorator = new BoardState();
+    return [actionDecorator, stateDecorator];
   }
 
   decorateWith(decorators) {
@@ -54,32 +65,11 @@ export default class Board extends AbstractBoard {
     }
   }
 
-  // Action
-  recordMaxScore() {
-    const cookie = document.cookie;
-    if (cookie.indexOf('2048-max-score') === -1) {
-      document.cookie = '2048-max-score=' + this.score;
-    } else {
-      const currentMaxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
-      if (currentMaxScore <= this.score) {
-        document.cookie = '2048-max-score=' + this.score;
-      }
-    }
-  }
-
-  // Action
-  recordCurrentState() {
-    this.recordCurrentBoard();
-    this.recordCurrentScore();
-  }
-
-  // Action
-  recordCurrentScore() {
-    const currentScore = this.getScore();
-    document.cookie = '2048-stored-score=' + currentScore;
-  }
-
-  // Action
+  /**
+   * Save current board data into client cookie.
+   * TODO: Handle the bad cache case: when null/undefined was saved
+   * in cookie by accident.
+   */
   recordCurrentBoard() {
     const currentBoard = this.getBoard();
     let scoreString = '';
@@ -101,7 +91,8 @@ export default class Board extends AbstractBoard {
    *   'board' is the data model that holds the cells.
    * @param  {Array} grid - Grid array of the board
    */
-  fillGridWithEmptyCell(grid) {
+  fillGridWithEmptyCell() {
+    const grid = this.getGrid();
     const rowLen = grid.length;
     for(let i = 0; i < rowLen; i++) {
       const colLen = grid[i].length;
@@ -143,6 +134,16 @@ export default class Board extends AbstractBoard {
     return this.getBoard();
   }
 
+  /**
+   * This method does more than what its name says
+   * 1. Check if board has available slots(in a confusing way).
+   * 2. Pick randomly from available index and generate
+   *   a new Cell with the row&col indexes.
+   * 3. Give the new cell a value 2 or 4 based on another
+   *   random value.
+   * 4. return the new cell.
+   */
+
   getRandomCell() {
     const availableSlots = this.getAvailableSlots();
     const availableLength = availableSlots.length;
@@ -158,24 +159,10 @@ export default class Board extends AbstractBoard {
     const row = slot.row;
     const col = slot.col;
     const valueFourRand = getRandomIntInclusive(0, 10);
-    const val = valueFourRand > VALUE_4_PROBABILITY? 4 : 2;
+    const val = valueFourRand > this.VALUE_4_PROBABILITY? 4 : 2;
     const newCell = new Cell(row, col, val);
     return newCell;
   }
-
-  addRandomCell() {
-    const newCell = this.getRandomCell();
-    this.setCellToBoard(newCell);
-  }
-
-  setCellToBoard(cell) {
-    if (!cell) {
-      return;
-    }
-    const {curRow: row, curCol: col} = cell;
-    this.getRow(row)[col] = cell;
-  }
-
 
   // TODO: refactor this method: why does it need to check if cell is merged
   // or not just for filtering?
@@ -226,14 +213,6 @@ export default class Board extends AbstractBoard {
     }
   }
 
-  getRow(row) {
-    return this.getBoard()[row];
-  }
-
-  getGrid() {
-    return this.grid;
-  }
-
   /**
    * Score related method
    */
@@ -251,4 +230,36 @@ export default class Board extends AbstractBoard {
   updateScore(score) {
     this.score += score;
   }
+
+  /**
+   * Read from client cookie and update max score.
+   */
+  recordMaxScore() {
+    const cookie = document.cookie;
+    if (cookie.indexOf('2048-max-score') === -1) {
+      document.cookie = '2048-max-score=' + this.score;
+    } else {
+      const currentMaxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
+      if (currentMaxScore <= this.score) {
+        document.cookie = '2048-max-score=' + this.score;
+      }
+    }
+  }
+
+   /**
+   * Record current board data and score.
+   */
+  recordCurrentState() {
+    this.recordCurrentBoard();
+    this.recordCurrentScore();
+  }
+
+  /**
+   * Write currnet score in client cookie.
+   */
+  recordCurrentScore() {
+    const currentScore = this.getScore();
+    document.cookie = '2048-stored-score=' + currentScore;
+  }
+
 }

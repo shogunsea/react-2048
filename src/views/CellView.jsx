@@ -14,7 +14,7 @@ class CellView extends React.Component {
     }
   }
 
-  showCellInfoInDevMode() {
+  showCellInfo() {
     const info = {
       row: this.props.row,
       col: this.props.col,
@@ -36,7 +36,7 @@ class CellView extends React.Component {
     const mergedInto = this.props.isMergedInto? " mergedInto " : " ";
     const mergedIntoToggle = this.props.isMergedIntoToggle? " mergedIntoToggle " : " ";
     const position = "row_"+this.props.row+" col_"+this.props.col + " ";
-    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement + merged + mergedInto + mergedIntoToggle} onClick={this.showCellInfoInDevMode.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
+    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement + merged + mergedInto + mergedIntoToggle} onClick={this.showCellInfo.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
   }
 }
 
