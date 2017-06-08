@@ -6,7 +6,7 @@ class ScoreView extends React.Component {
   }
 
   render() {
-    const clickHandler = this.props.clickHandler;
+    const clickHandler = this.props.newGameClickHandler;
     return <div className="score">
       <div className="new-game button" onClick={clickHandler}> New Game </div>
       <div className="max-score button"> Max score: {this.props.maxScore}</div>

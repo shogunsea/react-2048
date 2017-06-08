@@ -10,7 +10,7 @@ const plugins = [
       'NODE_ENV': JSON.stringify('production')
     }
   }),
-  new ExtractTextPlugin('2048/style.css'), // how to namespace to a different dist path?
+  new ExtractTextPlugin('dist/2048/style.css'), // how to namespace to a different dist path?
   new OptimizeCssAssetsPlugin()
 ];
 
@@ -26,11 +26,12 @@ if (isProduction) {
 
 module.exports = {
   entry: {
-    '2048': "./src/entry.js",
+    'dist/2048/2048': "./src/entry.js",
+    'test/lib/main.test': "./test/entry.js"
   },
   output: {
-      path: path.join(__dirname, "dist"),
-      filename: "[name]/[name].js"
+      path: './',
+      filename: "[name].js"
   },
   plugins: plugins,
   module: {

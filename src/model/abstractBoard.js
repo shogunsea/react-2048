@@ -57,12 +57,48 @@ export default class AbstractBoard {
     console.log(message);
 
     for (let i = 0; i < row; i++) {
-      console.log(this.getBoard()[i]);
+      const currentRow = this.getBoard()[i];
+      let rowContent = '';
+
+      for (let j = 0; j < currentRow.length; j++) {
+        const cell = currentRow[j];
+        if (cell) {
+          rowContent += cell.val + ' ';
+        } else {
+          rowContent += '0 ';
+        }
+      }
+
+      const rowString = `[${rowContent}]`;
+      console.log(rowString);
     }
 
     for (let j = 0; j < padding; j++) {
       console.log();
     }
+  }
+
+
+  /**
+   * @return {array} The array view of current board.
+   */
+  getArrayView() {
+   const row = this.getBoard().length;
+   const data = [];
+
+    for (let i = 0; i < row; i++) {
+      const currentRow = this.getBoard()[i];
+      const rowData = [];
+
+      for (let j = 0; j < currentRow.length; j++) {
+        const cell = currentRow[j];
+        rowData[j] = cell? cell.val : 0;
+      }
+
+      data[i] = rowData;
+    }
+
+    return data;
   }
 
   /**

@@ -19,9 +19,9 @@ export default class Board extends AbstractBoard {
     this.score = 0;
     this.VALUE_4_PROBABILITY = 8; // 8/10 --> 80%
 
+    this.decorateWith(decorators);
     this.initWithBoardData(boardData);
     this.initGrid();
-    this.decorateWith(decorators);
   }
 
 /**

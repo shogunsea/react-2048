@@ -1,6 +1,6 @@
 /*eslint-disable */
 
-import {rotateMatrixClockwise} from '../helper/utils.js';
+const {rotateMatrixClockwise} = require('../helper/utils.js');
 
 /**
  * Generate a new Cell that been assigned value from
@@ -27,7 +27,7 @@ const setCellToBoard = function(cell) {
 
 /**
  * TODO: number to string: doulbe switch condition
- *   really necessary?
+ *   really necessary? -- Fixed
  * TODO: Passing function as callback can reduce
  *   dependency? Consider to use more of such pattern?
  * TODO: is this method right place to trigger recordCurrentState?
@@ -35,28 +35,16 @@ const setCellToBoard = function(cell) {
  * @param  {function} addRandomCell - the function that needs to be
  *   triggered to add a random number
  */
+
+// takes input board in, output the moved board.
 const moveBoard = function(direction, addRandomCell) {
-  let hasMoved = false;
-  switch(direction) {
-    case 0:
-      hasMoved = this.moveBoardTowards('left');
-      break;
-    case 1:
-      hasMoved = this.moveBoardTowards('up');
-      break;
-    case 2:
-      hasMoved = this.moveBoardTowards('right');
-      break;
-    case 3:
-      hasMoved = this.moveBoardTowards('down');
-      break;
-  }
+  const hasMoved = this.moveBoardTowards(direction);
 
   if (hasMoved) {
     addRandomCell();
     this.recordCurrentState();
   }
-}
+};
 
 /**
  * Receive direction, based on the direction temporarily rotate the board,
@@ -165,7 +153,7 @@ const moveCellsUp = function() {
   }
 
   return boardHasMoved;
-}
+};
 
 /**
  * @param  {Object} mergedIntoCell - the cell that absorb another cell and stays on
@@ -197,23 +185,26 @@ const mergeTwoCells = function(mergedIntoCell, mergedCell) {
   mergedCell.merged = true;
   mergedCell.mergedInto = false;
   mergedCell.mergedIntoToggle = false;
-}
+};
 
 export default class BoardAction {
   constructor() {
   }
 
   getMethods() {
-
-    const methods = [
-      print,
-      moveBoardTowards,
+    const utilityAction = [
       mergeTwoCells,
-      moveCellsUp,
-      moveBoard,
       addRandomCell,
       setCellToBoard,
     ];
+
+    const coreMovement = [
+      moveBoardTowards,
+      moveCellsUp,
+      moveBoard,
+    ];
+
+    const methods = [...utilityAction, ...coreMovement];
 
     return methods;
   }

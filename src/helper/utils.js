@@ -2,6 +2,31 @@ const chalk = require('chalk');
 const sampleBoards = require('../../test/stub/sample_boards.json');
 
 /**
+ * @param  {number} keyCode - Integer representation of key been pressed
+ * @return {string} String value of detected direction.
+ */
+const parseDirection = function(keyCode) {
+  let direction = '';
+
+  switch(keyCode) {
+    case 37:
+      direction = 'left';
+      break;
+    case 38:
+      direction = 'up';
+      break;
+    case 39:
+      direction = 'right';
+      break;
+    case 40:
+      direction = 'down';
+      break;
+  }
+
+  return direction;
+};
+
+/**
  * @param  {number} min - Lower inclusive bound
  * @param  {number} max - Upper inclusive bound
  * @return {number} Random integer value in [min, max]
@@ -50,4 +75,5 @@ module.exports = {
   boardDataFetcher,
   rotateMatrixClockwise,
   getRandomIntInclusive,
+  parseDirection,
 };

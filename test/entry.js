@@ -1,0 +1,1 @@
+require('./integration/movementTest.js');

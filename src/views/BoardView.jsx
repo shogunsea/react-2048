@@ -6,8 +6,9 @@ import ScoreView from './scoreView.jsx';
 import SourceView from './sourceView.jsx';
 import WinOverlayView from './winOverlay.jsx';
 import FailOverlayView from './failOverlay.jsx';
+import {parseDirection} from '../helper/utils';
 
-const KeyCodes = [37, 38, 39,40];
+const directionKeyCodes = [37, 38, 39,40];
 
 class BoardView extends React.Component {
   constructor(props) {
@@ -50,7 +51,7 @@ class BoardView extends React.Component {
   }
 
   getStoredBoard() {
-   // read from cookie
+    // read from cookie
     if (document.cookie.indexOf('2048-stored-board') === -1) {
       return;
     }
@@ -158,6 +159,8 @@ class BoardView extends React.Component {
     this.hanleKeyUp({keyCode});
   }
 
+
+
   hanleKeyUp(e, newGame) {
     if (newGame) {
       this.board = new Board();
@@ -174,8 +177,9 @@ class BoardView extends React.Component {
     if (this.board.hasWon) {
       return;
     }
-    if (KeyCodes.indexOf(key) != -1) {
-      const direction = key - 37;
+    if (directionKeyCodes.indexOf(key) != -1) {
+      // const direction = key - 37;
+      const direction = parseDirection(key);
       this.board.filterMergedCells();
       let isInitiallyMovable = this.board.isMovable();
       // move the board if movable
@@ -194,7 +198,9 @@ class BoardView extends React.Component {
   }
 
   clickHandler() {
-    this.hanleKeyUp(null, true);
+    const event = null;
+    const newGame = true;
+    this.hanleKeyUp(event, newGame);
   }
 
   createTestBoard() {
@@ -211,7 +217,7 @@ class BoardView extends React.Component {
       maxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
     }
     return <div className="game-view">
-        <ScoreView currentScore={currentScore} maxScore={maxScore} clickHandler={this.clickHandler.bind(this)} />
+        <ScoreView currentScore={currentScore} maxScore={maxScore} newGameClickHandler={this.clickHandler.bind(this)} />
         <div className={'touch-panel'}>
           <div className={'board '}>
             {this.state.grid}

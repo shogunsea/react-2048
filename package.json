@@ -4,8 +4,8 @@
   "description": "react in 2048",
   "main": "index.js",
   "scripts": {
-    "lint": "./node_modules/eslint/bin/eslint.js --quiet --color ./src/** ./tasks/**; exit 0",
-    "lintfix": "./node_modules/eslint/bin/eslint.js --quiet --color --fix ./src/** ./tasks/**; exit 0",
+    "lint": "./node_modules/eslint/bin/eslint.js --quiet --color ./src/** ./tasks/** ./test/helper ./test/integration; exit 0",
+    "lintfix": "./node_modules/eslint/bin/eslint.js --quiet --color --fix ./src/** ./tasks/** ./test/helper ./test/integration; exit 0",
     "dev": "./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist src/server.js",
     "dev-debug": "./node_modules/nodemon/bin/nodemon.js debug -e js --watch . --watch dist src/server.js",
     "start": "echo \"2048 is up\" ; ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist src/server.js > /dev/null 2>&1 &"
