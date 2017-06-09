@@ -156,22 +156,22 @@ const moveCellsUp = function() {
 };
 
 /**
- * @param  {Object} mergedIntoCell - the cell that absorb another cell and stays on
+ * @param  {Object} hostCell - the cell that absorb another cell and stays on
  *   the board
- * @param  {Object} mergedCell - the cell that has been merged and will visually
+ * @param  {Object} guestCell - the cell that has been merged and will visually
  *   disappear
  */
-const mergeTwoCells = function(mergedIntoCell, mergedCell) {
-  mergedIntoCell.val *= 2;
-  this.updateScore(mergedIntoCell.val);
+const mergeTwoCells = function(hostCell, guestCell) {
+  hostCell.val *= 2;
+  this.updateScore(hostCell.val);
   this.recordMaxScore();
 
   // never ends please
-  if (mergedIntoCell.val == 2048) {
+  if (hostCell.val == 2048) {
     this.hasWon = true;
   }
 
-  mergedIntoCell.shouldNotMergeAgain = true;
+  hostCell.shouldNotMergeAgain = true;
 
   /**
    * If host cell was also a host cell during last move, it should
@@ -180,19 +180,27 @@ const mergeTwoCells = function(mergedIntoCell, mergedCell) {
    * I was having issues with React not triggering the animation
    * when it has detect that..?
    */
-  if (mergedIntoCell.mergedInto) {
-    mergedIntoCell.mergedIntoToggle = true;
-    mergedIntoCell.mergedInto = false;
-  } else if (mergedIntoCell.mergedIntoToggle) {
-    mergedIntoCell.mergedInto = true;
-    mergedIntoCell.mergedIntoToggle = false;
+  /**!!!!!!!!!!!!!!!
+   * New spec for re-appear animation:
+   *should only check one attribute. If present then trigger the re-appear
+   * This attribute shouldn't be attached to the state of a cell
+   * Rather it just should be a flag or boolean value, which gets computed everytime.
+   * The fewer states there are, the easier they're to maintain.
+   *!!!!!!!!!!!!!!!
+   */
+  if (hostCell.mergedInto) {
+    hostCell.mergedIntoToggle = true;
+    hostCell.mergedInto = false;
+  } else if (hostCell.mergedIntoToggle) {
+    hostCell.mergedInto = true;
+    hostCell.mergedIntoToggle = false;
   } else {
-    mergedIntoCell.mergedInto = true;
+    hostCell.mergedInto = true;
   }
 
-  mergedCell.merged = true;
-  mergedCell.mergedInto = false;
-  mergedCell.mergedIntoToggle = false;
+  guestCell.merged = true;
+  guestCell.mergedInto = false;
+  guestCell.mergedIntoToggle = false;
 };
 
 export default class BoardAction {
