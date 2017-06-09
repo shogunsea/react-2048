@@ -22,8 +22,6 @@ class CellView extends React.Component {
       isNew: this.props.isNew,
       isGrid: this.props.isGrid,
       isMerged: this.props.isMerged,
-      isMergedInto: this.props.isMergedInto,
-      isMergedIntoToggle: this.props.isMergedIntoToggle
     };
     console.log(info);
   }
@@ -34,9 +32,8 @@ class CellView extends React.Component {
     const gridClass = this.props.isGrid? "grid " : " ";
     const merged = this.props.isMerged? " merged " : " ";
     const mergedInto = this.props.isMergedInto? " mergedInto " : " ";
-    const mergedIntoToggle = this.props.isMergedIntoToggle? " mergedIntoToggle " : " ";
     const position = "row_"+this.props.row+" col_"+this.props.col + " ";
-    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement + merged + mergedInto + mergedIntoToggle} onClick={this.showCellInfo.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
+    return  <div id={this.props.id} className={"cell " + valClass + position + " " + this.props.movement + merged + mergedInto} onClick={this.showCellInfo.bind(this)}>{this.props.val == 0? '' : this.props.val}</div>;
   }
 }
 

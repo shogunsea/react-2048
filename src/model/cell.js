@@ -13,7 +13,6 @@ class Cell {
     this.movement = '';
     this.merged = false;
     this.mergedInto = false;
-    this.mergedIntoToggle = false;
   }
 
   isMerged() {

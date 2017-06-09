@@ -101,6 +101,7 @@ const moveCellsUp = function() {
       }
 
       const curCell = currentRow[j];
+      curCell.mergedInto = false;
       const preRow = curCell.curRow;
       let merged = false;
       let toRow = this.getReachableRow(curCell, direction);
@@ -145,7 +146,6 @@ const moveCellsUp = function() {
 
       if (cellHasMoved && !merged) {
         curCell.mergedInto = false;
-        curCell.mergedIntoToggle = false;
       }
 
       boardHasMoved |= cellHasMoved;
@@ -188,19 +188,9 @@ const mergeTwoCells = function(hostCell, guestCell) {
    * The fewer states there are, the easier they're to maintain.
    *!!!!!!!!!!!!!!!
    */
-  if (hostCell.mergedInto) {
-    hostCell.mergedIntoToggle = true;
-    hostCell.mergedInto = false;
-  } else if (hostCell.mergedIntoToggle) {
-    hostCell.mergedInto = true;
-    hostCell.mergedIntoToggle = false;
-  } else {
-    hostCell.mergedInto = true;
-  }
-
+  hostCell.mergedInto = true;
   guestCell.merged = true;
-  guestCell.mergedInto = false;
-  guestCell.mergedIntoToggle = false;
+
 };
 
 export default class BoardAction {
