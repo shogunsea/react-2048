@@ -235,6 +235,10 @@ export default class Board extends AbstractBoard {
    * Read from client cookie and update max score.
    */
   recordMaxScore() {
+    if (!document.cookie) {
+      return;
+    }
+
     const cookie = document.cookie;
     if (cookie.indexOf('2048-max-score') === -1) {
       document.cookie = '2048-max-score=' + this.score;

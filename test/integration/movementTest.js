@@ -17,26 +17,46 @@ const singleCellBoard = [
   [0, 0, 0, 0],
 ];
 
-// const twoCell = [
-//   [0, 2, 0, 0],
-//   [0, 0, 0, 0],
-//   [0, 0, 2, 0],
-//   [0, 0, 0, 0],
-// ];
+const twoCell = [
+  [0, 2, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 2, 0],
+  [0, 0, 0, 0],
+];
 
-// const twoCellMerge = [
-//   [0, 0, 0, 0],
-//   [0, 0, 0, 0],
-//   [2, 0, 2, 0],
-//   [0, 0, 0, 0],
-// ];
+const twoCellMergeOnLeft = [
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [2, 0, 2, 0],
+  [0, 0, 0, 0],
+];
 
-describe.only('Board Movement', () => {
+const twoCellMergeOnRight = [
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [2, 0, 2, 0],
+  [0, 0, 0, 0],
+];
+
+const twoCellMergeOnUp = [
+  [0, 0, 0, 0],
+  [0, 0, 2, 0],
+  [0, 0, 2, 0],
+  [0, 0, 0, 0],
+];
+
+const twoCellMergeOnDown = [
+  [0, 0, 2, 0],
+  [0, 0, 0, 0],
+  [0, 0, 2, 0],
+  [0, 0, 0, 0],
+];
+
+describe('Board Movement', () => {
   beforeEach(() => {
     this.board = new Board();
     global.document = {};
   });
-
 
   describe('Moving up', () => {
     beforeEach(() => {
@@ -55,22 +75,51 @@ describe.only('Board Movement', () => {
           [0, 0, 0, 0],
           [0, 0, 0, 0],
         ];
-        this.document = {};
         this.board.moveBoard('up', () => {});
         const array = this.board.getArrayView();
         expect(array).to.deep.equal(expectedBoard);
       });
     });
 
-    // context('Multiple cells', function() {
-    //   context('With merge', function() {
+    context('Multiple cells', () => {
+      context('Without merge', () => {
+        beforeEach(() => {
+          this.board.initWithBoardData(twoCell);
+        });
 
-    //   });
+        it('moves the board correctly', () => {
+          const expectedBoard = [
+            [0, 2, 2, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+          ];
+          this.board.moveBoard('up', () => {});
+          const array = this.board.getArrayView();
+          expect(array).to.deep.equal(expectedBoard);
+        });
+      });
 
-    //   context('Without merge', function() {
+      context('With merge', () => {
+        beforeEach(() => {
+          this.board.initWithBoardData(twoCellMergeOnUp);
+        });
 
-    //   });
-    // });
+        it.only('moves the board correctly', () => {
+          const expectedBoard = [
+            [0, 0, 4, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+            [0, 0, 0, 0],
+          ];
+          this.board.moveBoard('up', () => {});
+          const array = this.board.getArrayView();
+          this.board.print();
+          expect(array).to.deep.equal(expectedBoard);
+        });
+      });
+
+    });
   });
 
   // describe('Moving down', function() {

@@ -157,8 +157,9 @@ const moveCellsUp = function() {
 
 /**
  * @param  {Object} mergedIntoCell - the cell that absorb another cell and stays on
- *   the board??
- * @param  {Object} mergedCell - the cell that has been merged with another cell
+ *   the board
+ * @param  {Object} mergedCell - the cell that has been merged and will visually
+ *   disappear
  */
 const mergeTwoCells = function(mergedIntoCell, mergedCell) {
   mergedIntoCell.val *= 2;
@@ -172,6 +173,13 @@ const mergeTwoCells = function(mergedIntoCell, mergedCell) {
 
   mergedIntoCell.shouldNotMergeAgain = true;
 
+  /**
+   * If host cell was also a host cell during last move, it should
+   * also show the animation of 're-appear'.
+   * Notes: this 'mergedintoToogle' attribtue was created because
+   * I was having issues with React not triggering the animation
+   * when it has detect that..?
+   */
   if (mergedIntoCell.mergedInto) {
     mergedIntoCell.mergedIntoToggle = true;
     mergedIntoCell.mergedInto = false;

@@ -92,7 +92,16 @@ export default class AbstractBoard {
 
       for (let j = 0; j < currentRow.length; j++) {
         const cell = currentRow[j];
-        rowData[j] = cell? cell.val : 0;
+        /**
+         * TODO: this line implies a LOT:
+         * If a cell is 'merged', then it will be pushed onto
+         * the end of a row.
+         */
+        if (cell && cell.merged) {
+          continue;
+        } else {
+          rowData[j] = cell? cell.val : 0;
+        }
       }
 
       data[i] = rowData;
