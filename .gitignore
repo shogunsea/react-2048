@@ -5,3 +5,4 @@ bundle.js
 dist
 .deploykey.json
 npm-debug*
+test/lib
