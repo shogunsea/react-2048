@@ -18,6 +18,9 @@ export default class Board extends AbstractBoard {
     this.hasLost = false;
     this.score = 0;
     this.VALUE_4_PROBABILITY = 8; // 8/10 --> 80%
+    // holder for merged cells that need to stay on the board
+    // for the purpose of showing the animation, then these cells
+    // will be filtered during next movement.
 
     this.decorateWith(decorators);
     this.initWithBoardData(boardData);
@@ -185,6 +188,11 @@ export default class Board extends AbstractBoard {
       const colLen = curRow.length;
       for (let j = 0; j < colLen; j++) {
         const curCell = curRow[j];
+        // merged cell is just temporarily staying on the spot.
+        // even if a cell is meged, there will always be a host cell.. right?
+        /**
+         * TODO: remove 'merged' check should still work
+         */
         if (curCell && !curCell.merged) {
           slots[curCell.curRow][curCell.curCol] = 1;
         }

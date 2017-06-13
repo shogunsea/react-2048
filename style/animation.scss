@@ -18,15 +18,15 @@
   }
 }
 
-@keyframes popup_as_merged_2 {
-  from {
-    transform: scale(0);
-  }
-  to {
-    z-index: 20;
-    transform: scale(1);
-  }
-}
+// @keyframes popup_as_merged_2 {
+//   from {
+//     transform: scale(0);
+//   }
+//   to {
+//     z-index: 20;
+//     transform: scale(1);
+//   }
+// }
 
 @for $i from 0 to 4 {
   @for $j from 0 to 4 {

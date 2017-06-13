@@ -33,8 +33,8 @@ class BoardView extends React.Component {
         this.board.addRandomCell();
       }
 
-      const gridView = this.mapCellsToView(this.board.getGrid());
-      const boardView = this.mapCellsToView(this.board.getBoard());
+      const gridView = this.mapBoardOfCellsToView(this.board.getGrid());
+      const boardView = this.mapBoardOfCellsToView(this.board.getBoard());
       const touchStart = { x: null, y: null};
       const touchEnd = {x: null, y: null};
       this.state = {board: boardView, grid: gridView, touchStart, touchEnd};
@@ -69,24 +69,32 @@ class BoardView extends React.Component {
   }
 
   updateStateWithCells(cells) {
-    const cellView = this.mapCellsToView(cells);
+    const cellView = this.mapBoardOfCellsToView(cells);
     this.setState({board: cellView});
   }
 
-  mapCellsToView(cells) {
+  mapCellView(cell) {
+    return <CellView fromRow={cell.fromRow} fromCol={cell.fromCol} row={cell.curRow} col={cell.curCol} val={cell.val} key={cell.id} id={cell.id} isNew={cell.isNew} isGrid={cell.isGrid()} movement={cell.movement} isMerged={cell.merged} isMergedInto={cell.mergedInto} />;
+  }
+
+  mapBoardOfCellsToView(cells) {
     const cellsViews = cells.map((row) =>{
       return row.map((cell) => {
         if (!cell) {
           return;
         }
 
-        const cellView  = <CellView row={cell.curRow} col={cell.curCol} val={cell.val} key={cell.id} id={cell.id} isNew={cell.isNew()} isGrid={cell.isGrid()} movement={cell.movement} isMerged={cell.merged} isMergedInto={cell.mergedInto} />;
+        const cellView  = this.mapCellView(cell);
 
-        cell.shouldNotMergeAgain = false;
+        if (cell.childCell) {
+          const childCellView = this.mapCellView(cell.childCell);
+          return [childCellView, cellView]
+        }
 
         return cellView;
       })
     });
+
     return cellsViews;
   }
 
@@ -159,8 +167,6 @@ class BoardView extends React.Component {
     this.hanleKeyUp({keyCode});
   }
 
-
-
   hanleKeyUp(e, newGame) {
     if (newGame) {
       this.board = new Board();
@@ -216,6 +222,7 @@ class BoardView extends React.Component {
     if (document.cookie.indexOf('2048-max-score') !== -1) {
       maxScore = +document.cookie.match(/2048-max-score=(\d+)/)[1];
     }
+
     return <div className="game-view">
         <ScoreView currentScore={currentScore} maxScore={maxScore} newGameClickHandler={this.clickHandler.bind(this)} />
         <div className={'touch-panel'}>

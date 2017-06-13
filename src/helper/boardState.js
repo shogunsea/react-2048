@@ -7,25 +7,16 @@ const isMovable = function() {
 };
 
 // State/Board
-const getReachableRow = function(curCell, direction) {
-  const {curRow: row, curCol: col} = curCell;
+const getReachableRow = function(curRow, curCol, direction) {
   const board = this.getBoard();
 
-  if (direction == 'up') {
-    for (let i = row - 1; i >= 0; i--) {
-      if (board[i][col]) {
-        return i + 1;
-      }
+  for (let i = curRow - 1; i >= 0; i--) {
+    if (board[i][curCol]) {
+      return i + 1;
     }
-    return 0;
-  } else if (direction == 'down') {
-    for (let i = row + 1; i < board.length; i++) {
-      if (board[i][col]) {
-        return i - 1;
-      }
-    }
-    return 3;
   }
+
+  return 0;
 };
 
 // State / Board

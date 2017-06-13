@@ -1,6 +1,6 @@
-/*eslint-disable */
 
 const {rotateMatrixClockwise} = require('../helper/utils.js');
+const {pick} = require('lodash');
 
 /**
  * Generate a new Cell that been assigned value from
@@ -26,8 +26,6 @@ const setCellToBoard = function(cell) {
 
 
 /**
- * TODO: number to string: doulbe switch condition
- *   really necessary? -- Fixed
  * TODO: Passing function as callback can reduce
  *   dependency? Consider to use more of such pattern?
  * TODO: is this method right place to trigger recordCurrentState?
@@ -47,23 +45,89 @@ const moveBoard = function(direction, addRandomCell) {
 };
 
 /**
+ * @param  {array} board - current board object.
+ * @return {object} A collection of objects that are keyed on
+ *   each cell's id, containing row/col indexes
+ */
+const getCellsIndexes = function(board) {
+  const indexes = {};
+
+  for (let row of board) {
+    for (let elem of row) {
+      if (elem) {
+        // const {fromRow, fromCol, curRow, curCol, id} = elem;
+        const record = pick(elem, 'fromRow', 'curRow', 'fromCol', 'curCol');
+        indexes[`${elem.id}`] = record;
+      }
+    }
+  }
+
+  return indexes;
+};
+
+const updateCellState = function(cell, previousIndexes, curRow, curCol) {
+  const record = previousIndexes[cell.id];
+  const rowChagned = record.curRow !== curRow;
+  const colChagned = record.curCol !== curCol;
+
+  if (rowChagned) {
+    cell.fromRow = record.curRow;
+    cell.curRow = curRow;
+    cell.fromCol = cell.curCol;
+    cell.movement = 'row_from_' + cell.fromRow + '_to_' + cell.curRow;
+  } else if (colChagned) {
+    cell.fromCol = record.curCol;
+    cell.curCol = curCol;
+    cell.fromRow = cell.curRow;
+    cell.movement = 'col_from_' + cell.fromCol + '_to_' + cell.curCol;
+  } else {
+    cell.movement = '';
+  }
+};
+
+/**
+ * @param  {array} board - current board object
+ * @param  {object} previousIndexes - A collection of objects
+ *   that stores the cell row/col info before board movement.
+ */
+const updateBoardState = function(board, previousIndexes) {
+  const rowLen = board.length;
+
+  for (let i = 0; i < rowLen; i++) {
+    const curRow = board[i];
+    const colLen = curRow.length;
+
+    for (let j = 0; j < colLen; j++) {
+      const curCell = board[i][j];
+
+      if (curCell && previousIndexes[curCell.id]) {
+        this.updateCellState(curCell, previousIndexes, i, j);
+
+        if(curCell.childCell && previousIndexes[curCell.childCell.id]) {
+          this.updateCellState(curCell.childCell, previousIndexes, i, j);
+        }
+      }
+    }
+  }
+};
+
+/**
  * Receive direction, based on the direction temporarily rotate the board,
  *   move the cells up and restore the board.
  * @param  {string} direction - current direction board is moving towards
+ * @return {boolean} Whether or not the board has been moved.
  */
 const moveBoardTowards = function(direction) {
   let hasMoved = false;
+  const previousIndexes = this.getCellsIndexes(this.board);
+
   switch (direction) {
     case 'up':
       hasMoved = this.moveCellsUp();
       break;
     case 'down':
-      this.print('Before rotating twice:');
       this.board = rotateMatrixClockwise(this.board, 2);
-      this.print('After rotating twice:');
-      this.print('Before current board moving up:');
       hasMoved = this.moveCellsUp();
-      this.print('After current board moving up:');
       this.board = rotateMatrixClockwise(this.board, 2);
       break;
     case 'left':
@@ -80,11 +144,42 @@ const moveBoardTowards = function(direction) {
       break;
   }
 
+  this.updateBoardState(this.board, previousIndexes);
+
   return hasMoved;
+};
+
+const cellToBeMerged = function(toRow, board, curCell, curCol) {
+  const moveToFirstRow = toRow == 0;
+
+  if (moveToFirstRow) {
+    return false;
+  }
+
+  const preCell = board[toRow - 1][curCol];
+  const preCellHasSameValue = preCell && preCell.val == curCell.val;
+  const preCellValidForMerge = preCell && !preCell.shouldNotMergeAgain;
+  const toBeMerged = preCellHasSameValue && preCellValidForMerge;
+
+  return toBeMerged;
+};
+
+/**
+ * Reset the attribute of current cell since
+ *   a fresh movement is about to be handled.
+ * @param  {object} cell - Current cell to be updated.
+ */
+const resetCellState = function(cell) {
+  cell.mergedInto = false;
+  cell.merged = false;
+  cell.shouldNotMergeAgain = false;
+  cell.isNew = false;
+  cell.childCell = null;
 };
 
 /**
  * move the cells upwards, merge if necessary
+ * @return {boolean} Whether or not the board has been moved.
  */
 const moveCellsUp = function() {
   const direction = 'up';
@@ -101,51 +196,34 @@ const moveCellsUp = function() {
       }
 
       const curCell = currentRow[j];
-      curCell.mergedInto = false;
-      const preRow = curCell.curRow;
-      let merged = false;
-      let toRow = this.getReachableRow(curCell, direction);
-      if (toRow > 0
-        && board[toRow - 1][j]
-        && board[toRow - 1][j].val == curCell.val
-        && !board[toRow - 1][j].shouldNotMergeAgain) {
+      this.resetCellState(curCell);
+
+      const preRow = i;
+      let toRow = this.getReachableRow(preRow, j, direction);
+
+      if (this.cellToBeMerged(toRow, board, curCell, j)) {
         this.mergeTwoCells(board[toRow - 1][j], curCell);
         toRow -= 1;
-        merged = true;
       }
 
-      let movement = '';
+      const cellHasMoved = preRow != toRow;
 
-      curCell.fromRow = preRow;
-      curCell.curRow = toRow;
-      movement = 'row_from_' + preRow + '_to_' + toRow;
-      curCell.movement = movement;
-
-      const cellHasMoved = curCell.fromRow != curCell.curRow;
-
-      const newRow = currentRow.map(function(cell) {
-        if (!cell) {
-          return;
-        }
-        if (cell.id != curCell.id) {
-          return cell;
-        }
-      });
-
-      // taking out the old cell
       if (cellHasMoved) {
+      // taking out the old cell
+        const newRow = currentRow.map(function(cell) {
+          if (!cell) {
+            return;
+          }
+          if (cell.id != curCell.id) {
+            return cell;
+          }
+        });
+
         board[i] = newRow;
       }
 
-      // setting new cell?
-      if (curCell.merged) {
-        board[toRow].push(curCell);
-      } else {
+      if (!curCell.merged) {
         board[toRow][j] = curCell;
-      }
-
-      if (cellHasMoved && !merged) {
-        curCell.mergedInto = false;
       }
 
       boardHasMoved |= cellHasMoved;
@@ -166,7 +244,6 @@ const mergeTwoCells = function(hostCell, guestCell) {
   this.updateScore(hostCell.val);
   this.recordMaxScore();
 
-  // never ends please
   if (hostCell.val == 2048) {
     this.hasWon = true;
   }
@@ -178,19 +255,30 @@ const mergeTwoCells = function(hostCell, guestCell) {
    * also show the animation of 're-appear'.
    * Notes: this 'mergedintoToogle' attribtue was created because
    * I was having issues with React not triggering the animation
-   * when it has detect that..?
+   * when it has detect that if one component has the same class
+   * as before --- even though other attribute of the component
+   * has been updated.
    */
-  /**!!!!!!!!!!!!!!!
+  /** !!!!!!!!!!!!!!!
    * New spec for re-appear animation:
-   *should only check one attribute. If present then trigger the re-appear
-   * This attribute shouldn't be attached to the state of a cell
-   * Rather it just should be a flag or boolean value, which gets computed everytime.
+   * should only check one attribute. If present then trigger the
+   * re-appear. This attribute shouldn't be attached to the state
+   * of a cell.  Rather it just should be a flag or boolean value,
+   * which gets computed everytime.
    * The fewer states there are, the easier they're to maintain.
    *!!!!!!!!!!!!!!!
    */
   hostCell.mergedInto = true;
   guestCell.merged = true;
 
+  /**
+   * ****** Spec for 'childCell' feature. ***
+   * hostCell should contain guestCell
+   * So that during cell Attribute updating process
+   * merged cell(guest cell) would have the right
+   * col/row info thus correct movement
+   */
+  hostCell.childCell = guestCell;
 };
 
 export default class BoardAction {
@@ -202,12 +290,17 @@ export default class BoardAction {
       mergeTwoCells,
       addRandomCell,
       setCellToBoard,
+      updateCellState,
+      resetCellState,
     ];
 
     const coreMovement = [
       moveBoardTowards,
       moveCellsUp,
       moveBoard,
+      cellToBeMerged,
+      getCellsIndexes,
+      updateBoardState,
     ];
 
     const methods = [...utilityAction, ...coreMovement];
@@ -217,9 +310,7 @@ export default class BoardAction {
 
   decorate(boardInstance) {
     const methods = this.getMethods();
-    // TODO: this might not be the right approach
-    // since it's mutating the instance.
-    // Question: how to properly extend JS prototype methods.
+
     for (let method of methods) {
       boardInstance[`${method.name}`] = method;
     }

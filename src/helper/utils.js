@@ -1,4 +1,5 @@
 const chalk = require('chalk');
+const {clone} = require('lodash');
 const sampleBoards = require('../../test/stub/sample_boards.json');
 
 /**
@@ -55,20 +56,25 @@ const boardDataFetcher = function(board) {
   return `window.__specifiedBoardData__ = ${JSON.stringify(boardData)};`;
 };
 
-const rotateMatrixClockwise = function(matrix, times) {
+const rotateMatrixClockwise = function(matrix, times = 1) {
   const len = matrix.length;
-  const tempBoard = [];
+  let tempBoard = clone(matrix);
+  let finalBoard = [];
 
-  for (let row = 0; row < len; row++) {
-    const newRow = [];
-    // for ith row, copy over all values from ith col
-    for (let col = len - 1; col >= 0; col--) {
-      newRow[len - 1 - col] = matrix[col][row];
+  for (let i = 0; i < times; i++) {
+    for (let row = 0; row < len; row++) {
+      const newRow = [];
+      // for ith row, copy over all values from ith col
+      for (let col = len - 1; col >= 0; col--) {
+        newRow[len - 1 - col] = tempBoard[col][row];
+      }
+      finalBoard[row] = newRow;
     }
-    tempBoard[row] = newRow;
+
+    tempBoard = clone(finalBoard);
   }
 
-  return tempBoard;
+  return finalBoard;
 };
 
 module.exports = {

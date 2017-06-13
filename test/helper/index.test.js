@@ -5,7 +5,7 @@ const {
 
 const {expect} = require('chai');
 
-describe.only('Board helper file', () => {
+describe('Board helper file', () => {
   describe('#rotateMatrixClockwise', () => {
     context('when matrix is a 3*3 square', () => {
       beforeEach(() => {

@@ -28,25 +28,27 @@
   font-family: "Clear Sans";
 
   &.merged {
-    z-index: 15;
+    z-index: 11;
   }
 
   &.mergedInto {
+    z-index: 12;
+    transform: scale(0);
     animation-delay: 0.15s;
     animation-duration: 0.35s;
     animation-fill-mode: forwards;
     // this animation ends up at higher z-index
     animation-name: popup_as_merged;
-    transform: scale(0);
+
   }
 
-  &.mergedIntoToggle {
-    animation-delay: 0.15s;
-    animation-duration: 0.35s;
-    animation-fill-mode: forwards;
-    animation-name: popup_as_merged_2;
-    transform: scale(0);
-  }
+  // &.mergedIntoToggle {
+  //   animation-delay: 0.15s;
+  //   animation-duration: 0.35s;
+  //   animation-fill-mode: forwards;
+  //   animation-name: popup_as_merged_2;
+  //   transform: scale(0);
+  // }
 
   &.new {
     animation-delay: 0.15s;
@@ -55,6 +57,11 @@
     animation-name: newTile;
     position: absolute;
     transform: scale(0);
+
+    &.grid {
+      animation: none;
+      transform: scale(1);
+    }
   }
 
   &.value-2 {
