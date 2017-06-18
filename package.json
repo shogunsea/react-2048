@@ -46,6 +46,8 @@
     "react-dom": "^15.0.2",
     "sass-loader": "^3.2.0",
     "style-loader": "^0.13.1",
+    "uglify-js": "git://github.com/mishoo/UglifyJS2#harmony-v2.8.22",
+    "uglifyjs-webpack-plugin": "^0.4.3",
     "webpack": "^2.2.1",
     "yargs": "^8.0.2"
   },

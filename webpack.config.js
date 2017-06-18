@@ -2,6 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const isProduction = process.env.NODE_ENV === 'production';
 
 const plugins = [
@@ -15,14 +16,12 @@ const plugins = [
 ];
 
 if (isProduction) {
-  const uglifyJS = new webpack.optimize.UglifyJsPlugin({
-    compressor: {
-      warnings: false
-    }
+  const uglifyJS = new UglifyJSPlugin({
+    sourceMap: false,
+    mangle: false
   });
   plugins.push(uglifyJS);
 }
-
 
 module.exports = {
   entry: {
