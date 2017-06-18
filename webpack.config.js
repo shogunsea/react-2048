@@ -30,8 +30,8 @@ module.exports = {
     'test/lib/main.test': "./test/entry.js"
   },
   output: {
-      path: './',
-      filename: "[name].js"
+    path: path.join(__dirname, "./"),
+    filename: "[name].js"
   },
   plugins: plugins,
   module: {
