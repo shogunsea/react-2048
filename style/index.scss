@@ -40,7 +40,6 @@ body {
   a:hover {
     border-bottom-color: #609bbf;
   }
-
 }
 
 @media (min-width: 1100px) {
@@ -63,40 +62,49 @@ body {
 }
 
 .overlay {
-  width: 82vmin;
-  height: 82vmin;
+  width: 72vmin;
+  height: 72vmin;
+  margin: auto;
   z-index: 30;
   background-color: $overlay-white;
   position: absolute;
   opacity: 0.6;
   align-items: center;
-  font-size: 23px;
+  font-size: 2em;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   &.hide {
     display: none;
   }
-}
 
-.overlay_text {
-  position: relative;
-  top: 33%;
-  padding: 35px;
-  color: #2d1212;
-  font-size: 27px;
-}
+  & .overlay_text {
+    padding: 35px;
+    color: #2d1212;
+  }
 
-.restart {
-  position: relative;
-  top: 35%;
-  background-color: #19c164;
-  font-size: 36px;
-  padding: 11px;
-  width: 50%;
-  margin: auto;
+  & .restart {
+    background-color: #19c164;
+    padding: 11px;
+  }
 }
 
 .row {
   display: flex;
   position: relative;
+}
+
+@media (min-width: 1100px) {
+  .overlay {
+    width: 82vmin;
+    height: 82vmin;
+  }
+}
+
+@media (max-width: 600px) {
+  .overlay {
+    font-size: 1em;
+  }
 }

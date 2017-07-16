@@ -1,9 +1,5 @@
-.new-game.button {
-  float: left;
-  background-color: $light-green;
-}
-
 .score {
+  position: relative;
   font-size: 0.7em;
   margin: auto;
   width: 72vmin;
@@ -12,15 +8,30 @@
   padding-bottom: 0.8em;
   font-family: Arial;
 
-  & .max-score {
-    background-color: $light-teal;
-    display: inline-block;
-    float: right;
-  }
+    & .new-game {
+      float: left;
+      position: absolute;
+      left: 0;
+      background-color: $light-green;
+    }
 
-  & .current-score {
-    display: inline-block;
-    float: right;
+    & .max-score {
+      float: right;
+      background-color: $light-teal;
+    }
+
+    & .current-score {
+      float: right;
+    }
+
+  & .button {
+    // margin: 0;
+  }
+}
+
+@media (max-width: 450px) {
+  .score {
+    font-size: 0.4em;
   }
 }
 
@@ -33,6 +44,7 @@
   padding: 4px;
   margin-bottom: 0em;
   margin-left: 0.5em;
+  margin-right: 1em;
 
   &:hover {
     transition: box-shadow 0.2s ease;
@@ -49,11 +61,17 @@
     padding: 8px;
     margin-bottom: 1em;
     margin-left: 1em;
-    box-shadow: 5px 10px 15px 1px $button-box-shadow-color;
+    box-shadow: 5px 5px 15px 1px $button-box-shadow-color;
 
     &:hover {
       box-shadow: 3px 5px 20px 0px $button-box-shadow-color;
     }
+  }
+}
+
+@media (min-width: 451px) and  (max-width: 600px) {
+  .score {
+    font-size: 0.8em;
   }
 }
 

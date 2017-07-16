@@ -11,7 +11,7 @@ class ScoreView extends React.Component {
       <div className="new-game button" onClick={clickHandler}> New Game </div>
       <div className="max-score button"> Max score: {this.props.maxScore}</div>
       <div className="current-score button"> Current score: {this.props.currentScore}</div>
-    </div>
+    </div>;
   }
 }
 
