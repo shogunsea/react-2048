@@ -8,7 +8,8 @@
     "lintfix": "./node_modules/eslint/bin/eslint.js --quiet --color --fix ./src/** ./tasks/** ./test/helper ./test/integration; exit 0",
     "dev": "./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist src/server.js",
     "dev-debug": "./node_modules/nodemon/bin/nodemon.js debug -e js --watch . --watch dist src/server.js",
-    "start": "echo \"starting 2048\" && ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist src/server.js > /dev/null 2>&1 &"
+    "starts": "echo \"starting 2048\" && ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist src/server.js > /dev/null 2>&1 &",
+    "start": "node src/server.js"
   },
   "repository": {
     "type": "git",
@@ -27,7 +28,6 @@
     "babel-loader": "^6.2.4",
     "babel-preset-es2015": "^6.6.0",
     "babel-preset-react": "^6.5.0",
-    "chalk": "^1.1.3",
     "css-loader": "^0.23.1",
     "eslint": "^3.13.0",
     "eslint-config-google": "^0.7.0",
@@ -38,7 +38,6 @@
     "gulp-nodemon": "^2.2.1",
     "jest-cli": "^13.0.0",
     "json-loader": "^0.5.4",
-    "lodash": "^4.17.4",
     "node-sass": "^4.1.1",
     "nodemon": "^1.11.0",
     "postcss-loader": "^1.2.1",
@@ -53,6 +52,8 @@
   },
   "dependencies": {
     "chai": "^4.0.1",
+    "chalk": "^1.1.3",
+    "lodash": "^4.17.4",
     "compression": "^1.6.2",
     "express": "^4.15.3",
     "handlebars": "^4.0.6",
