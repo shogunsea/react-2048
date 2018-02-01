@@ -9,7 +9,7 @@
     "dev": "./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist src/server.js",
     "dev-debug": "./node_modules/nodemon/bin/nodemon.js debug -e js --watch . --watch dist src/server.js",
     "starts": "echo \"starting 2048\" && ./node_modules/nodemon/bin/nodemon.js -e js --watch . --watch dist src/server.js > /dev/null 2>&1 &",
-    "start": "node src/server.js"
+    "start": "echo \"starting 2048\" && NODE_PORT=8080 NODE_ENV=PROD node src/server"
   },
   "repository": {
     "type": "git",

@@ -7,7 +7,7 @@ const Handlebars = require('handlebars');
 
 const app = express();
 const indexPage = path.join(__dirname, './index.html.hbs');
-const layoutExample = path.join(__dirname, '../layout_example.html');
+// const layoutExample = path.join(__dirname, '../layout_example.html');
 const publicPath = path.resolve(__dirname, '../dist');
 
 const {boardDataFetcher} = require('./helper/utils.js');
@@ -51,17 +51,17 @@ app.get('/2048', function(req, res) {
   });
 });
 
-app.get('/example', function(req, res) {
-  res.sendFile(layoutExample);
-});
+// app.get('/example', function(req, res) {
+//   res.sendFile(layoutExample);
+// });
 
-app.get('*', function(req, res) {
-  res.redirect('/2048');
-});
+// app.get('*', function(req, res) {
+//   res.redirect('/2048');
+// });
 
-const port = 3080;
+const PORT = process.env.NODE_PORT || 8000;
 
-app.listen(port, function() {
+app.listen(PORT, function() {
   console.log('yoooo!');
-  console.log('2048 app running on http://localhost:' + port);
+  console.log('2048 app running on http://localhost:' + PORT);
 });
