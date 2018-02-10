@@ -21,7 +21,6 @@ export default class Board extends AbstractBoard {
     // holder for merged cells that need to stay on the board
     // for the purpose of showing the animation, then these cells
     // will be filtered during next movement.
-
     this.decorateWith(decorators);
     this.initWithBoardData(boardData);
     this.initGrid();

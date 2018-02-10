@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import ReactDom from 'react-dom';
 import Board from '../model/board.js';
 import CellView from './cellView.jsx';
@@ -8,7 +8,7 @@ import WinOverlayView from './winOverlay.jsx';
 import FailOverlayView from './failOverlay.jsx';
 import {parseDirection} from '../helper/utils';
 
-const directionKeyCodes = [37, 38, 39,40];
+const directionKeyCodes = [37, 38, 39, 40];
 
 class BoardView extends React.Component {
   constructor(props) {
@@ -35,7 +35,7 @@ class BoardView extends React.Component {
 
       const gridView = this.mapBoardOfCellsToView(this.board.getGrid());
       const boardView = this.mapBoardOfCellsToView(this.board.getBoard());
-      const touchStart = { x: null, y: null};
+      const touchStart = {x: null, y: null};
       const touchEnd = {x: null, y: null};
       this.state = {board: boardView, grid: gridView, touchStart, touchEnd};
   }
@@ -47,7 +47,7 @@ class BoardView extends React.Component {
 
     const storedScore = +document.cookie.match(/2048-stored-score=(\d+)/)[1];
 
-    return  storedScore;
+    return storedScore;
   }
 
   getStoredBoard() {
@@ -57,11 +57,15 @@ class BoardView extends React.Component {
     }
 
     const boardString = document.cookie.match(/2048-stored-board=((\d+,\d+,\d+,\d+,!)+)/)[1];
-    const rows = boardString.split('!').filter((elem) => { return elem });
+    const rows = boardString.split('!').filter((elem) => {
+ return elem;
+});
     const boardData = [];
 
     for (let i = 0; i < rows.length; i++) {
-      const scoresInRow = rows[i].split(',').filter((elem) => { return elem });
+      const scoresInRow = rows[i].split(',').filter((elem) => {
+ return elem;
+});
       boardData[i] = scoresInRow;
     }
 
@@ -84,15 +88,15 @@ class BoardView extends React.Component {
           return;
         }
 
-        const cellView  = this.mapCellView(cell);
+        const cellView = this.mapCellView(cell);
 
         if (cell.childCell) {
           const childCellView = this.mapCellView(cell.childCell);
-          return [childCellView, cellView]
+          return [childCellView, cellView];
         }
 
         return cellView;
-      })
+      });
     });
 
     return cellsViews;
@@ -157,7 +161,6 @@ class BoardView extends React.Component {
       if (yd > 0) {
         // direction = 'top';
         keyCode = 40;
-
       } else {
         // direction = 'down';
         keyCode = 38;
@@ -234,10 +237,10 @@ class BoardView extends React.Component {
           </div>
         </div>
         <SourceView />
-      </div>
+      </div>;
   }
 }
 
 export default BoardView;
 
-ReactDom.render(<BoardView />, document.getElementById("container"))
+ReactDom.render(<BoardView />, document.getElementById('container'));
